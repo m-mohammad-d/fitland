@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import PromoBar from "@/components/layout/PromoBar";
 
 export const metadata: Metadata = {
   title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
@@ -17,12 +18,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="fa" dir="rtl">
-      <body>{children}</body>
+      <body className="flex flex-col min-h-screen">
+        <PromoBar /> 
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }
