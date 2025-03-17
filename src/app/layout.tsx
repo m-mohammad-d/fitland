@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import PromoBar from "@/components/layout/PromoBar";
 import Header from "@/components/layout/Header";
-
+import ApolloClientProvider from "@/provider/ApolloClientProvider";
 export const metadata: Metadata = {
   title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
   description:
@@ -27,7 +27,9 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen">
         <PromoBar />
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <ApolloClientProvider>{children}</ApolloClientProvider>
+        </main>
       </body>
     </html>
   );
