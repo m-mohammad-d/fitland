@@ -2,7 +2,7 @@ import OfferCard from "./OfferCard";
 
 const MainOffers: React.FC = () => {
   return (
-    <div className="p-6 md:p-10 flex flex-col md:flex-row gap-4 mt-12 items-center justify-between">
+    <div className="p-6 md:p-10 flex flex-col md:flex-row gap-4 container mx-auto my-12 items-center justify-between">
       <div className="grid sm:grid-cols-2 gap-4 md:gap-6 w-full md:w-auto">
         <OfferCard
           image="images/nike-shirt.jpg"

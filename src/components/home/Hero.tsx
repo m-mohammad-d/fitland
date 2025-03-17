@@ -5,7 +5,7 @@ import { CiCalendarDate, CiShop } from "react-icons/ci";
 function Hero() {
   return (
     <div>
-      <div className="px-4 mt-6 flex items-center justify-between">
+      <div className="px-4 mt-6 flex items-center container mx-auto justify-between">
         <div className="w-full lg:w-1/2 text-center lg:text-start">
           <h3 className="text-base md:text-lg text-neutral-600 font-medium">
             راحت و مطمئن خرید کنید!
