@@ -66,7 +66,7 @@ function Hero() {
       </div>
       <img
         src="/images/hero-section-dot-patten.png"
-        className="w-full -mt-16 hidden md:block"
+        className="w-full hidden md:block"
         alt="hero-section-dot-patten"
       />
     </div>
