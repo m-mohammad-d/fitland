@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import PromoBar from "@/components/layout/PromoBar";
+import Header from "@/components/layout/Header";
 
 export const metadata: Metadata = {
   title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
@@ -24,7 +25,8 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className="flex flex-col min-h-screen">
-        <PromoBar /> 
+        <PromoBar />
+        <Header />
         <main className="flex-1">{children}</main>
       </body>
     </html>
