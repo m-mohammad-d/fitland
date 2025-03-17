@@ -8,12 +8,24 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "seed": "ts-node --transpile-only ./prisma/seed.ts"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   },
   "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "@as-integrations/next": "^3.2.0",
+    "@prisma/client": "^6.5.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.5.0",
+    "graphql": "^16.10.0",
+    "graphql-tag": "^2.12.6",
     "next": "15.2.2",
+    "pg": "^8.14.1",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -32,7 +44,7 @@
     "@storybook/react": "^8.6.6",
     "@storybook/test": "^8.6.6",
     "@tailwindcss/postcss": "^4.0.14",
-    "@types/node": "^20",
+    "@types/node": "^20.17.24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/browser": "^3.0.9",
@@ -41,9 +53,10 @@
     "eslint-config-next": "15.2.2",
     "eslint-plugin-storybook": "^0.11.5",
     "playwright": "^1.51.0",
+    "prisma": "^6.5.0",
     "storybook": "^8.6.6",
     "tailwindcss": "^4.0.14",
-    "typescript": "^5",
+    "ts-node": "^10.9.2",
     "vitest": "^3.0.9"
   },
   "eslintConfig": {

@@ -1,0 +1,53 @@
+type Product {
+  id: ID!
+  name: String!
+  description: String!
+  price: Float!
+  stock: Int!
+  category: Category! 
+  images: [String!]!
+  colors: [String!]!
+  sizes: [String!]!
+  discountCode: String
+  comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  rating: Int!
+  product: Product! 
+  createdAt: String!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  products: [Product!]!
+}
+
+type Query {
+  products: [Product!]!
+  product(id: ID!): Product
+  categories: [Category!]!
+}
+
+type Mutation {
+  addProduct(
+    name: String!
+    description: String!
+    price: Float!
+    stock: Int!
+    categoryId: ID! 
+    images: [String!]!
+    colors: [String!]!
+    sizes: [String!]!
+    discountCode: String
+  ): Product!
+
+  addComment(productId: ID!, content: String!, rating: Int!): Comment!
+
+  addCategory(name: String!): Category!
+}
