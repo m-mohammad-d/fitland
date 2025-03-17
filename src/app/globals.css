@@ -1,1 +1,120 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #fa541c;
+  --color-primary-900: #190803;
+  --color-primary-850: #4b1908;
+  --color-primary-700: #963211;
+  --color-primary-600: #e14c19;
+  --color-primary-400: #fb7649;
+  --color-primary-300: #fc9877;
+  --color-primary-150: #fdccbb;
+  --color-primary-50: #feeee8;
+
+  --color-secondary: #032340;
+  --color-secondary-900: #01070d;
+  --color-secondary-850: #010a13;
+  --color-secondary-700: #021526;
+  --color-secondary-400: #194165;
+  --color-secondary-300: #2f5f8a;
+  --color-secondary-150: #518cc1;
+  --color-secondary-50: #67aae6;
+  --color-secondary-10: #cfe8ff;
+  --color-secondary-0: #ebf5ff;
+
+  --color-background: #ffffff;
+  --color-primary-back: #feeee8;
+  --color-secondary-back: #ebf5ff;
+
+  --color-error-800: #8a1513;
+  --color-error-500: #e53935;
+  --color-error-200: #faddca;
+
+  --color-warn-800: #995700;
+  --color-warn-500: #ffb300;
+  --color-warn-200: #fff3bf;
+
+  --color-success-800: #257028;
+  --color-success-500: #66bb6a;
+  --color-success-200: #d3eddd;
+
+  --color-info-800: #0f5894;
+  --color-info-500: #29b6f6;
+  --color-info-200: #c7f2fc;
+
+  --color-neutral-100: #f9f9f9;
+  --color-neutral-200: #ededed;
+  --color-neutral-300: #d9d9d9;
+  --color-neutral-400: #cbcbcb;
+  --color-neutral-500: #adadad;
+  --color-neutral-600: #868686;
+  --color-neutral-700: #606060;
+  --color-neutral-800: #404040;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-Thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-UltraLight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-DemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansX";
+  src: url("/fonts/IRANSansX-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+html {
+  font-family: "IRANSansX", sans-serif;
+}
