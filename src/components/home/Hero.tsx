@@ -27,7 +27,7 @@ function Hero() {
             مشاهده محصولات
           </Link>
         </div>
-        <div>
+        <div className="hidden md:block">
           <img src="/images/hero-section-image.png" alt="hero section image" />
         </div>
         <div className="hidden md:block">

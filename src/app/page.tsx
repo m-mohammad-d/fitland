@@ -1,3 +1,4 @@
+"use client";
 import Hero from "@/components/home/Hero";
 import MainOffers from "@/components/home/MainOffer";
 import Banner from "@/components/ui/Banner";
