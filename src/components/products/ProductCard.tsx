@@ -1,4 +1,5 @@
-import { Product } from "@prisma/client";
+
+import { Product } from "@/types/Products";
 import React from "react";
 
 interface ProductCardProps {
@@ -27,7 +28,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           از سایز {product.sizes} تا {product.sizes}
         </p>
 
-        {/* رنگ‌ها */}
         <div className="flex justify-center gap-2 mt-3">
           {product.colors.map((color, index) => (
             <span

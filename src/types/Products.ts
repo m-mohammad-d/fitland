@@ -17,7 +17,5 @@ export interface Product {
 }
 
 export interface GetProductsResponse {
-  data: {
-    products: Product[];
-  };
+  products: Product[];
 }
