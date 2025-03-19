@@ -8,20 +8,23 @@ datasource db {
 }
 
 model Product {
-  id          String    @id @default(uuid())
-  name        String  
-  description String   
-  price       Float    
-  stock       Int    
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String  
-  images      String[] 
-  colors      String[]  
-  sizes       String[] 
-  discountCode String? 
-  comments    Comment[] 
-  createdAt   DateTime @default(now()) 
-  updatedAt   DateTime @updatedAt   
+  id            String    @id @default(uuid())
+  name          String  
+  description   String   
+  price         Int    
+  stock         Int    
+  category      Category @relation(fields: [categoryId], references: [id])
+  categoryId    String  
+  images        String[] 
+  colors        String[]  
+  sizes         String[] 
+  discount      Float?    @default(0) 
+  discountCode  String? 
+  comments      Comment[] 
+  createdAt     DateTime @default(now()) 
+  updatedAt     DateTime @updatedAt   
+  
+  discountedPrice Int?
 }
 
 model Comment {

@@ -6,7 +6,13 @@ import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
 import { useQuery } from "@apollo/client";
 
 export default function Home() {
-  const { loading, error, data } = useQuery(GET_PRODUCTS);
+  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+    variables: {
+      sortBy: "DISCOUNT",
+      order: "DESC",
+      pageSize: 8,
+    },
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

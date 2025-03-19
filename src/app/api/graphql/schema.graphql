@@ -1,14 +1,38 @@
+enum SortOrder {
+  ASC
+  DESC
+}
+
+enum ProductSortField {
+  PRICE
+  DISCOUNT
+  CREATED_AT
+  NAME
+}
+
+input ProductFilter {
+  minPrice: Int
+  maxPrice: Int
+  discount: Int
+  categoryId: ID
+  colors: [String!]
+  sizes: [String!]
+  search: String
+}
+
 type Product {
   id: ID!
   name: String!
   description: String!
-  price: Float!
+  price: Int!
+  discountedPrice: Int
   stock: Int!
-  category: Category! 
+  category: Category!
   images: [String!]!
   colors: [String!]!
   sizes: [String!]!
   discountCode: String
+  discount: Float
   comments: [Comment!]!
   createdAt: String!
   updatedAt: String!
@@ -18,7 +42,7 @@ type Comment {
   id: ID!
   content: String!
   rating: Int!
-  product: Product! 
+  product: Product!
   createdAt: String!
 }
 
@@ -29,8 +53,17 @@ type Category {
 }
 
 type Query {
-  products: [Product!]!
+  products(
+    sortBy: ProductSortField
+    order: SortOrder
+    filters: ProductFilter
+    page: Int
+    pageSize: Int
+  ): [Product!]!
+
   product(id: ID!): Product
+  latestProduct: Product
+  highestDiscountProduct: Product
   categories: [Category!]!
 }
 
@@ -38,12 +71,13 @@ type Mutation {
   addProduct(
     name: String!
     description: String!
-    price: Float!
+    price: Int!
     stock: Int!
-    categoryId: ID! 
+    categoryId: ID!
     images: [String!]!
     colors: [String!]!
     sizes: [String!]!
+    discount: Float
     discountCode: String
   ): Product!
 
