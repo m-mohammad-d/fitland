@@ -1,4 +1,5 @@
 "use client";
+import BenefitsSection from "@/components/home/BenefitsSection";
 import Hero from "@/components/home/Hero";
 import MainOffers from "@/components/home/MainOffer";
 import ProductHighlight from "@/components/products/ProductHighlight";
@@ -86,6 +87,7 @@ export default function Home() {
           },
         ]}
       />
+      <BenefitsSection />
     </div>
   );
 }
