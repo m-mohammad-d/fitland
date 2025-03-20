@@ -8,18 +8,34 @@ import { GetProductsResponse } from "@/types/Products";
 import { useQuery } from "@apollo/client";
 
 export default function Home() {
-  const { loading, error, data } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
+  const {
+    loading: loadingDiscountedProducts,
+    error: errorDiscountedProducts,
+    data: discountedProductsData,
+  } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
     variables: {
-      sortBy: "DISCOUNT",
+      sortBy: "discount",
       order: "DESC",
       limit: 8,
     },
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  const {
+    loading: loadingNewProducts,
+    error: errorNewProducts,
+    data: newProductsData,
+  } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
+    variables: {
+      sortBy: "createdAt",
+      order: "DESC",
+      limit: 8,
+    },
+  });
 
-  console.log(data);
+  if (loadingDiscountedProducts || loadingNewProducts) return <p>Loading...</p>;
+  if (errorDiscountedProducts)
+    return <p>Error: {errorDiscountedProducts.message}</p>;
+  if (errorNewProducts) return <p>Error: {errorNewProducts.message}</p>;
 
   return (
     <div>
@@ -29,7 +45,16 @@ export default function Home() {
         imageUrl="/images/Baner.png"
         mobileImageUrl="images/Baner-mobile.png"
       />
-      <ProductHighlight title="بیشترین تخفیف" products={data?.products} className="bg-primary-50" />
+      <ProductHighlight
+        title="بیشترین تخفیف"
+        products={discountedProductsData?.products}
+        className="bg-primary-50"
+      />
+      <ProductHighlight
+        title="جدیدترین محصولات"
+        products={newProductsData?.products}
+        className="bg-white"
+      />
     </div>
   );
 }

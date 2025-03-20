@@ -4,10 +4,10 @@ enum SortOrder {
 }
 
 enum ProductSortField {
-  PRICE
-  DISCOUNT
-  CREATED_AT
-  NAME
+  price
+  discount
+  createdAt
+  name
 }
 
 input ProductFilter {

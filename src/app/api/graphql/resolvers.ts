@@ -9,7 +9,7 @@ const resolvers = {
 
       let orderBy: any = {};
       if (sortBy) {
-        orderBy[sortBy.toLowerCase()] = order?.toLowerCase() || "asc";
+        orderBy[sortBy] = order?.toLowerCase() || "asc";
       }
 
       const where: any = {};

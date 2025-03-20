@@ -30,10 +30,10 @@ const ProductHighlight: React.FC<ProductHighlightProps> = ({
         className
       )}
     >
-      <h2 className="text-lg md:text-xl font-semibold text-center w-fit absolute -top-4 md:-top-5 rounded-bl-2xl rounded-br-2xl md:rounded-bl-3xl md:rounded-br-3xl bg-white left-1/2 transform -translate-x-1/2 px-3 md:px-6 py-1 md:py-2 text-neutral-950 mb-4 md:mb-8">
+      <h2 className="text-lg md:text-xl text-secondary font-semibold text-center w-fit absolute -top-4 md:-top-5 rounded-bl-2xl rounded-br-2xl md:rounded-bl-3xl md:rounded-br-3xl bg-white left-1/2 transform -translate-x-1/2 px-3 md:px-6 py-1 md:py- mb-4 md:mb-8">
         {title}
       </h2>
-      <div className="mx-auto relative container px-2 md:px-6 py-3 md:py-6">
+      <div className="mx-auto relative container mt-10 px-2 md:px-6 py-3 md:py-6">
         <button
           id="next-btn"
           className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent shadow-md p-2 rounded-full text-secondary"
