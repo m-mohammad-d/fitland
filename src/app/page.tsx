@@ -40,7 +40,20 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <MainOffers />
+      <MainOffers
+        offers={[
+          {
+            image: "images/nike-shirt.jpg",
+            title: "جدید ترین تخفیفات فصل برند نایک",
+            brand: "نایک",
+          },
+          {
+            image: "images/puma-shirt.jpg",
+            title: "جدید ترین تخفیفات فصل برند پوما",
+            brand: "پوما",
+          },
+        ]}
+      />{" "}
       <Banner
         imageUrl="/images/Baner.png"
         mobileImageUrl="images/Baner-mobile.png"
@@ -54,6 +67,24 @@ export default function Home() {
         title="جدیدترین محصولات"
         products={newProductsData?.products}
         className="bg-white"
+      />
+      <Banner
+        imageUrl="/images/Baner-1.png"
+        mobileImageUrl="images/Baner-1-mobile.png"
+      />
+      <MainOffers
+        offers={[
+          {
+            image: "images/adidas-shirt.png",
+            title: "جدیدترین محصولات آدیداس",
+            brand: "آدیداس",
+          },
+          {
+            image: "images/reebok-shirt.png",
+            title: "جدیدترین محصولات ریباک",
+            brand: "ریباک",
+          },
+        ]}
       />
     </div>
   );

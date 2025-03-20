@@ -1,21 +1,27 @@
 import OfferCard from "./OfferCard";
 
-const MainOffers: React.FC = () => {
+interface Offer {
+  image: string;
+  title: string;
+  brand: string;
+}
+
+interface MainOffersProps {
+  offers: Offer[];
+}
+
+const MainOffers: React.FC<MainOffersProps> = ({ offers }) => {
   return (
     <div className="p-6 md:p-10 flex flex-col md:flex-row gap-4 container mx-auto my-12 items-center justify-between">
       <div className="grid sm:grid-cols-2 gap-4 md:gap-6 w-full md:w-auto">
-        <OfferCard
-          image="images/nike-shirt.jpg"
-          title="جدید ترین تخفیفات فصل برند نایک"
-          discount={50}
-          brand="نایک"
-        />
-        <OfferCard
-          image="images/puma-shirt.jpg"
-          title="جدید ترین تخفیفات فصل برند پوما"
-          discount={50}
-          brand="پوما"
-        />
+        {offers.map((offer, index) => (
+          <OfferCard
+            key={index}
+            image={offer.image}
+            title={offer.title}
+            brand={offer.brand}
+          />
+        ))}
       </div>
       <div className="hidden md:block w-full md:w-auto text-center md:text-right">
         <h2 className="text-xl md:text-2xl font-bold text-secondary mb-4">

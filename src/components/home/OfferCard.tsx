@@ -1,13 +1,11 @@
 interface OfferCardProps {
   image: string;
   title: string;
-  discount: number;
   brand: string;
 }
 const OfferCard: React.FC<OfferCardProps> = ({
   image,
   title,
-  discount,
   brand,
 }) => {
   return (

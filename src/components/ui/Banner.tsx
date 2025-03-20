@@ -14,7 +14,7 @@ const Banner: React.FC<BannerProps> = ({ imageUrl, mobileImageUrl }) => {
       <img
         src={imageUrl}
         alt="Desktop Banner"
-        className="hidden md:block w-full h-[500px]"
+        className="hidden md:block w-full h-[600px]"
       />
     </div>
   );
