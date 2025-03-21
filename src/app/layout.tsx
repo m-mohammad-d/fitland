@@ -3,6 +3,7 @@ import "./globals.css";
 import PromoBar from "@/components/layout/PromoBar";
 import Header from "@/components/layout/Header";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
+import Footer from "@/components/layout/Footer";
 export const metadata: Metadata = {
   title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
   description:
@@ -30,6 +31,7 @@ export default function RootLayout({
         <main className="flex-1">
           <ApolloClientProvider>{children}</ApolloClientProvider>
         </main>
+        <Footer />
       </body>
     </html>
   );
