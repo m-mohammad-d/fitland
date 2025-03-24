@@ -16,14 +16,13 @@ model Product {
   category      Category @relation(fields: [categoryId], references: [id])
   categoryId    String  
   images        String[] 
-  colors        String[]  
+  colors        Json
   sizes         String[] 
   discount      Float?    @default(0) 
   discountCode  String? 
   comments      Comment[] 
   createdAt     DateTime @default(now()) 
   updatedAt     DateTime @updatedAt   
-  
   discountedPrice Int?
 }
 

@@ -18,7 +18,13 @@ async function main() {
   console.log("✅ دسته‌بندی‌ها اضافه شدند.");
 
   const categories = await prisma.category.findMany();
-  const getCategory = (name) => categories.find((c) => c.name === name)?.id;
+  const getCategory = (name) => {
+    const category = categories.find((c) => c.name === name);
+    if (!category) {
+      throw new Error(`❌ دسته‌بندی ${name} پیدا نشد!`);
+    }
+    return category.id;
+  };
 
   await prisma.product.createMany({
     data: [
@@ -31,7 +37,10 @@ async function main() {
         stock: 20,
         categoryId: getCategory("کفش"),
         images: ["nike_run_1.jpg", "nike_run_2.jpg"],
-        colors: ["مشکی", "سفید"],
+        colors: [
+          { name: "مشکی", hex: "#000000" },
+          { name: "سفید", hex: "#FFFFFF" },
+        ],
         sizes: ["40", "41", "42"],
         discountCode: "SALE20",
       },
@@ -44,7 +53,10 @@ async function main() {
         stock: 50,
         categoryId: getCategory("تی‌شرت"),
         images: ["adidas_tshirt.jpg"],
-        colors: ["آبی", "قرمز"],
+        colors: [
+          { name: "آبی", hex: "#0000FF" },
+          { name: "قرمز", hex: "#FF0000" },
+        ],
         sizes: ["M", "L", "XL"],
         discountCode: "ADIDAS20",
       },
@@ -57,7 +69,10 @@ async function main() {
         stock: 30,
         categoryId: getCategory("هودی"),
         images: ["nike_hoodie.jpg"],
-        colors: ["خاکستری", "مشکی"],
+        colors: [
+          { name: "خاکستری", hex: "#808080" },
+          { name: "مشکی", hex: "#000000" },
+        ],
         sizes: ["M", "L"],
       },
       {
@@ -69,7 +84,7 @@ async function main() {
         stock: 15,
         categoryId: getCategory("اکسسوری"),
         images: ["xiaomi_watch.jpg"],
-        colors: ["مشکی"],
+        colors: [{ name: "مشکی", hex: "#000000" }],
         discountCode: "TECH10",
       },
       {
@@ -81,7 +96,10 @@ async function main() {
         stock: 10,
         categoryId: getCategory("کفش"),
         images: ["adidas_football.jpg"],
-        colors: ["آبی", "سبز"],
+        colors: [
+          { name: "آبی", hex: "#0000FF" },
+          { name: "سبز", hex: "#008000" },
+        ],
         sizes: ["42", "43"],
       },
       {
@@ -93,7 +111,10 @@ async function main() {
         stock: 25,
         categoryId: getCategory("شلوار ورزشی"),
         images: ["puma_pants.jpg"],
-        colors: ["مشکی", "سرمه‌ای"],
+        colors: [
+          { name: "مشکی", hex: "#000000" },
+          { name: "سرمه‌ای", hex: "#191970" },
+        ],
         sizes: ["L", "XL"],
         discountCode: "PUMA10",
       },
@@ -106,7 +127,10 @@ async function main() {
         stock: 40,
         categoryId: getCategory("اکسسوری"),
         images: ["yankees_cap.jpg"],
-        colors: ["مشکی", "سفید"],
+        colors: [
+          { name: "مشکی", hex: "#000000" },
+          { name: "سفید", hex: "#FFFFFF" },
+        ],
         discountCode: "CAP10",
       },
     ],

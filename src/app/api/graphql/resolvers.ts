@@ -11,20 +11,32 @@ const resolvers = {
       if (sortBy) {
         orderBy[sortBy] = order?.toLowerCase() || "asc";
       }
+      console.log(filters);
 
       const where: any = {};
-      if (filters?.minPrice) where.price = { gte: filters.minPrice };
-      if (filters?.maxPrice) where.price = { lte: filters.maxPrice };
+
+      if (filters?.minPrice !== undefined)
+        where.price = { gte: filters.minPrice };
+      if (filters?.maxPrice !== undefined)
+        where.price = { ...where.price, lte: filters.maxPrice };
+
       if (filters?.discount) where.discount = { gte: filters.discount };
-      if (filters?.categoryId) where.categoryId = filters.categoryId;
 
+      if (filters?.category?.length)
+        where.categoryId = { in: filters.category };
+
+      if (filters?.brand?.length) where.brand = { in: filters.brand };
       if (filters?.colors?.length) {
-        where.colors = { hasSome: filters.colors };
+        where.OR = filters.colors.map((color: { name: string }) => ({
+          colors: {
+            array_contains: [{ name: color }],
+          },
+        }));
       }
 
-      if (filters?.sizes?.length) {
-        where.sizes = { hasSome: filters.sizes };
-      }
+      if (filters?.sizes?.length) where.sizes = { hasSome: filters.sizes };
+
+      if (filters?.availableOnly) where.stock = { gt: 0 };
 
       if (filters?.search) {
         where.OR = [
@@ -35,23 +47,22 @@ const resolvers = {
 
       const skip = (page - 1) * pageSize;
       const take = pageSize;
-
       const products = await prisma.product.findMany({
         where,
         orderBy,
         skip,
         take,
-        include: { category: true },
+        include: {
+          category: true,
+        },
       });
-
-      return products.map((product) => ({
-        ...product,
-        discountedPrice: product.discount
-          ? Math.round(product.price * (1 - product.discount / 100))
-          : product.price,
-      }));
+      console.log(products);
+      return products;
     },
 
+    categories: async () => {
+      return await prisma.category.findMany();
+    },
     product: async (_: any, { id }: { id: string }) => {
       const product = await prisma.product.findUnique({
         where: { id },

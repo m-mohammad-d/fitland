@@ -10,7 +10,10 @@ export interface Product {
   price: number;
   stock: number;
   images: string[];
-  colors: string[];
+  colors: {
+    name: string;
+    hex: string;
+  }[];
   sizes: string[];
   category: Category;
   __typename: "Product";

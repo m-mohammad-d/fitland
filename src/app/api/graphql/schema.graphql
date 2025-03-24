@@ -9,15 +9,21 @@ enum ProductSortField {
   createdAt
   name
 }
-
+type Color {
+  name: String!
+  hex: String!
+}
 input ProductFilter {
   minPrice: Int
   maxPrice: Int
   discount: Int
-  categoryId: ID
-  colors: [String!]
+  category: [ID!]
+  brand: [ID!]
+  colors: [ID!]
   sizes: [String!]
+  availableOnly: Boolean
   search: String
+  minRating: Float
 }
 
 type Product {
@@ -29,7 +35,7 @@ type Product {
   stock: Int!
   category: Category!
   images: [String!]!
-  colors: [String!]!
+  colors: [Color]
   sizes: [String!]!
   discountCode: String
   discount: Float

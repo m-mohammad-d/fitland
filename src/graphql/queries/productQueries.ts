@@ -22,7 +22,10 @@ export const GET_PRODUCTS = gql`
       discountedPrice
       stock
       images
-      colors
+      colors {
+        name
+        hex
+      }
       sizes
       discount
       category {
@@ -41,7 +44,10 @@ export const GET_PRODUCT_BY_ID = gql`
       price
       stock
       images
-      colors
+      colors {
+        name
+        hex
+      }
       sizes
       category {
         name

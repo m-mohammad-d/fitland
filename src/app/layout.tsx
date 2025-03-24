@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import PromoBar from "@/components/layout/PromoBar";
 import Header from "@/components/layout/Header";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
@@ -29,7 +30,9 @@ export default function RootLayout({
         <PromoBar />
         <Header />
         <main className="flex-1">
-          <ApolloClientProvider>{children}</ApolloClientProvider>
+          <NuqsAdapter>
+            <ApolloClientProvider>{children}</ApolloClientProvider>
+          </NuqsAdapter>
         </main>
         <Footer />
       </body>
