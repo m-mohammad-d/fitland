@@ -13,7 +13,6 @@ import { useDebounce } from "@/hooks/useDebounce";
 
 type FilterKey = "category" | "brand" | "colors" | "sizes";
 
-
 const Filter = () => {
   const { filters, updateFilters, activeSections, setActiveSections } =
     useFilters();
@@ -99,7 +98,7 @@ const Filter = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 border border-neutral-400 rounded-xl bg-white shadow-lg w-full md:w-80 space-y-4">
+    <div className="p-4 md:p-6 border border-neutral-400 rounded-xl bg-white shadow-lg w-full lg:w-80 space-y-4">
       <div className="flex justify-between items-center pb-4 border-b border-gray-100">
         <h3 className="text-xl font-bold text-gray-900">فیلتر محصولات</h3>
         <button

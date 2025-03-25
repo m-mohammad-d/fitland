@@ -1,14 +1,14 @@
-enum SortOrder {
-  ASC
-  DESC
-}
-
 enum ProductSortField {
   price
+  priceDesc
   discount
+  discountDesc
   createdAt
-  name
+  createdAtDesc
+  stock
+  stockDesc
 }
+
 type Color {
   name: String!
   hex: String!
@@ -61,15 +61,12 @@ type Category {
 type Query {
   products(
     sortBy: ProductSortField
-    order: SortOrder
     filters: ProductFilter
     page: Int
     pageSize: Int
   ): [Product!]!
 
   product(id: ID!): Product
-  latestProduct: Product
-  highestDiscountProduct: Product
   categories: [Category!]!
 }
 

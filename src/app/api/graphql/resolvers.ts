@@ -5,13 +5,15 @@ const prisma = new PrismaClient();
 const resolvers = {
   Query: {
     products: async (_: any, args: any) => {
-      const { sortBy, order, filters, page = 1, pageSize = 10 } = args;
+      const { sortBy, filters, page = 1, pageSize = 10 } = args;
 
       let orderBy: any = {};
       if (sortBy) {
-        orderBy[sortBy] = order?.toLowerCase() || "asc";
+        const isDescending = sortBy.endsWith("Desc");
+        const column = isDescending ? sortBy.replace("Desc", "") : sortBy;
+
+        orderBy[column] = isDescending ? "desc" : "asc";
       }
-      console.log(filters);
 
       const where: any = {};
 
@@ -56,7 +58,6 @@ const resolvers = {
           category: true,
         },
       });
-      console.log(products);
       return products;
     },
 

@@ -4,14 +4,12 @@ export const GET_PRODUCTS = gql`
   query GetProducts(
     $filters: ProductFilter
     $sortBy: ProductSortField
-    $order: SortOrder
     $page: Int
     $pageSize: Int
   ) {
     products(
       filters: $filters
       sortBy: $sortBy
-      order: $order
       page: $page
       pageSize: $pageSize
     ) {

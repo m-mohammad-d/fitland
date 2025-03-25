@@ -13,23 +13,26 @@ const filterSchema = z.object({
   category: z.array(z.string()).default([]).optional(),
   minPrice: z.number().optional(),
   maxPrice: z.number().optional(),
-  page: z.number().default(1).optional(),
   brand: z.array(z.string()).default([]).optional(),
   colors: z.array(z.string()).default([]).optional(),
   sizes: z.array(z.string()).default([]).optional(),
   availableOnly: z.boolean().optional(),
-  sort: z.string().optional(),
+  sortBy: z.string().optional(),
 });
 
 type Filters = z.infer<typeof filterSchema>;
 type FilterContextType = {
   filters: Filters;
+  sortBy: string;
   isPending: boolean;
   updateFilters: (_updates: Partial<Filters>) => void;
   activeSections: Record<string, boolean>;
   setActiveSections: React.Dispatch<
     React.SetStateAction<Record<string, boolean>>
   >;
+  updateSortBy: (value: string) => void;
+  page: number;
+  updatePage: (page: number) => void;
 };
 
 export const FilterContext = createContext<FilterContextType | undefined>(
@@ -43,6 +46,8 @@ export default function FilterProvider({
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Parsing filters
   const filters = filterSchema.safeParse({
     category: searchParams.getAll("category"),
     brand: searchParams.getAll("brand"),
@@ -57,9 +62,12 @@ export default function FilterProvider({
     availableOnly: searchParams.has("availableOnly")
       ? searchParams.get("availableOnly") === "true"
       : false,
-    sort: searchParams.get("sort") || undefined,
-    page: searchParams.get("page") || undefined,
   });
+
+  // Parsing page
+  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
+  const sortBy = searchParams.get("sortBy") || "createdAt";
+
   const [activeSections, setActiveSections] = useState<Record<string, boolean>>(
     {
       brand: false,
@@ -72,7 +80,6 @@ export default function FilterProvider({
   );
 
   const [isPending, startTransition] = useTransition();
-
   const [optimisticFilters, setOptimisticFilters] = useOptimistic(
     filters.data,
     (prevState, newFilters: Partial<Filters>) => {
@@ -84,10 +91,7 @@ export default function FilterProvider({
   );
 
   function updateFilters(updates: Partial<typeof optimisticFilters>) {
-    const newState = {
-      ...optimisticFilters,
-      ...updates,
-    };
+    const newState = { ...optimisticFilters, ...updates };
     const newSearchParams = new URLSearchParams();
 
     Object.entries(newState).forEach(([key, value]) => {
@@ -106,14 +110,35 @@ export default function FilterProvider({
     });
   }
 
+  function updateSortBy(value: string) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("sortBy", value);
+
+    startTransition(() => {
+      router.replace(`?${newSearchParams}`, { scroll: false });
+    });
+  }
+  function updatePage(newPage: number) {
+    const newSearchParams = new URLSearchParams(window.location.search);
+    newSearchParams.set("page", String(newPage));
+
+    startTransition(() => {
+      router.replace(`?${newSearchParams}`, { scroll: false });
+    });
+  }
+
   return (
     <FilterContext.Provider
       value={{
         filters: optimisticFilters || {},
         isPending,
+        sortBy,
+        updateSortBy,
         updateFilters,
         activeSections,
         setActiveSections,
+        page,
+        updatePage,
       }}
     >
       {children}
