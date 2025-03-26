@@ -20,7 +20,6 @@ export default function Home() {
       limit: 8,
     },
   });
-
   const {
     loading: loadingNewProducts,
     error: errorNewProducts,

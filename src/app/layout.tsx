@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import "./globals.css";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
-import PromoBar from "@/components/layout/PromoBar";
-import Header from "@/components/layout/Header";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
-import Footer from "@/components/layout/Footer";
+
 export const metadata: Metadata = {
   title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
   description:
@@ -18,7 +15,6 @@ export const metadata: Metadata = {
   ],
   creator: "فیت لند",
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -26,15 +22,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="flex flex-col min-h-screen">
-        <PromoBar />
-        <Header />
-        <main className="flex-1">
-          <NuqsAdapter>
-            <ApolloClientProvider>{children}</ApolloClientProvider>
-          </NuqsAdapter>
-        </main>
-        <Footer />
+      <body>
+        <ApolloClientProvider>{children}</ApolloClientProvider>
       </body>
     </html>
   );
