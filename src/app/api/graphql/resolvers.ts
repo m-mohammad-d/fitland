@@ -1,7 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 const prisma = new PrismaClient();
-
+const SECRET_KEY = process.env.JWT_SECRET!;
 const resolvers = {
   Query: {
     products: async (_: any, args: any) => {
@@ -119,6 +122,110 @@ const resolvers = {
           name: args.name,
         },
       }),
+    signUp: async (
+      _: any,
+      {
+        email,
+        password,
+        name,
+      }: { email: string; password: string; name?: string }
+    ) => {
+      const existingUser = await prisma.user.findUnique({ where: { email } });
+      if (existingUser) {
+        throw new Error("Email already in use");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      const user = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name: name || "",
+          role: "USER",
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      if (!user.id) {
+        throw new Error("Failed to create user");
+      }
+
+      const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
+        expiresIn: "7d",
+      });
+      const cookieStore = await cookies();
+
+      cookieStore.set("auth-token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        path: "/",
+      });
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+    },
+
+    signIn: async (
+      _: any,
+      { email, password }: { email: string; password: string; name?: string }
+    ) => {
+      const user = await prisma.user.findUnique({ where: { email } });
+      if (!user) {
+        throw new Error("Invalid email or password");
+      }
+
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid) {
+        throw new Error("Invalid email or password");
+      }
+
+      const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
+        expiresIn: "7d",
+      });
+
+      const cookieStore = await cookies();
+      cookieStore.set("auth-token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+    },
+
+    signOut: async () => {
+      const cookieStore = await cookies();
+      cookieStore.set("auth-token", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        expires: new Date(0),
+        path: "/",
+      });
+
+      return {
+        success: true,
+      };
+    },
   },
 };
 

@@ -5,10 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import Input from "@/components/ui/Input";
-import { useState, useEffect } from "react";
-import { PasswordStrengthMeter } from "@/components/ui/PasswordStrengthMeter";
-import { calculatePasswordStrength, PasswordStrength } from "@/utils/passwordStrength";
-
+import { LOGIN } from "@/graphql/mutations/AuthMutations";
+import { useMutation } from "@apollo/client";
 
 const loginSchema = z.object({
   email: z.string().email("ایمیل معتبر وارد کنید").min(1, "ایمیل الزامی است"),
@@ -18,30 +16,23 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+  const [mutateFunction] = useMutation(LOGIN);
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
-  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({
-    score: 0,
-    message: "",
-  });
-
-  const password = watch("password");
-
-  useEffect(() => {
-    setPasswordStrength(
-      password ? calculatePasswordStrength(password) : { score: 0, message: "" }
-    );
-  }, [password]);
-
   const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
+    mutateFunction({
+      variables: {
+        email: data.email,
+        name: data.email,
+        password: data.password,
+      },
+    });
   };
 
   return (
@@ -72,8 +63,6 @@ export default function LoginForm() {
             errors.password ? "border-error-500" : "border-neutral-300"
           }`}
         />
-
-        {password && <PasswordStrengthMeter strength={passwordStrength} />}
 
         <div className="text-right">
           <Link

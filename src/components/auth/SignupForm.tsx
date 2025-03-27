@@ -8,6 +8,8 @@ import Input from "@/components/ui/Input";
 import { useState, useEffect } from "react";
 import { PasswordStrengthMeter } from "@/components/ui/PasswordStrengthMeter";
 import { calculatePasswordStrength } from "@/utils/passwordStrength";
+import { useMutation } from "@apollo/client";
+import { SIGN_UP } from "@/graphql/mutations/AuthMutations";
 
 const signupSchema = z
   .object({
@@ -24,6 +26,8 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 export default function SignupForm() {
+  const [mutateFunction] = useMutation(SIGN_UP);
+
   const {
     register,
     handleSubmit,
@@ -47,8 +51,13 @@ export default function SignupForm() {
   }, [password]);
 
   const onSubmit = (data: SignupFormValues) => {
-    console.log(data);
-    // Handle signup logic here
+    mutateFunction({
+      variables: {
+        email: data.email,
+        name: data.email,
+        password: data.password,
+      },
+    });
   };
 
   return (

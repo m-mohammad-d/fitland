@@ -25,7 +25,11 @@ input ProductFilter {
   search: String
   minRating: Float
 }
-
+type User {
+  id: ID
+  name: String
+  email: String
+}
 type Product {
   id: ID!
   name: String!
@@ -70,6 +74,9 @@ type Query {
   categories: [Category!]!
 }
 
+type SignOutResponse {
+  success: Boolean!
+}
 type Mutation {
   addProduct(
     name: String!
@@ -83,6 +90,10 @@ type Mutation {
     discount: Float
     discountCode: String
   ): Product!
+
+  signUp(name: String!, email: String!, password: String!): User!
+  signIn(email: String!, password: String!): User!
+  signOut: SignOutResponse!
 
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
 
