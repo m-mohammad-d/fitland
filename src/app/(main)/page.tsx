@@ -1,42 +1,27 @@
-"use client";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import Hero from "@/components/home/Hero";
 import MainOffers from "@/components/home/MainOffer";
 import ProductHighlight from "@/components/products/ProductHighlight";
 import Banner from "@/components/ui/Banner";
 import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
+import graphQLClient from "@/lib/graphqlClient";
 import { GetProductsResponse } from "@/types/Products";
-import { useQuery } from "@apollo/client";
+import { Product } from "@prisma/client";
 
-export default function Home() {
-  const {
-    loading: loadingDiscountedProducts,
-    error: errorDiscountedProducts,
-    data: discountedProductsData,
-  } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
-    variables: {
-      sortBy: "discount",
-      order: "DESC",
-      limit: 8,
-    },
-  });
-  const {
-    loading: loadingNewProducts,
-    error: errorNewProducts,
-    data: newProductsData,
-  } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
-    variables: {
+export default async function Home() {
+  const [discountedProductsResponse, newProductsResponse] = await Promise.all([
+    graphQLClient.request<GetProductsResponse>(GET_PRODUCTS, {
+      sortBy: "createdAt", 
+      pageSize: 8,
+    }),
+    graphQLClient.request<GetProductsResponse>(GET_PRODUCTS, {
       sortBy: "createdAt",
-      order: "DESC",
-      limit: 8,
-    },
-  });
-
-  if (loadingDiscountedProducts || loadingNewProducts) return <p>Loading...</p>;
-  if (errorDiscountedProducts)
-    return <p>Error: {errorDiscountedProducts.message}</p>;
-  if (errorNewProducts) return <p>Error: {errorNewProducts.message}</p>;
-
+      pageSize: 8,
+    }),
+  ]);
+  
+  const discountedProducts = discountedProductsResponse.products;
+  const newProducts = newProductsResponse.products;
   return (
     <div>
       <Hero />
@@ -60,12 +45,12 @@ export default function Home() {
       />
       <ProductHighlight
         title="بیشترین تخفیف"
-        products={discountedProductsData?.products}
+        products={discountedProducts}
         className="bg-primary-50"
       />
       <ProductHighlight
         title="جدیدترین محصولات"
-        products={newProductsData?.products}
+        products={newProducts}
         className="bg-white"
       />
       <Banner
