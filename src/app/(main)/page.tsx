@@ -11,7 +11,7 @@ import { Product } from "@prisma/client";
 export default async function Home() {
   const [discountedProductsResponse, newProductsResponse] = await Promise.all([
     graphQLClient.request<GetProductsResponse>(GET_PRODUCTS, {
-      sortBy: "createdAt", 
+      sortBy: "createdAt",
       pageSize: 8,
     }),
     graphQLClient.request<GetProductsResponse>(GET_PRODUCTS, {
@@ -19,7 +19,7 @@ export default async function Home() {
       pageSize: 8,
     }),
   ]);
-  
+
   const discountedProducts = discountedProductsResponse.products;
   const newProducts = newProductsResponse.products;
   return (
@@ -72,6 +72,7 @@ export default async function Home() {
         ]}
       />
       <BenefitsSection />
+
     </div>
   );
 }
