@@ -1,16 +1,53 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+type Filters = {
+  minPrice?: number;
+  maxPrice?: number;
+  discount?: number;
+  category?: string[];
+  brand?: string[];
+  colors?: { name: string }[];
+  sizes?: string[];
+  availableOnly?: boolean;
+  search?: string;
+};
 
+type Args = {
+  sortBy?: string;
+  filters?: Filters;
+  page?: number;
+  pageSize?: number;
+};
+type AddProductArgs = {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  categoryId: string;
+  images: string[];
+  colors: { name: string }[];
+  sizes: string[];
+  discount?: number;
+  discountCode?: string | null;
+};
+type AddCommentArgs = {
+  content: string;
+  rating: number;
+  productId: string;
+};
+type AddCategoryArgs = {
+  name: string;
+};
 const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET!;
 const resolvers = {
   Query: {
-    products: async (_: any, args: any) => {
+    products: async (_: void, args: Args) => {
       const { sortBy, filters, page = 1, pageSize = 10 } = args;
 
-      let orderBy: any = {};
+      let orderBy: Record<string, "asc" | "desc"> = {};
       if (sortBy) {
         const isDescending = sortBy.endsWith("Desc");
         const column = isDescending ? sortBy.replace("Desc", "") : sortBy;
@@ -34,7 +71,7 @@ const resolvers = {
       if (filters?.colors?.length) {
         where.OR = filters.colors.map((color: { name: string }) => ({
           colors: {
-            array_contains: [{ name: color }],
+            array_contains: [{ name: color.name }],
           },
         }));
       }
@@ -67,7 +104,7 @@ const resolvers = {
     categories: async () => {
       return await prisma.category.findMany();
     },
-    product: async (_: any, { id }: { id: string }) => {
+    product: async (_: void, { id }: { id: string }) => {
       const product = await prisma.product.findUnique({
         where: { id },
         include: { comments: true, category: true },
@@ -85,7 +122,7 @@ const resolvers = {
   },
 
   Mutation: {
-    addProduct: async (_: any, args: any) => {
+    addProduct: async (_: void, args: AddProductArgs) => {
       const discountedPrice =
         args.discount && args.discount > 0
           ? Math.round(args.price * (1 - args.discount / 100))
@@ -107,7 +144,7 @@ const resolvers = {
         },
       });
     },
-    addComment: async (_: any, args: any) =>
+    addComment: async (_: void, args: AddCommentArgs) =>
       await prisma.comment.create({
         data: {
           content: args.content,
@@ -116,14 +153,15 @@ const resolvers = {
         },
       }),
 
-    addCategory: async (_: any, args: any) =>
-      await prisma.category.create({
+    addCategory: async (_: void, args: AddCategoryArgs) => {
+      return await prisma.category.create({
         data: {
           name: args.name,
         },
-      }),
+      });
+    },
     signUp: async (
-      _: any,
+      _: void,
       {
         email,
         password,
@@ -179,7 +217,7 @@ const resolvers = {
     },
 
     signIn: async (
-      _: any,
+      _: void,
       { email, password }: { email: string; password: string; name?: string }
     ) => {
       const user = await prisma.user.findUnique({ where: { email } });
@@ -227,7 +265,7 @@ const resolvers = {
       };
     },
     updateUser: async (
-      _: any,
+      _: void,
       {
         id,
         name,
