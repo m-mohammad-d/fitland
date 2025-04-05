@@ -226,6 +226,65 @@ const resolvers = {
         success: true,
       };
     },
+    updateUser: async (
+      _: any,
+      {
+        id,
+        name,
+        email,
+        phone,
+        nationalCode,
+        gender,
+      }: {
+        id: string;
+        name?: string;
+        email?: string;
+        phone?: string;
+        nationalCode?: string;
+        gender?: string;
+      }
+    ) => {
+      const existingUser = await prisma.user.findUnique({ where: { id } });
+      if (!existingUser) {
+        throw new Error("User not found");
+      }
+
+      if (email && email !== existingUser.email) {
+        const emailExists = await prisma.user.findUnique({ where: { email } });
+        if (emailExists) {
+          throw new Error("Email already in use");
+        }
+      }
+
+      if (phone && phone !== existingUser.phone) {
+        const phoneExists = await prisma.user.findUnique({ where: { phone } });
+        if (phoneExists) {
+          throw new Error("Phone number already in use");
+        }
+      }
+
+      let genderEnum: "MALE" | "FEMALE" | undefined = undefined;
+      if (gender) {
+        genderEnum = gender.toUpperCase() as "MALE" | "FEMALE";
+
+        if (!["MALE", "FEMALE"].includes(genderEnum)) {
+          throw new Error("Invalid gender value");
+        }
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data: {
+          name: name || existingUser.name,
+          email: email || existingUser.email,
+          phone: phone || existingUser.phone,
+          nationalCode: nationalCode || existingUser.nationalCode,
+          gender: genderEnum || existingUser.gender,
+        },
+      });
+
+      return updatedUser;
+    },
   },
 };
 

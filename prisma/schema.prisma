@@ -24,7 +24,6 @@ model User {
 enum Gender {
   MALE
   FEMALE
-  OTHER
 }
 
 enum Role {

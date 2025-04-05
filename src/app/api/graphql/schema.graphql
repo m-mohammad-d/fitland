@@ -77,6 +77,10 @@ type Query {
 type SignOutResponse {
   success: Boolean!
 }
+enum Gender {
+  MALE
+  FEMALE
+}
 type Mutation {
   addProduct(
     name: String!
@@ -94,7 +98,14 @@ type Mutation {
   signUp(name: String!, email: String!, password: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SignOutResponse!
-
+  updateUser(
+    id: String!
+    name: String
+    email: String
+    phone: String
+    nationalCode: String
+    gender: Gender
+  ): User!
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
 
   addCategory(name: String!): Category!
