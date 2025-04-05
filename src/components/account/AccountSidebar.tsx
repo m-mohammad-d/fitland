@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { useState, ChangeEvent } from "react";
+import { useUpload } from "@/hooks/useUpload";
 import {
   BsPlus,
   BsHeart,
@@ -12,9 +13,10 @@ import {
 } from "react-icons/bs";
 
 function AccountSidebar() {
+  const { uploadFile, uploading, imageUrl } = useUpload();
   const [profileImagePreview, setProfileImagePreview] = useState<string>("");
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const [userInfo] = useState({
     data: {
       user: { name: "نام کاربر", email: "user@example.com" },
@@ -24,16 +26,16 @@ function AccountSidebar() {
   function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
-      setProfileImageFile(file);
-      const reader = new FileReader();
-      reader.onload = () => setProfileImagePreview(reader.result as string);
-      reader.readAsDataURL(file);
+      setProfileImagePreview(URL.createObjectURL(file));
+      setSelectedFile(file); 
     }
   }
 
-  function handleSaveChanges(event: MouseEvent<HTMLButtonElement>) {
-    setIsUpdating(true);
-    setTimeout(() => setIsUpdating(false), 1000);
+  async function handleUpload() {
+    if (selectedFile) {
+      await uploadFile(selectedFile);
+      setSelectedFile(null); 
+    }
   }
 
   return (
@@ -41,7 +43,7 @@ function AccountSidebar() {
       <div className="flex flex-col items-center pb-4">
         <div className="relative">
           <img
-            src={profileImagePreview || "/userLogo.jpg"}
+            src={imageUrl || profileImagePreview || "/userLogo.jpg"}
             alt="Profile"
             className="h-24 w-24 rounded-full object-cover border"
           />
@@ -60,13 +62,13 @@ function AccountSidebar() {
           />
         </div>
 
-        {profileImageFile && (
+        {selectedFile && (
           <button
-            onClick={handleSaveChanges}
-            disabled={isUpdating}
-            className="mt-3 px-4 py-1.5 text-white bg-success-600 rounded-md text-sm hover:bg-success-700 disabled:opacity-50"
+            onClick={handleUpload}
+            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            disabled={uploading}
           >
-            {isUpdating ? "در حال ذخیره..." : "ذخیره عکس"}
+            {uploading ? "در حال آپلود..." : "ذخیره عکس"}
           </button>
         )}
 
@@ -81,28 +83,23 @@ function AccountSidebar() {
           {[
             {
               href: "/account/profile",
-              icon: <BsPerson />,
-              label: "حساب کاربری",
+              icon: <BsPerson />, label: "حساب کاربری",
             },
             {
               href: "/account/orders",
-              icon: <BsClockHistory />,
-              label: "تاریخچه سفارشات",
+              icon: <BsClockHistory />, label: "تاریخچه سفارشات",
             },
             {
               href: "/account/favorites",
-              icon: <BsHeart />,
-              label: "علاقه‌مندی‌ها",
+              icon: <BsHeart />, label: "علاقه‌مندی‌ها",
             },
             {
               href: "/account/addresses",
-              icon: <BsGeoAlt />,
-              label: "آدرس‌ها",
+              icon: <BsGeoAlt />, label: "آدرس‌ها",
             },
             {
               href: "/account/reviews",
-              icon: <BsChatDots />,
-              label: "دیدگاه‌ها و نظرات",
+              icon: <BsChatDots />, label: "دیدگاه‌ها و نظرات",
             },
           ].map(({ href, icon, label }) => (
             <li key={href}>
