@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AuthLayout({
   children,
@@ -24,9 +25,9 @@ export default function AuthLayout({
             <Image src="/logo.svg" alt="Logo" width={150} height={150} />
           </div>
           <div>
-            <a href="/" className="text-xl font-semibold">
+            <Link href="/" className="text-xl font-semibold">
               برگشت به صفحه اصلی
-            </a>
+            </Link>
           </div>
         </div>
       </div>
