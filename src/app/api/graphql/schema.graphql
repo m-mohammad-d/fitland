@@ -25,10 +25,28 @@ input ProductFilter {
   search: String
   minRating: Float
 }
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
 type User {
-  id: ID
-  name: String
-  email: String
+  id: ID!
+  name: String!
+  email: String!
+  phone: String
+  nationalCode: String
+  gender: Gender
+  photo: String
+  role: Role!
+  lastLogin: String
+  createdAt: String!
+  updatedAt: String!
 }
 type Product {
   id: ID!
@@ -69,17 +87,13 @@ type Query {
     page: Int
     pageSize: Int
   ): [Product!]!
-
+  getMe: User!
   product(id: ID!): Product
   categories: [Category!]!
 }
 
 type SignOutResponse {
   success: Boolean!
-}
-enum Gender {
-  MALE
-  FEMALE
 }
 type Mutation {
   addProduct(

@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { cookies } from "next/headers";
 type Filters = {
   minPrice?: number;
@@ -99,6 +99,35 @@ const resolvers = {
         },
       });
       return products;
+    },
+    getMe: async () => {
+      try {
+        const cookieStore = await cookies();
+        const tokenValue = cookieStore.get("auth-token")?.value;
+
+        if (!tokenValue) {
+          throw new Error("Authentication token not found");
+        }
+
+        const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+        if (!decodedToken || !decodedToken.userId) {
+          throw new Error("Invalid token structure or missing id");
+        }
+
+        const { userId } = decodedToken;
+
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        return user;
+      } catch (error) {
+        console.error("Error in getMe function:", error);
+        throw error;
+      }
     },
 
     categories: async () => {
