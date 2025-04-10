@@ -1,4 +1,4 @@
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 import React, { ForwardedRef, forwardRef, useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 

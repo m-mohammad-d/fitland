@@ -4,17 +4,17 @@ import MainOffers from "@/components/home/MainOffer";
 import ProductHighlight from "@/components/products/ProductHighlight";
 import Banner from "@/components/ui/Banner";
 import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
-import graphQLClient from "@/lib/graphqlClient";
+import { graphQLClient } from "@/lib/graphqlClient";
 import { GetProductsResponse } from "@/types/Products";
-import { Product } from "@prisma/client";
 
 export default async function Home() {
+  const client = await graphQLClient();
   const [discountedProductsResponse, newProductsResponse] = await Promise.all([
-    graphQLClient.request<GetProductsResponse>(GET_PRODUCTS, {
+    client.request<GetProductsResponse>(GET_PRODUCTS, {
       sortBy: "createdAt",
       pageSize: 8,
     }),
-    graphQLClient.request<GetProductsResponse>(GET_PRODUCTS, {
+    client.request<GetProductsResponse>(GET_PRODUCTS, {
       sortBy: "createdAt",
       pageSize: 8,
     }),
@@ -72,7 +72,6 @@ export default async function Home() {
         ]}
       />
       <BenefitsSection />
-
     </div>
   );
 }

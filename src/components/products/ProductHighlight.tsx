@@ -7,11 +7,11 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { cn } from "@/utils/utils";
 import {
   MdKeyboardArrowRight,
   MdOutlineKeyboardArrowLeft,
 } from "react-icons/md";
+import { cn } from "@/lib/utils";
 
 interface ProductHighlightProps {
   title: string;

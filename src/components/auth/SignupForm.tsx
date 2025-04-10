@@ -7,9 +7,9 @@ import Link from "next/link";
 import Input from "@/components/ui/Input";
 import { useState, useEffect } from "react";
 import { PasswordStrengthMeter } from "@/components/ui/PasswordStrengthMeter";
-import { calculatePasswordStrength } from "@/utils/passwordStrength";
 import { useMutation } from "@apollo/client";
 import { SIGN_UP } from "@/graphql/mutations/AuthMutations";
+import { calculatePasswordStrength } from "@/lib/passwordStrength";
 
 const signupSchema = z
   .object({

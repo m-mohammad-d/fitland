@@ -4,12 +4,12 @@ import { useFilters } from "@/provider/FilterProvider";
 import { useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "@/graphql/queries/categoryQueries";
 import { GetCategorysResponse } from "@/types/Category";
-import { colors } from "@/utils/Colors";
-import { cn } from "@/utils/utils";
 import { FiXCircle, FiCheck, FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { Sizes } from "@/utils/Sizes";
-import { Brands } from "@/utils/Brands";
 import { useDebounce } from "@/hooks/useDebounce";
+import { Brands } from "@/lib/Brands";
+import { colors } from "@/lib/Colors";
+import { Sizes } from "@/lib/Sizes";
+import { cn } from "@/lib/utils";
 
 type FilterKey = "category" | "brand" | "colors" | "sizes";
 
