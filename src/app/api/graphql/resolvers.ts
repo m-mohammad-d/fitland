@@ -199,7 +199,7 @@ const resolvers = {
     ) => {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
-        throw new Error("Email already in use");
+        throw new Error("این ایمیل قبلاً ثبت شده است");
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -222,12 +222,13 @@ const resolvers = {
       });
 
       if (!user.id) {
-        throw new Error("Failed to create user");
+        throw new Error("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید");
       }
 
       const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
         expiresIn: "7d",
       });
+
       const cookieStore = await cookies();
 
       cookieStore.set("auth-token", token, {
