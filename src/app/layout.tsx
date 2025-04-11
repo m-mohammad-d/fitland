@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import "./globals.css";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="fa" dir="rtl">
       <body>
         <ApolloClientProvider>{children}</ApolloClientProvider>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

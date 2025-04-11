@@ -7,6 +7,8 @@ import Link from "next/link";
 import Input from "@/components/ui/Input";
 import { LOGIN } from "@/graphql/mutations/AuthMutations";
 import { useMutation } from "@apollo/client";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email("ایمیل معتبر وارد کنید").min(1, "ایمیل الزامی است"),
@@ -16,7 +18,18 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-  const [mutateFunction] = useMutation(LOGIN);
+  const router = useRouter();
+
+  const [mutateFunction, { loading }] = useMutation(LOGIN, {
+    onCompleted: (data) => {
+      toast.success("با موفقیت وارد حساب شدید 🎉");
+      router.push("/account/profile");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -29,7 +42,6 @@ export default function LoginForm() {
     mutateFunction({
       variables: {
         email: data.email,
-        name: data.email,
         password: data.password,
       },
     });
@@ -76,8 +88,9 @@ export default function LoginForm() {
         <button
           type="submit"
           className="w-full py-2 px-4 bg-primary hover:bg-primary-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-150 transition-colors"
+          disabled={loading}
         >
-          ورود به حساب
+          {loading ? "در حال ورود..." : "ورود به حساب"}
         </button>
 
         <div className="text-center text-sm text-neutral-700">
