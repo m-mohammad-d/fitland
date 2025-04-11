@@ -8,12 +8,27 @@ async function ProfilePage() {
   const client = await graphQLClient();
   const GetUserResponseData = await client.request<GetUserResponse>(GET_ME);
 
-
   const userInfo = [
-    { label: "نام و نام خانوادگی", value: GetUserResponseData.getMe?.name || "تعیین نشده" },
-    { label: "شماره تماس", value: GetUserResponseData.getMe?.phone || "تعیین نشده" },
-    { label: "کد ملی", value: GetUserResponseData.getMe?.nationalCode || "تعیین نشده" },
-    { label: "جنسیت", value: GetUserResponseData.getMe?.gender || "تعیین نشده" },
+    {
+      label: "نام و نام خانوادگی",
+      value: GetUserResponseData.getMe?.name || "تعیین نشده",
+    },
+    {
+      label: "شماره تماس",
+      value: GetUserResponseData.getMe?.phone || "تعیین نشده",
+    },
+    {
+      label: "کد ملی",
+      value: GetUserResponseData.getMe?.nationalCode || "تعیین نشده",
+    },
+    {
+      label: "جنسیت",
+      value: GetUserResponseData.getMe?.gender
+        ? GetUserResponseData.getMe.gender === "MALE"
+          ? "مرد"
+          : "زن"
+        : "تعیین نشده",
+    },
     { label: "ایمیل", value: GetUserResponseData.getMe?.email || "تعیین نشده" },
   ];
 
