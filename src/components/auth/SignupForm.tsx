@@ -10,6 +10,8 @@ import { PasswordStrengthMeter } from "@/components/ui/PasswordStrengthMeter";
 import { useMutation } from "@apollo/client";
 import { SIGN_UP } from "@/graphql/mutations/AuthMutations";
 import { calculatePasswordStrength } from "@/lib/passwordStrength";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const signupSchema = z
   .object({
@@ -26,7 +28,16 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 export default function SignupForm() {
-  const [mutateFunction] = useMutation(SIGN_UP);
+  const router = useRouter();
+  const [mutateFunction, { loading }] = useMutation(SIGN_UP, {
+    onCompleted: (data) => {
+      toast.success("اکانت با موفقیت ایجاد شد");
+      router.push("/account/profile");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const {
     register,
@@ -113,7 +124,7 @@ export default function SignupForm() {
           type="submit"
           className="w-full py-2 px-4 bg-primary hover:bg-primary-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-150 transition-colors"
         >
-          ثبت نام
+          {loading ? "در حال ثبت نام..." : "ثبت نام"}
         </button>
 
         <div className="text-center text-sm text-neutral-700">
