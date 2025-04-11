@@ -251,12 +251,12 @@ const resolvers = {
     ) => {
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
-        throw new Error("Invalid email or password");
+        throw new Error("ایمیل یا رمز عبور اشتباه است");
       }
 
       const isValid = await bcrypt.compare(password, user.password);
       if (!isValid) {
-        throw new Error("Invalid email or password");
+        throw new Error("ایمیل یا رمز عبور اشتباه است");
       }
 
       const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
