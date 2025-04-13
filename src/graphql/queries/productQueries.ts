@@ -1,4 +1,3 @@
-
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
@@ -35,7 +34,7 @@ export const GET_PRODUCTS = gql`
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($id: String!) {
+  query GetProductById($id: ID!) {
     product(id: $id) {
       id
       name
@@ -43,6 +42,8 @@ export const GET_PRODUCT_BY_ID = gql`
       price
       stock
       images
+      discount
+      discountedPrice
       colors {
         name
         hex
