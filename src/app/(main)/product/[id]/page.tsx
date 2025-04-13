@@ -7,6 +7,7 @@ import ProductDescription from "@/components/products/ProductDescription";
 import ProductGallery from "@/components/products/ProductImageGallery";
 import ProductInfo from "@/components/products/ProductInfo";
 import { GET_PRODUCT_BY_ID } from "@/graphql/queries/productQueries";
+import DotSpinner from "@/components/ui/DotSpinner";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -19,8 +20,7 @@ export default function ProductDetailsPage({ params }: Props) {
     variables: { id },
   });
 
-  if (loading)
-    return <div className="text-center mt-10">در حال بارگذاری...</div>;
+  if (loading) return <DotSpinner />;
   if (error || !data?.product) return notFound();
 
   const product = data.product;

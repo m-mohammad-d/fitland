@@ -126,6 +126,7 @@ html {
   align-items: center;
   height: 100vh;
   position: fixed;
+  background-color: white;
   top: 0;
   left: 0;
   right: 0;
