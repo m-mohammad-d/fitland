@@ -40,6 +40,24 @@ type AddCommentArgs = {
 type AddCategoryArgs = {
   name: string;
 };
+type CreateOrderItemInput = {
+  productId: string;
+  variantId?: string | null;
+  quantity: number;
+  priceAtPurchase: number;
+};
+
+type CreateOrderInput = {
+  addressId: string;
+  deliveryDate: string;
+  paymentMethod: "ONLINE" | "CASH";
+  shippingCost: number;
+  tax: number;
+  totalPrice: number;
+  discountCode?: string;
+  items: CreateOrderItemInput[];
+};
+
 const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET!;
 const resolvers = {
@@ -352,6 +370,72 @@ const resolvers = {
       });
 
       return updatedUser;
+    },
+    createOrder: async (_: void, { input }: { input: CreateOrderInput }) => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
+      }
+      const { userId } = decodedToken;
+
+      if (!userId) {
+        throw new Error("دسترسی غیرمجاز");
+      }
+      let discountCodeId: string | undefined = undefined;
+      let discountAmount: number = 0;
+
+      if (input.discountCode) {
+        const discount = await prisma.discountCode.findUnique({
+          where: { code: input.discountCode },
+        });
+
+        if (!discount || !discount.isActive) {
+          throw new Error("کد تخفیف نامعتبر یا غیرفعال است");
+        }
+        if (discount.type === "AMOUNT") {
+          discountAmount = discount.value;
+        } else if (discount.type === "PERCENT") {
+          discountAmount = (input.totalPrice * discount.value) / 100;
+        }
+
+        if (discountAmount >= input.totalPrice) {
+          throw new Error("مقدار تخفیف نباید بیشتر یا مساوی مبلغ کل باشد");
+        }
+      }
+
+      const finalPrice = input.totalPrice - discountAmount;
+
+      const order = await prisma.order.create({
+        data: {
+          userId,
+          addressId: input.addressId,
+          deliveryDate: new Date(input.deliveryDate),
+          paymentMethod: input.paymentMethod,
+          shippingCost: input.shippingCost,
+          tax: input.tax,
+          totalPrice: finalPrice,
+          discountCodeId,
+          status: "PENDING",
+          items: {
+            create: input.items.map((item) => ({
+              productId: item.productId,
+              variantId: item.variantId,
+              quantity: item.quantity,
+              priceAtPurchase: item.priceAtPurchase,
+            })),
+          },
+        },
+        include: { items: true },
+      });
+
+      return order;
     },
   },
 };

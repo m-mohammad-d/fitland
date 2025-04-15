@@ -79,7 +79,23 @@ type Category {
   name: String!
   products: [Product!]!
 }
+input OrderItemInput {
+  productId: ID!
+  variantId: ID
+  quantity: Int!
+  priceAtPurchase: Float!
+}
 
+input CreateOrderInput {
+  items: [OrderItemInput!]!
+  addressId: ID!
+  discountCode: String
+  deliveryDate: String!
+  paymentMethod: PaymentMethod!
+  shippingCost: Float!
+  tax: Float!
+  totalPrice: Float!
+}
 type Query {
   products(
     sortBy: ProductSortField
@@ -94,6 +110,43 @@ type Query {
 
 type SignOutResponse {
   success: Boolean!
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum PaymentMethod {
+  ONLINE
+  CASH
+}
+
+type Order {
+  id: ID!
+  userId: ID!
+  addressId: ID!
+  deliveryDate: String!
+  paymentMethod: PaymentMethod!
+  shippingCost: Float!
+  tax: Float!
+  totalPrice: Float!
+  status: OrderStatus!
+  discountCodeId: ID
+  createdAt: String!
+  items: [OrderItem!]!
+}
+
+type OrderItem {
+  id: ID!
+  orderId: ID!
+  productId: ID!
+  variantId: ID
+  quantity: Int!
+  priceAtPurchase: Float!
 }
 type Mutation {
   addProduct(
@@ -121,6 +174,7 @@ type Mutation {
     gender: Gender
   ): User!
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
+  createOrder(input: CreateOrderInput!): Order!
 
   addCategory(name: String!): Category!
 }
