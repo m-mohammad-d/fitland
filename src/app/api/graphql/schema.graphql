@@ -188,6 +188,7 @@ type Query {
 
   getAllOrders: [Order!]!
   getUserOrders: [Order!]!
+  getOrderById(id: String): Order
 
   product(id: ID!): Product
 

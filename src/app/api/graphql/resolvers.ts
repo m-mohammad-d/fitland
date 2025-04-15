@@ -179,6 +179,29 @@ const resolvers = {
         },
       });
     },
+    getOrderById: async (_: void, { id }: { id: string }) => {
+      if (!id) {
+        throw new Error("ارسال ایدی اجباری هست");
+      }
+      const order = await prisma.order.findUnique({
+        where: { id },
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+          discountCode: true,
+          address: true,
+        },
+      });
+
+      if (!order) {
+        throw new Error("سفارش پیدا نشد");
+      }
+
+      return order;
+    },
     getUserOrders: async () => {
       const cookieStore = await cookies();
       const tokenValue = cookieStore.get("auth-token")?.value;
