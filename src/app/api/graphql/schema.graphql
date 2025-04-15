@@ -1,3 +1,4 @@
+# Enums
 enum ProductSortField {
   price
   priceDesc
@@ -8,23 +9,6 @@ enum ProductSortField {
   stock
   stockDesc
 }
-
-type Color {
-  name: String!
-  hex: String!
-}
-input ProductFilter {
-  minPrice: Int
-  maxPrice: Int
-  discount: Int
-  category: [ID!]
-  brand: [ID!]
-  colors: [ID!]
-  sizes: [String!]
-  availableOnly: Boolean
-  search: String
-  minRating: Float
-}
 enum Gender {
   MALE
   FEMALE
@@ -33,6 +17,30 @@ enum Gender {
 enum Role {
   USER
   ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum PaymentMethod {
+  ONLINE
+  CASH
+}
+
+enum DiscountType {
+  AMOUNT
+  PERCENT
+}
+
+# Types
+type Color {
+  name: String!
+  hex: String!
 }
 
 type User {
@@ -47,7 +55,10 @@ type User {
   lastLogin: String
   createdAt: String!
   updatedAt: String!
+  addresses: [Address!]!
+  orders: [Order!]!
 }
+
 type Product {
   id: ID!
   name: String!
@@ -56,6 +67,7 @@ type Product {
   discountedPrice: Int
   stock: Int!
   category: Category!
+  categoryId: String!
   images: [String!]!
   colors: [Color]
   sizes: [String!]!
@@ -64,6 +76,7 @@ type Product {
   comments: [Comment!]!
   createdAt: String!
   updatedAt: String!
+  orderItems: [OrderItem!]!
 }
 
 type Comment {
@@ -79,6 +92,71 @@ type Category {
   name: String!
   products: [Product!]!
 }
+
+type Address {
+  id: ID!
+  user: User!
+  userId: String!
+  line1: String!
+  city: String!
+  state: String!
+  zipCode: String!
+  country: String!
+  orders: [Order!]!
+}
+
+type Order {
+  id: ID!
+  user: User!
+  userId: String!
+  items: [OrderItem!]!
+  discountCode: DiscountCode
+  discountCodeId: String
+  address: Address!
+  addressId: String!
+  deliveryDate: String!
+  paymentMethod: PaymentMethod!
+  shippingCost: Float!
+  tax: Float!
+  totalPrice: Float!
+  status: OrderStatus!
+  createdAt: String!
+}
+
+type OrderItem {
+  id: ID!
+  order: Order!
+  orderId: String!
+  product: Product!
+  productId: String!
+  variantId: String
+  quantity: Int!
+  priceAtPurchase: Float!
+}
+
+type DiscountCode {
+  id: ID!
+  code: String!
+  type: DiscountType!
+  value: Float!
+  isActive: Boolean!
+  orders: [Order!]!
+}
+
+# Input Types
+input ProductFilter {
+  minPrice: Int
+  maxPrice: Int
+  discount: Int
+  category: [ID!]
+  brand: [ID!]
+  colors: [ID!]
+  sizes: [String!]
+  availableOnly: Boolean
+  search: String
+  minRating: Float
+}
+
 input OrderItemInput {
   productId: ID!
   variantId: ID
@@ -96,6 +174,8 @@ input CreateOrderInput {
   tax: Float!
   totalPrice: Float!
 }
+
+# Queries
 type Query {
   products(
     sortBy: ProductSortField
@@ -103,51 +183,17 @@ type Query {
     page: Int
     pageSize: Int
   ): [Product!]!
+
   getMe: User!
+
+  getAllOrders: [Order!]!
+
   product(id: ID!): Product
+
   categories: [Category!]!
 }
 
-type SignOutResponse {
-  success: Boolean!
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  DELIVERED
-  CANCELED
-}
-
-enum PaymentMethod {
-  ONLINE
-  CASH
-}
-
-type Order {
-  id: ID!
-  userId: ID!
-  addressId: ID!
-  deliveryDate: String!
-  paymentMethod: PaymentMethod!
-  shippingCost: Float!
-  tax: Float!
-  totalPrice: Float!
-  status: OrderStatus!
-  discountCodeId: ID
-  createdAt: String!
-  items: [OrderItem!]!
-}
-
-type OrderItem {
-  id: ID!
-  orderId: ID!
-  productId: ID!
-  variantId: ID
-  quantity: Int!
-  priceAtPurchase: Float!
-}
+# Mutations
 type Mutation {
   addProduct(
     name: String!
@@ -163,8 +209,11 @@ type Mutation {
   ): Product!
 
   signUp(name: String!, email: String!, password: String!): User!
+
   signIn(email: String!, password: String!): User!
+
   signOut: SignOutResponse!
+
   updateUser(
     id: String!
     name: String
@@ -173,8 +222,15 @@ type Mutation {
     nationalCode: String
     gender: Gender
   ): User!
+
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
+
   createOrder(input: CreateOrderInput!): Order!
 
   addCategory(name: String!): Category!
+}
+
+# Sign Out Response Type
+type SignOutResponse {
+  success: Boolean!
 }

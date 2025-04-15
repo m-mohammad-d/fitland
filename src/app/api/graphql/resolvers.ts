@@ -166,6 +166,19 @@ const resolvers = {
           : product.price,
       };
     },
+    getAllOrders: async () => {
+      return await prisma.order.findMany({
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+          discountCode: true,
+          address: true,
+        },
+      });
+    },
   },
 
   Mutation: {

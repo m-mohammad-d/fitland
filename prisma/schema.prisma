@@ -49,6 +49,7 @@ model Product {
   comments      Comment[] 
   createdAt     DateTime @default(now()) 
   updatedAt     DateTime @updatedAt   
+  orderItems OrderItem[] 
   discountedPrice Int?
 }
 
@@ -130,8 +131,11 @@ model OrderItem {
   id              String   @id @default(cuid())
   order           Order    @relation(fields: [orderId], references: [id])
   orderId         String
+
+  product         Product  @relation(fields: [productId], references: [id])
   productId       String
   variantId       String?
+
   quantity        Int
   priceAtPurchase Float
 }

@@ -9,7 +9,10 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "seed": "ts-node --transpile-only ./prisma/seed.ts"
+    "seed": "ts-node --transpile-only ./prisma/seed.ts",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:studio": "npx prisma studio",
+    "prisma:generate": "npx prisma generate"
   },
   "ts-node": {
     "compilerOptions": {
