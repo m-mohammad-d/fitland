@@ -187,6 +187,7 @@ type Query {
   getMe: User!
 
   getAllOrders: [Order!]!
+  getUserOrders: [Order!]!
 
   product(id: ID!): Product
 

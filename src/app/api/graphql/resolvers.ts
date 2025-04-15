@@ -179,6 +179,38 @@ const resolvers = {
         },
       });
     },
+    getUserOrders: async () => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("توکن نامعتبر یا شناسه کاربر موجود نیست");
+      }
+
+      const { userId } = decodedToken;
+
+      return await prisma.order.findMany({
+        where: { userId },
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+          discountCode: true,
+          address: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    },
   },
 
   Mutation: {
