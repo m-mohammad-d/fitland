@@ -19,6 +19,8 @@ model User {
   lastLogin     DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  addresses Address[]
+  orders    Order[]
 }
 
 enum Gender {
@@ -63,4 +65,73 @@ model Category {
   id        String    @id @default(uuid())
   name      String    @unique
   products  Product[]
+}
+
+
+enum PaymentMethod {
+  ONLINE
+  CASH
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum DiscountType {
+  AMOUNT
+  PERCENT
+}
+
+
+model Address {
+  id       String   @id @default(cuid())
+  user     User     @relation(fields: [userId], references: [id])
+  userId   String
+  line1    String
+  city     String
+  state    String
+  zipCode  String
+  country  String
+  orders   Order[]
+}
+
+model DiscountCode {
+  id       String   @id @default(cuid())
+  code     String   @unique
+  type     DiscountType
+  value    Float
+  isActive Boolean
+  orders   Order[]
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  user           User          @relation(fields: [userId], references: [id])
+  userId         String
+  items          OrderItem[]
+  discountCode   DiscountCode? @relation(fields: [discountCodeId], references: [id])
+  discountCodeId String?
+  address        Address       @relation(fields: [addressId], references: [id])
+  addressId      String
+  deliveryDate   DateTime
+  paymentMethod  PaymentMethod
+  shippingCost   Float
+  tax            Float
+  totalPrice     Float
+  status         OrderStatus
+  createdAt      DateTime      @default(now())
+}
+
+model OrderItem {
+  id              String   @id @default(cuid())
+  order           Order    @relation(fields: [orderId], references: [id])
+  orderId         String
+  productId       String
+  variantId       String?
+  quantity        Int
+  priceAtPurchase Float
 }
