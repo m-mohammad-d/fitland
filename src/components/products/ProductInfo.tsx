@@ -9,6 +9,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
+import { Sizes } from "@/lib/Sizes";
 
 interface Props {
   product: {
@@ -60,7 +61,8 @@ export default function ProductInfo({ product }: Props) {
       color: selectedColor,
       size: selectedSize,
       quantity: quantity,
-      price: product.discountedPrice || product.price,
+      price: product.price,
+      discountedPrice: product.discountedPrice,
     });
 
     setShowModal(true);
@@ -68,9 +70,13 @@ export default function ProductInfo({ product }: Props) {
 
   const handleUpdateQuantity = (newQty: number) => {
     if (newQty <= 0) {
-      removeItem(cartItem?.productId as string);
+      removeItem(
+        cartItem?.productId as string,
+        cartItem?.color as string,
+        cartItem?.size as string
+      );
     } else if (cartItem) {
-      updateQuantity(cartItem.productId, newQty);
+      updateQuantity(cartItem.productId, cartItem.color, cartItem.size, newQty);
     }
   };
 
