@@ -15,5 +15,7 @@ export type User = {
 };
 
 export interface GetUserResponse {
-  getMe: User;
+  data: {
+    getMe: User;
+  };
 }

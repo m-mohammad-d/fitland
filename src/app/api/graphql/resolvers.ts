@@ -123,6 +123,9 @@ const resolvers = {
         const cookieStore = await cookies();
         const tokenValue = cookieStore.get("auth-token")?.value;
 
+        
+        console.log(cookieStore);
+
         if (!tokenValue) {
           throw new Error("Authentication token not found");
         }

@@ -1,35 +1,37 @@
 import { GET_ME } from "@/graphql/queries/userQueries";
-import { graphQLClient } from "@/lib/graphqlClient";
+import { graphQLFetch } from "@/lib/utils";
 import { GetUserResponse } from "@/types/User";
 import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 
 async function ProfilePage() {
-  const client = await graphQLClient();
-  const GetUserResponseData = await client.request<GetUserResponse>(GET_ME);
+  const res = await graphQLFetch<GetUserResponse>(
+    process.env.NEXT_PUBLIC_BACKEND_URL || "",
+    GET_ME.loc?.source.body as string
+  );
 
   const userInfo = [
     {
       label: "نام و نام خانوادگی",
-      value: GetUserResponseData.getMe?.name || "تعیین نشده",
+      value: res.data.getMe?.name || "تعیین نشده",
     },
     {
       label: "شماره تماس",
-      value: GetUserResponseData.getMe?.phone || "تعیین نشده",
+      value: res.data.getMe?.phone || "تعیین نشده",
     },
     {
       label: "کد ملی",
-      value: GetUserResponseData.getMe?.nationalCode || "تعیین نشده",
+      value: res.data.getMe?.nationalCode || "تعیین نشده",
     },
     {
       label: "جنسیت",
-      value: GetUserResponseData.getMe?.gender
-        ? GetUserResponseData.getMe.gender === "MALE"
+      value: res.data.getMe?.gender
+        ? res.data.getMe.gender === "MALE"
           ? "مرد"
           : "زن"
         : "تعیین نشده",
     },
-    { label: "ایمیل", value: GetUserResponseData.getMe?.email || "تعیین نشده" },
+    { label: "ایمیل", value: res.data.getMe?.email || "تعیین نشده" },
   ];
 
   return (
