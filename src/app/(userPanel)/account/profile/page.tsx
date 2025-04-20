@@ -5,7 +5,6 @@ import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 
 async function ProfilePage() {
-  console.log(typeof window);
   const res = await graphQLFetch<GetUserResponse>(
     process.env.NEXT_PUBLIC_BACKEND_URL || "",
     GET_ME.loc?.source.body as string

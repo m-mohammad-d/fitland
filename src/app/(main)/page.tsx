@@ -4,24 +4,31 @@ import MainOffers from "@/components/home/MainOffer";
 import ProductHighlight from "@/components/products/ProductHighlight";
 import Banner from "@/components/ui/Banner";
 import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
-import { graphQLClient } from "@/lib/graphqlClient";
+import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetProductsResponse } from "@/types/Products";
 
 export default async function Home() {
-  const client = await graphQLClient();
   const [discountedProductsResponse, newProductsResponse] = await Promise.all([
-    client.request<GetProductsResponse>(GET_PRODUCTS, {
-      sortBy: "createdAt",
-      pageSize: 8,
-    }),
-    client.request<GetProductsResponse>(GET_PRODUCTS, {
-      sortBy: "createdAt",
-      pageSize: 8,
-    }),
+    graphQLFetch<GetProductsResponse>(
+      process.env.NEXT_PUBLIC_BACKEND_URL || "",
+      GET_PRODUCTS.loc?.source.body as string,
+      {
+        sortBy: "price",
+        pageSize: 8,
+      }
+    ),
+    graphQLFetch<GetProductsResponse>(
+      process.env.NEXT_PUBLIC_BACKEND_URL || "",
+      GET_PRODUCTS.loc?.source.body as string,
+      {
+        sortBy: "createdAt",
+        pageSize: 8,
+      }
+    ),
   ]);
 
-  const discountedProducts = discountedProductsResponse.products;
-  const newProducts = newProductsResponse.products;
+  const discountedProducts = discountedProductsResponse.data.products;
+  const newProducts = newProductsResponse.data.products;
   return (
     <div>
       <Hero />

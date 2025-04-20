@@ -23,8 +23,6 @@ export async function graphQLFetch<T>(
     }
 
     const responseJson = await response.json();
-    console.log(responseJson);
-
     return responseJson;
   } catch (error) {
     console.error("Error in GraphQL fetch:", error);

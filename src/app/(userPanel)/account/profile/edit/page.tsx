@@ -1,16 +1,17 @@
 import UpdateProfileForm from "@/components/account/UpdateProfileForm";
 import { GET_ME } from "@/graphql/queries/userQueries";
-import { graphQLClient } from "@/lib/graphqlClient";
+import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetUserResponse } from "@/types/User";
 
 async function EditProfilePage() {
-  const client = await graphQLClient();
-  const GetUserResponseData = await client.request<GetUserResponse>(GET_ME);
-  const user = GetUserResponseData.getMe;
+  const res = await graphQLFetch<GetUserResponse>(
+    process.env.NEXT_PUBLIC_BACKEND_URL || "",
+    GET_ME.loc?.source.body as string
+  );
 
   return (
     <div>
-      <UpdateProfileForm user={user} />
+      <UpdateProfileForm user={res.data.getMe} />
     </div>
   );
 }
