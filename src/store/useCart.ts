@@ -12,8 +12,24 @@ type CartItem = {
   discountedPrice?: number;
 };
 
+type CheckoutInfo = {
+  addressId?: string;
+  deliveryDate?: string;
+  paymentMethod?: "ONLINE" | "ON_DELIVERY";
+  shippingCost?: number;
+  tax?: number;
+  discountCode?: string;
+};
+
 type CartState = {
   items: CartItem[];
+  checkout: CheckoutInfo;
+  setCheckoutField: <K extends keyof CheckoutInfo>(
+    key: K,
+    value: CheckoutInfo[K]
+  ) => void;
+  clearCheckout: () => void;
+
   addItem: (item: CartItem) => void;
   removeItem: (productId: string, color: string, size: string) => void;
   updateQuantity: (
@@ -23,6 +39,7 @@ type CartState = {
     quantity: number
   ) => void;
   clearCart: () => void;
+
   getTotal: () => number;
   getOriginalTotal: () => number;
   getTotalDiscount: () => number;
@@ -32,6 +49,15 @@ export const useCart = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      checkout: {},
+
+      setCheckoutField: (key, value) => {
+        set({ checkout: { ...get().checkout, [key]: value } });
+      },
+
+      clearCheckout: () => {
+        set({ checkout: {} });
+      },
 
       addItem: (item) => {
         const existing = get().items.find(
@@ -67,6 +93,7 @@ export const useCart = create<CartState>()(
           ),
         });
       },
+
       updateQuantity: (productId, color, size, quantity) => {
         set({
           items: get().items.map((i) =>
@@ -76,6 +103,7 @@ export const useCart = create<CartState>()(
           ),
         });
       },
+
       clearCart: () => {
         set({ items: [] });
       },
