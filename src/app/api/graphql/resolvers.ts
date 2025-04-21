@@ -388,6 +388,7 @@ const resolvers = {
         email,
         phone,
         nationalCode,
+        photo,
         gender,
       }: {
         id: string;
@@ -396,6 +397,7 @@ const resolvers = {
         phone?: string;
         nationalCode?: string;
         gender?: string;
+        photo?: string;
       }
     ) => {
       const existingUser = await prisma.user.findUnique({ where: { id } });
@@ -430,6 +432,7 @@ const resolvers = {
         where: { id },
         data: {
           name: name || existingUser.name,
+          photo: photo || existingUser.photo,
           email: email || existingUser.email,
           phone: phone || existingUser.phone,
           nationalCode: nationalCode || existingUser.nationalCode,

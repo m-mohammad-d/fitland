@@ -11,100 +11,126 @@ import {
   BsPerson,
   BsClockHistory,
 } from "react-icons/bs";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ME } from "@/graphql/queries/userQueries";
+import { ApolloGetUserResponse } from "@/types/User";
+import { UPDATE_USER } from "@/graphql/mutations/UserMutations";
 
-function AccountSidebar() {
-  const { uploadFile, uploading, imageUrl } = useUpload();
+const NAV_ITEMS = [
+  {
+    path: "/account/profile",
+    icon: <BsPerson />,
+    label: "حساب کاربری",
+  },
+  {
+    path: "/account/orders",
+    icon: <BsClockHistory />,
+    label: "تاریخچه سفارشات",
+  },
+  {
+    path: "/account/favorites",
+    icon: <BsHeart />,
+    label: "علاقه‌مندی‌ها",
+  },
+  {
+    path: "/account/addresses",
+    icon: <BsGeoAlt />,
+    label: "آدرس‌ها",
+  },
+  {
+    path: "/account/reviews",
+    icon: <BsChatDots />,
+    label: "دیدگاه‌ها و نظرات",
+  },
+];
+
+const DEFAULT_PROFILE_IMAGE = "/userLogo.jpg";
+
+export default function AccountSidebar() {
+  const { uploadFile, isUploading } = useUpload();
+  const { data: userData } = useQuery<ApolloGetUserResponse>(GET_ME);
+  const [updateUser] = useMutation(UPDATE_USER);
+
   const [profileImagePreview, setProfileImagePreview] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
-  const [userInfo] = useState({
-    data: {
-      user: { name: "نام کاربر", email: "user@example.com" },
-    },
-  });
+  const currentUser = userData?.getMe;
+  const profileImageSrc =
+    profileImagePreview || currentUser?.photo || DEFAULT_PROFILE_IMAGE;
 
-  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      setProfileImagePreview(URL.createObjectURL(file));
-      setSelectedFile(file); 
-    }
-  }
+    if (!file) return;
 
-  async function handleUpload() {
-    if (selectedFile) {
-      await uploadFile(selectedFile);
-      setSelectedFile(null); 
+    setProfileImagePreview(URL.createObjectURL(file));
+    setSelectedImageFile(file);
+  };
+
+  const handleUploadProfileImage = async () => {
+    if (!selectedImageFile || !currentUser?.id) return;
+
+    try {
+      const uploadResult = await uploadFile(selectedImageFile);
+
+      await updateUser({
+        variables: {
+          id: currentUser.id,
+          photo: uploadResult.url,
+        },
+      });
+      setSelectedImageFile(null);
+    } catch (error) {
+      console.error("Error uploading profile image:", error);
     }
-  }
+  };
 
   return (
     <aside className="bg-white shadow-sm p-4 rounded-lg md:w-64 w-full">
       <div className="flex flex-col items-center pb-4">
         <div className="relative">
           <img
-            src={imageUrl || profileImagePreview || "/userLogo.jpg"}
+            src={profileImageSrc}
             alt="Profile"
             className="h-24 w-24 rounded-full object-cover border"
           />
           <button
-            onClick={() => document.getElementById("profileImage")?.click()}
+            onClick={() =>
+              document.getElementById("profileImageInput")?.click()
+            }
             className="absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary hover:bg-primary-500 text-white border shadow"
+            aria-label="Change profile picture"
           >
             <BsPlus />
           </button>
           <input
             type="file"
-            id="profileImage"
+            id="profileImageInput"
             accept="image/*"
             onChange={handleImageChange}
             className="hidden"
           />
         </div>
 
-        {selectedFile && (
+        {selectedImageFile && (
           <button
-            onClick={handleUpload}
+            onClick={handleUploadProfileImage}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            disabled={uploading}
+            disabled={isUploading}
           >
-            {uploading ? "در حال آپلود..." : "ذخیره عکس"}
+            {isUploading ? "در حال آپلود..." : "ذخیره عکس"}
           </button>
         )}
 
-        <h2 className="mt-3 text-lg font-semibold">
-          {userInfo.data.user.name}
-        </h2>
-        <p className="text-sm text-gray-600">{userInfo.data.user.email}</p>
+        <h2 className="mt-3 text-lg font-semibold">{currentUser?.name}</h2>
+        <p className="text-sm text-gray-600">{currentUser?.email}</p>
       </div>
 
       <nav className="mt-5">
         <ul className="space-y-3">
-          {[
-            {
-              href: "/account/profile",
-              icon: <BsPerson />, label: "حساب کاربری",
-            },
-            {
-              href: "/account/orders",
-              icon: <BsClockHistory />, label: "تاریخچه سفارشات",
-            },
-            {
-              href: "/account/favorites",
-              icon: <BsHeart />, label: "علاقه‌مندی‌ها",
-            },
-            {
-              href: "/account/addresses",
-              icon: <BsGeoAlt />, label: "آدرس‌ها",
-            },
-            {
-              href: "/account/reviews",
-              icon: <BsChatDots />, label: "دیدگاه‌ها و نظرات",
-            },
-          ].map(({ href, icon, label }) => (
-            <li key={href}>
+          {NAV_ITEMS.map(({ path, icon, label }) => (
+            <li key={path}>
               <Link
-                href={href}
+                href={path}
                 className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md transition"
               >
                 <span className="text-lg ml-3">{icon}</span>
@@ -124,5 +150,3 @@ function AccountSidebar() {
     </aside>
   );
 }
-
-export default AccountSidebar;

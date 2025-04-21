@@ -17,6 +17,7 @@ export async function graphQLFetch<T>(
 
       body: JSON.stringify({ query, variables }),
     });
+ 
 
     if (!response.ok) {
       throw new Error(response.statusText);

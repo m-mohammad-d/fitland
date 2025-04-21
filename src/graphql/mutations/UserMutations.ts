@@ -7,6 +7,7 @@ export const UPDATE_USER = gql`
     $email: String
     $phone: String
     $nationalCode: String
+    $photo: String
     $gender: Gender
   ) {
     updateUser(
@@ -14,6 +15,7 @@ export const UPDATE_USER = gql`
       name: $name
       email: $email
       phone: $phone
+      photo: $photo
       nationalCode: $nationalCode
       gender: $gender
     ) {

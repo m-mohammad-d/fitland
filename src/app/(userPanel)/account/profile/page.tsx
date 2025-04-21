@@ -1,11 +1,11 @@
 import { GET_ME } from "@/graphql/queries/userQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
-import { GetUserResponse } from "@/types/User";
+import { GraphQLFetchGetUserResponse } from "@/types/User";
 import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 
 async function ProfilePage() {
-  const res = await graphQLFetch<GetUserResponse>(
+  const res = await graphQLFetch<GraphQLFetchGetUserResponse>(
     process.env.NEXT_PUBLIC_BACKEND_URL || "",
     GET_ME.loc?.source.body as string
   );

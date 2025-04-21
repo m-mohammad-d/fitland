@@ -14,8 +14,16 @@ export type User = {
   updatedAt: Date;
 };
 
-export interface GetUserResponse {
+
+export type ApolloGetUserResponse = {
+  getMe: User & {
+    __typename: string;
+  };
+};
+
+
+export type GraphQLFetchGetUserResponse = {
   data: {
     getMe: User;
   };
-}
+};
