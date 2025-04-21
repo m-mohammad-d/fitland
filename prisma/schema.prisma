@@ -89,15 +89,19 @@ enum DiscountType {
 
 
 model Address {
-  id       String   @id @default(cuid())
-  user     User     @relation(fields: [userId], references: [id])
-  userId   String
-  line1    String
-  city     String
-  state    String
-  zipCode  String
-  country  String
-  orders   Order[]
+  id         String   @id @default(cuid()) 
+  user       User     @relation(fields: [userId], references: [id]) 
+  userId     String  
+  province   String   
+  city       String   
+  street     String 
+  alley      String? 
+  plaque     String?  
+  unit       String?  
+  zipCode    String  
+  createdAt  DateTime @default(now()) 
+  updatedAt  DateTime @updatedAt 
+  orders     Order[]  
 }
 
 model DiscountCode {

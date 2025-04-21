@@ -93,18 +93,6 @@ type Category {
   products: [Product!]!
 }
 
-type Address {
-  id: ID!
-  user: User!
-  userId: String!
-  line1: String!
-  city: String!
-  state: String!
-  zipCode: String!
-  country: String!
-  orders: [Order!]!
-}
-
 type Order {
   id: ID!
   user: User!
@@ -174,6 +162,29 @@ input CreateOrderInput {
   tax: Float!
   totalPrice: Float!
 }
+type Address {
+  id: ID
+  userId: String
+  province: String
+  city: String
+  street: String
+  alley: String
+  plaque: String
+  unit: String
+  zipCode: String
+  createdAt: String
+  updatedAt: String
+}
+
+input AddAddressInput {
+  province: String!
+  city: String!
+  zipCode: String!
+  street: String!
+  alley: String
+  plaque: String
+  unit: String
+}
 
 # Queries
 type Query {
@@ -189,6 +200,7 @@ type Query {
   getAllOrders: [Order!]!
   getUserOrders: [Order!]!
   getOrderById(id: String): Order
+  getUserAddress: [Address!]!
 
   product(id: ID!): Product
 
@@ -229,6 +241,7 @@ type Mutation {
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
 
   createOrder(input: CreateOrderInput!): Order!
+  addAddress(input: AddAddressInput!): Address!
 
   addCategory(name: String!): Category!
 }

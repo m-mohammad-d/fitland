@@ -1,6 +1,7 @@
 "use client";
 import CartItem from "@/components/ui/CartItem";
 import { useCart } from "@/store/useCart";
+import Link from "next/link";
 import { RiShoppingBag3Line } from "react-icons/ri";
 
 const CartPage = () => {
@@ -91,13 +92,14 @@ const CartPage = () => {
                   </span>
                 </div>
               </div>
-
-              <button
-                className="w-full mt-8 bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg 
-                transition-colors font-medium shadow-md hover:shadow-lg"
-              >
-                ادامه فرآیند خرید
-              </button>
+              <div className="py-4">
+                <Link
+                  href="/checkout/address"
+                  className="mt-12 bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg  transition-colors font-medium shadow-md hover:shadow-lg"
+                >
+                  ادامه فرآیند خرید
+                </Link>
+              </div>
             </div>
 
             <div className="mt-4 p-4 rounded-lg text-sm text-neutral-600">

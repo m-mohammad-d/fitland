@@ -57,7 +57,15 @@ type CreateOrderInput = {
   discountCode?: string;
   items: CreateOrderItemInput[];
 };
-
+type addAddressInput = {
+  province: string;
+  city: string;
+  street: string;
+  alley: string;
+  plaque: string;
+  unit: string;
+  zipCode: string;
+};
 const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET!;
 const resolvers = {
@@ -232,6 +240,26 @@ const resolvers = {
         orderBy: {
           createdAt: "desc",
         },
+      });
+    },
+    getUserAddress: async () => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("توکن نامعتبر یا شناسه کاربر موجود نیست");
+      }
+
+      const { userId } = decodedToken;
+
+      return await prisma.address.findMany({
+        where: { userId },
       });
     },
   },
@@ -507,6 +535,37 @@ const resolvers = {
       });
 
       return order;
+    },
+    addAddress: async (_: void, { input }: { input: addAddressInput }) => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
+      }
+      const { userId } = decodedToken;
+
+      if (!userId) {
+        throw new Error("دسترسی غیرمجاز");
+      }
+      const address = await prisma.address.create({
+        data: {
+          userId,
+          province: input.province,
+          city: input.city,
+          zipCode: input.zipCode,
+          street: input.street,
+          alley: input.alley,
+          plaque: input.plaque,
+          unit: input.unit,
+        },
+      });
+      return address;
     },
   },
 };
