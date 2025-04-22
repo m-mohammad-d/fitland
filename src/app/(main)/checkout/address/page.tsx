@@ -14,7 +14,7 @@ async function CheckOutAddress() {
 
   return (
     <div className="container mx-auto">
-      <OrderProgressBar currentStep={2} />
+      <OrderProgressBar currentStep={1} />
       <div className="px-4 my-12 flex gap-6 flex-col md:flex-row">
         <div className="w-full">
           <AddressList addresses={res.data.getUserAddress} />

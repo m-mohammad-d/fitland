@@ -31,6 +31,7 @@
     "framer-motion": "^12.5.0",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
+    "jalali-moment": "^3.3.11",
     "jsonwebtoken": "^9.0.2",
     "next": "15.2.2",
     "nuqs": "^2.4.1",

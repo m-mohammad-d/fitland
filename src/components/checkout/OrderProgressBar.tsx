@@ -7,10 +7,8 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
-// مراحل پراسس بار
 const steps = [
   { title: "انتخاب آدرس", icon: <FaMapMarkedAlt /> },
-  { title: "انتخاب روش ارسال", icon: <FaShippingFast /> },
   { title: "انتخاب تاریخ تحویل", icon: <FaCalendarDay /> },
   { title: "انتخاب روش پرداخت", icon: <FaCreditCard /> },
   { title: "بررسی نهایی سفارش", icon: <FaCheckCircle /> },
