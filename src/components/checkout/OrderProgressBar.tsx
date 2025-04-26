@@ -1,7 +1,6 @@
 import React from "react";
 import {
   FaMapMarkedAlt,
-  FaShippingFast,
   FaCalendarDay,
   FaCreditCard,
   FaCheckCircle,
@@ -39,13 +38,18 @@ const OrderProgressBar: React.FC<OrderProgressBarProps> = ({ currentStep }) => {
             : "text-neutral-600";
 
           return (
-            <div key={index} className="flex items-center space-x-2">
+            <div
+              key={index}
+              className="flex flex-col md:flex-row items-center space-x-2"
+            >
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center ${iconBgColor} text-white`}
               >
                 {step.icon}
               </div>
-              <span className={`text-lg ${textColor}`}>{step.title}</span>
+              <span className={`text-xs sm:text-base md:text-lg ${textColor}`}>
+                {step.title}
+              </span>
             </div>
           );
         })}
