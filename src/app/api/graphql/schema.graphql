@@ -58,7 +58,10 @@ type User {
   addresses: [Address!]!
   orders: [Order!]!
 }
-
+enum TransactionType {
+  DEPOSIT
+  PAYMENT
+}
 type Product {
   id: ID!
   name: String!
@@ -162,6 +165,23 @@ input CreateOrderInput {
   tax: Float!
   totalPrice: Float!
 }
+
+type Transaction {
+  id: String!
+  walletId: String!
+  amount: Float!
+  transactionType: TransactionType!
+  createdAt: String!
+}
+
+type Wallet {
+  id: String!
+  userId: String!
+  balance: Float!
+  createdAt: String!
+  updatedAt: String!
+  transactions: [Transaction!]!
+}
 type Address {
   id: ID
   userId: String
@@ -201,6 +221,7 @@ type Query {
   getUserOrders: [Order!]!
   getOrderById(id: String): Order
   getUserAddress: [Address!]!
+  getUserWalletInfo: Wallet!
 
   product(id: ID!): Product
 

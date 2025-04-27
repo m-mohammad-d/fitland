@@ -126,6 +126,41 @@ const resolvers = {
       });
       return products;
     },
+    getUserWalletInfo: async () => {
+      try {
+        const cookieStore = await cookies();
+        const tokenValue = cookieStore.get("auth-token")?.value;
+
+        if (!tokenValue) {
+          throw new Error("توکن احراز هویت یافت نشد");
+        }
+
+        const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+        if (!decodedToken || !decodedToken.userId) {
+          throw new Error("ساختار توکن نامعتبر است یا شناسه کاربری موجود نیست");
+        }
+
+        const { userId } = decodedToken;
+        const wallet = await prisma.wallet.findUnique({
+          where: {
+            userId,
+          },
+          include: {
+            transactions: true,
+          },
+        });
+
+        if (!wallet) {
+          throw new Error("کیف پول پیدا نشد");
+        }
+
+        return wallet;
+      } catch (error) {
+        throw new Error("مشکلی در دریافت اطلاعات کیف پول پیش آمد");
+      }
+    },
+
     getMe: async () => {
       try {
         const cookieStore = await cookies();
