@@ -35,9 +35,6 @@ model Wallet {
   transactions Transaction[]  
 }
 
-
-
-
 model Transaction {
   id          String    @id @default(cuid())  
   wallet      Wallet    @relation(fields: [walletId], references: [id])  

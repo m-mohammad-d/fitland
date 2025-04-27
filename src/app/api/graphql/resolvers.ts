@@ -609,6 +609,46 @@ const resolvers = {
       });
       return address;
     },
+    walletDeposit: async (_: void, { amount }: { amount: number }) => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
+      }
+      const { userId } = decodedToken;
+
+      if (!userId) {
+        throw new Error("دسترسی غیرمجاز");
+      }
+
+      const wallet = await prisma.wallet.findUnique({
+        where: { userId },
+      });
+
+      if (!wallet) {
+        throw new Error("کیف پول پیدا نشد");
+      }
+      const updatedWallet = await prisma.wallet.update({
+        where: { userId },
+        data: {
+          balance: wallet.balance + amount,
+        },
+      });
+      await prisma.transaction.create({
+        data: {
+          walletId: wallet.id,
+          amount,
+          transactionType: "DEPOSIT",
+        },
+      });
+      return updatedWallet;
+    },
   },
 };
 

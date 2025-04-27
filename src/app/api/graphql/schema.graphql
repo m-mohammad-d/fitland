@@ -260,6 +260,7 @@ type Mutation {
   ): User!
 
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
+  walletDeposit(amount: Int): Wallet
 
   createOrder(input: CreateOrderInput!): Order!
   addAddress(input: AddAddressInput!): Address!
