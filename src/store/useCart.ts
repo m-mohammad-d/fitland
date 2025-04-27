@@ -15,7 +15,7 @@ type CartItem = {
 type CheckoutInfo = {
   addressId?: string;
   deliveryDate?: string;
-  paymentMethod?: "ONLINE" | "ON_DELIVERY";
+  paymentMethod?: "ONLINE" | "ON_DELIVERY" | "WALLET";
   shippingCost?: number;
   tax?: number;
   discountCode?: string;

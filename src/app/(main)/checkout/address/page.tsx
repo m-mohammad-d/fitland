@@ -36,7 +36,7 @@ async function CheckOutAddress() {
 
             <div className="py-4">
               <Link
-                href="/checkout/shipping"
+                href="/checkout/delivery"
                 className="mt-12 bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
               >
                 ادامه فرآیند خرید
