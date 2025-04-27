@@ -339,6 +339,13 @@ const resolvers = {
         throw new Error("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید");
       }
 
+      await prisma.wallet.create({
+        data: {
+          userId: user.id,
+          balance: 0,
+        },
+      });
+
       const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
         expiresIn: "7d",
       });
