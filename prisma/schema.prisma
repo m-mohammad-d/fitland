@@ -19,8 +19,37 @@ model User {
   lastLogin     DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  addresses Address[]
-  orders    Order[]
+  addresses     Address[]
+  orders        Order[]
+  walletId      String?  @unique 
+  wallet        Wallet?   
+}
+
+model Wallet {
+  id        String   @id @default(cuid()) 
+  user       User     @relation(fields: [userId], references: [id]) 
+  userId     String  @unique
+  balance   Float    @default(0)  
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt 
+  transactions Transaction[]  
+}
+
+
+
+
+model Transaction {
+  id          String    @id @default(cuid())  
+  wallet      Wallet    @relation(fields: [walletId], references: [id])  
+  walletId    String    
+  amount      Float     
+  transactionType TransactionType
+  createdAt   DateTime  @default(now()) 
+}
+
+enum TransactionType {
+  DEPOSIT  
+  PAYMENT 
 }
 
 enum Gender {
