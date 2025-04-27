@@ -15,8 +15,14 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_ME } from "@/graphql/queries/userQueries";
 import { ApolloGetUserResponse } from "@/types/User";
 import { UPDATE_USER } from "@/graphql/mutations/UserMutations";
+import { BiWallet } from "react-icons/bi";
 
 const NAV_ITEMS = [
+  {
+    path: "/account/wallet",
+    icon: <BiWallet />,
+    label: "کیف پول",
+  },
   {
     path: "/account/profile",
     icon: <BsPerson />,
