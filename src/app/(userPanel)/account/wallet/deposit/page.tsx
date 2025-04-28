@@ -60,7 +60,7 @@ export default function WalletDepositPage() {
             step="10000"
             errorMessage={errors.amount?.message}
           />
-          <p className="text-xs text-gray-500 mt-2">حداقل مبلغ: ۵۰,۰۰۰ تومان</p>
+          <p className="text-xs text-gray-500 mt-2">حداقل مبلغ: ۵۰,۰۰۰ تومان , حداکثر مبلغ 10,000,000</p>
         </div>
 
         <div className="grid grid-cols-4 gap-2">

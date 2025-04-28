@@ -81,7 +81,7 @@ const PaymentGateway = ({
         ctx.font = "24px Arial";
 
         const textWidth = ctx.measureText(captcha).width;
-        const x = (canvasWidth - textWidth) / 2;
+        const x = canvasWidth - textWidth / 2;
         const y = canvasHeight / 2 + 10;
         ctx.fillText(captcha, x, y);
       }
@@ -97,9 +97,6 @@ const PaymentGateway = ({
 
     setIsLoading(true);
     try {
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
       toast.success("پرداخت با موفقیت انجام شد.");
       onPaymentSuccess?.();
       router.refresh();
@@ -124,7 +121,6 @@ const PaymentGateway = ({
     >
       <h2 className="text-2xl font-semibold mb-4">فرم پرداخت آنلاین</h2>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        
         <Input
           label="شماره کارت"
           {...register("cardNumber")}
@@ -133,7 +129,6 @@ const PaymentGateway = ({
           size={40}
         />
 
-
         <Input
           label="CVV2"
           {...register("cvv")}
@@ -141,7 +136,6 @@ const PaymentGateway = ({
           errorMessage={errors.cvv?.message}
           size={40}
         />
-
 
         <div className="flex gap-4">
           <Input
@@ -180,7 +174,7 @@ const PaymentGateway = ({
 
         <button
           type="submit"
-          className={`w-full mt-6 bg-primary-500 text-white py-2 px-4 rounded-lg hover:bg-primary-600 focus:outline-none focus:ring focus:ring-primary-300 ${
+          className={`w-full mt-6 bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-600 focus:outline-none focus:ring focus:ring-primary-300 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={isLoading}
