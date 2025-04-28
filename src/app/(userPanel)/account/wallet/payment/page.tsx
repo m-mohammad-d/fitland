@@ -14,7 +14,7 @@ function WalletPaymentPage() {
 
   function handleDepositWallet() {
     walletDeposit({ variables: { amount } });
-    router.push("/account/wallet");
+    router.push("/account/wallet/success");
   }
 
   return (
