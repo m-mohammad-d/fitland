@@ -297,6 +297,20 @@ const resolvers = {
         where: { userId },
       });
     },
+    getAddressById: async (_: void, { id }: { id: string }) => {
+      if (!id) {
+        throw new Error("ارسال ایدی اجباری هست");
+      }
+      const address = await prisma.address.findUnique({
+        where: { id },
+      });
+
+      if (!address) {
+        throw new Error("ادرسی پیدا نشد");
+      }
+
+      return address;
+    },
   },
 
   Mutation: {

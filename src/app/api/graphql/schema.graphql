@@ -229,7 +229,7 @@ type Query {
   getOrderById(id: String): Order
   getUserAddress: [Address!]!
   getUserWalletInfo: Wallet!
-
+  getAddressById(id: String): Address
   product(id: ID!): Product
 
   categories: [Category!]!
