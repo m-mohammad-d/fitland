@@ -578,6 +578,45 @@ const resolvers = {
 
       return order;
     },
+    applyDiscount: async (
+      _: void,
+      { code, totalPrice }: { code: string; totalPrice: number }
+    ) => {
+      const discount = await prisma.discountCode.findUnique({
+        where: { code },
+      });
+
+      if (!discount || !discount.isActive) {
+        return {
+          success: false,
+          message: "کد تخفیف نامعتبر یا غیرفعال است",
+        };
+      }
+
+      let discountAmount = 0;
+
+      if (discount.type === "AMOUNT") {
+        discountAmount = discount.value;
+      } else if (discount.type === "PERCENT") {
+        discountAmount = (totalPrice * discount.value) / 100;
+      }
+
+      if (discountAmount >= totalPrice) {
+        return {
+          success: false,
+          message: "مقدار تخفیف بیش از مبلغ کل است",
+        };
+      }
+
+      return {
+        success: true,
+        message: "کد تخفیف با موفقیت اعمال شد",
+        discountAmount,
+        discountPercent: discount.type === "PERCENT" ? discount.value : null,
+        type: discount.type,
+        code: discount.code,
+      };
+    },
     addAddress: async (_: void, { input }: { input: addAddressInput }) => {
       const cookieStore = await cookies();
       const tokenValue = cookieStore.get("auth-token")?.value;

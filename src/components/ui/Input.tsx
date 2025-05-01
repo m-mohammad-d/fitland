@@ -43,7 +43,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div
         className={cn(
-          "mt-4 w-full min-w-[200px]",
+          "w-full min-w-[200px]",
           fullWidth ? "max-w-full" : "w-full"
         )}
       >

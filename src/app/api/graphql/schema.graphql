@@ -205,7 +205,14 @@ input AddAddressInput {
   plaque: String
   unit: String
 }
-
+type DiscountResponse {
+  success: Boolean!
+  message: String!
+  discountAmount: Float
+  discountPercent: Float
+  type: String
+  code: String
+}
 # Queries
 type Query {
   products(
@@ -264,7 +271,7 @@ type Mutation {
 
   createOrder(input: CreateOrderInput!): Order!
   addAddress(input: AddAddressInput!): Address!
-
+  applyDiscount(code: String!, totalPrice: Float!): DiscountResponse!
   addCategory(name: String!): Category!
 }
 

@@ -19,6 +19,7 @@ type CheckoutInfo = {
   shippingCost?: number;
   tax?: number;
   discountCode?: string;
+  discountAmount?: number;
 };
 
 type CartState = {
@@ -39,7 +40,6 @@ type CartState = {
     quantity: number
   ) => void;
   clearCart: () => void;
-
   getTotal: () => number;
   getOriginalTotal: () => number;
   getTotalDiscount: () => number;

@@ -1,28 +1,42 @@
 import PaymentMethods from "@/components/checkout/PaymentMethods";
 import OrderProgressBar from "@/components/checkout/OrderProgressBar";
+import DiscountCode from "@/components/checkout/DiscountCode";
 function PaymentPage() {
   return (
-    <div className="container mx-auto my-12 px-4">
+    <div className="container mx-auto my-6 md:my-12 px-4 max-w-6xl">
       <OrderProgressBar currentStep={3} />
-      <div className="flex flex-col md:flex-row md:items-start gap-8 max-w-full overflow-hidden mt-8">
-        <div className="flex-1 min-w-0">
-          <h2 className="text-2xl text-neutral-800 mt-6 font-bold mb-8">
-            انتخاب روش پرداخت
-          </h2>
-          <PaymentMethods />
+
+      <div className="grid md:grid-cols-[1fr_340px] gap-8 mt-8">
+        <div className="space-y-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            روش پرداخت خود را انتخاب کنید
+          </h1>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <DiscountCode />
+            <PaymentMethods />
+          </div>
         </div>
 
-        <div className="md:w-64 lg:w-96 shrink-0">
-          <div className="bg-background p-6 rounded-xl shadow-lg border border-neutral-100">
-            <h2 className="text-xl font-semibold mb-6">توجه به روش پرداخت</h2>
-            <div className="space-y-4 text-neutral-600 text-sm">
-              <p>
-                لطفاً یک روش پرداخت مناسب انتخاب نمایید. پس از تکمیل فرآیند
-                پرداخت، سفارش شما نهایی خواهد شد.
+        <div className="order-first md:order-last">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <span className="text-emerald-600">•</span>
+              نکات مهم پرداخت
+            </h2>
+
+            <div className="space-y-4 text-gray-600 text-sm">
+              <p className="leading-relaxed">
+                پس از انتخاب روش پرداخت و تایید نهایی، سفارش شما ثبت خواهد شد.
+                لطفا از صحت اطلاعات پرداخت اطمینان حاصل فرمایید.
               </p>
-              <p>در صورتی که مشکلی در پرداخت به وجود آید، با ما تماس بگیرید.</p>
-              <div className="text-yellow-600 bg-yellow-50 p-3 rounded-lg">
-                در صورت عدم موفقیت در پرداخت، سفارش شما ثبت نخواهد شد.
+
+              <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-700">
+                <p className="font-medium">توجه:</p>
+                <p>
+                  در صورت عدم موفقیت در پرداخت، سفارش به صورت قطعی ثبت نخواهد
+                  شد.
+                </p>
               </div>
             </div>
           </div>
