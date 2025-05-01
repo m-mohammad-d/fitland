@@ -44,17 +44,25 @@ type CartState = {
   getOriginalTotal: () => number;
   getTotalDiscount: () => number;
   getTotalQuantity: () => number;
+  getFinalTotal: () => number;
 };
 export const useCart = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      checkout: {},
+      checkout: { tax: 40000 },
 
       setCheckoutField: (key, value) => {
         set({ checkout: { ...get().checkout, [key]: value } });
       },
-
+      getFinalTotal: () => {
+        const { getTotal, checkout } = get();
+        const baseTotal = getTotal();
+        const discount = checkout.discountAmount ?? 0;
+        const shipping = checkout.shippingCost ?? 0;
+        const tax = checkout.tax ?? 0;
+        return baseTotal - discount + shipping + tax;
+      },
       clearCheckout: () => {
         set({ checkout: {} });
       },

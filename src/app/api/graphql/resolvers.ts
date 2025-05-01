@@ -42,7 +42,8 @@ type AddCategoryArgs = {
 };
 type CreateOrderItemInput = {
   productId: string;
-  variantId?: string | null;
+  color?: string | null;
+  size?: string | null;
   quantity: number;
   priceAtPurchase: number;
 };
@@ -554,6 +555,7 @@ const resolvers = {
         if (!discount || !discount.isActive) {
           throw new Error("کد تخفیف نامعتبر یا غیرفعال است");
         }
+        discountCodeId = discount.id;
         if (discount.type === "AMOUNT") {
           discountAmount = discount.value;
         } else if (discount.type === "PERCENT") {
@@ -564,8 +566,8 @@ const resolvers = {
           throw new Error("مقدار تخفیف نباید بیشتر یا مساوی مبلغ کل باشد");
         }
       }
-
-      const finalPrice = input.totalPrice - discountAmount;
+      const finalPrice =
+        input.totalPrice - discountAmount + input.tax + input.shippingCost;
 
       const order = await prisma.order.create({
         data: {
@@ -581,7 +583,8 @@ const resolvers = {
           items: {
             create: input.items.map((item) => ({
               productId: item.productId,
-              variantId: item.variantId,
+              color: item.color,
+              size: item.size,
               quantity: item.quantity,
               priceAtPurchase: item.priceAtPurchase,
             })),
@@ -700,6 +703,55 @@ const resolvers = {
           transactionType: "DEPOSIT",
         },
       });
+      return updatedWallet;
+    },
+    walletWithdraw: async (_: void, { amount }: { amount: number }) => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
+      }
+
+      const { userId } = decodedToken;
+
+      if (!userId) {
+        throw new Error("دسترسی غیرمجاز");
+      }
+
+      const wallet = await prisma.wallet.findUnique({
+        where: { userId },
+      });
+
+      if (!wallet) {
+        throw new Error("کیف پول پیدا نشد");
+      }
+
+      if (wallet.balance < amount) {
+        throw new Error("موجودی کافی نیست");
+      }
+
+      const updatedWallet = await prisma.wallet.update({
+        where: { userId },
+        data: {
+          balance: wallet.balance - amount,
+        },
+      });
+
+      await prisma.transaction.create({
+        data: {
+          walletId: wallet.id,
+          amount,
+          transactionType: "PAYMENT",
+        },
+      });
+
       return updatedWallet;
     },
   },

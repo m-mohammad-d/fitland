@@ -7,3 +7,11 @@ export const WALLET_DEPOSIT = gql`
     }
   }
 `;
+
+export const WALLET_WITHDRAW = gql`
+  mutation walletWithdraw($amount: Int!) {
+    walletWithdraw(amount: $amount) {
+      id
+    }
+  }
+`;

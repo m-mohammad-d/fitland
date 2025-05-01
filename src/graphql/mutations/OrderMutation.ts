@@ -13,7 +13,6 @@ export const CREATE_ORDER_MUTATION = gql`
       paymentMethod
       shippingCost
       tax
-      discountCode
       totalPrice
     }
   }

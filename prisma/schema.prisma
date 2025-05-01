@@ -97,7 +97,8 @@ model Category {
 
 enum PaymentMethod {
   ONLINE
-  CASH
+  ON_DELIVERY
+  WALLET
 }
 
 enum OrderStatus {
@@ -164,7 +165,8 @@ model OrderItem {
 
   product         Product  @relation(fields: [productId], references: [id])
   productId       String
-  variantId       String?
+  color       String?
+  size       String?
 
   quantity        Int
   priceAtPurchase Float

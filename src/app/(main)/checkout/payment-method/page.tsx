@@ -1,7 +1,7 @@
 import PaymentMethods from "@/components/checkout/PaymentMethods";
 import OrderProgressBar from "@/components/checkout/OrderProgressBar";
 import DiscountCode from "@/components/checkout/DiscountCode";
-function PaymentPage() {
+function PaymentMethodPage() {
   return (
     <div className="container mx-auto my-6 md:my-12 px-4 max-w-6xl">
       <OrderProgressBar currentStep={3} />
@@ -46,4 +46,4 @@ function PaymentPage() {
   );
 }
 
-export default PaymentPage;
+export default PaymentMethodPage;

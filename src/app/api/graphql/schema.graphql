@@ -29,7 +29,8 @@ enum OrderStatus {
 
 enum PaymentMethod {
   ONLINE
-  CASH
+  ON_DELIVERY
+  WALLET
 }
 
 enum DiscountType {
@@ -268,6 +269,7 @@ type Mutation {
 
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
   walletDeposit(amount: Int): Wallet
+  walletWithdraw(amount: Int): Wallet
 
   createOrder(input: CreateOrderInput!): Order!
   addAddress(input: AddAddressInput!): Address!

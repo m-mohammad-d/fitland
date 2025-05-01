@@ -50,7 +50,10 @@ function DeliveryDays({ workingDays }: DeliveryDaysProps) {
                 }
                 w-full sm:w-28 md:w-32 lg:w-36
               `}
-              onClick={() => setCheckoutField("deliveryDate", day.date)}
+              onClick={() => {
+                setCheckoutField("deliveryDate", day.date);
+                setCheckoutField("shippingCost", day.shippingPrice);
+              }}
             >
               <div className="flex justify-between items-start mb-3">
                 <div>

@@ -45,7 +45,7 @@ function DeliveryDatePage() {
 
             <div className="pt-6">
               <Link
-                href="/checkout/payment"
+                href="/checkout/payment-method"
                 className="w-full inline-block text-center bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg"
               >
                 تایید زمان و ادامه به پرداخت
