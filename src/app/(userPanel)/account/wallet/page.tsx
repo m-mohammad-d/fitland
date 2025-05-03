@@ -1,7 +1,11 @@
+import TransactionItem from "@/components/account/TransactionItem";
+import WalletBalance from "@/components/account/WalletBalance";
 import { GET_WALLET_USER } from "@/graphql/queries/walletQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GraphQLFetchGetWalletResponse } from "@/types/Wallet";
 import Link from "next/link";
+import CountUp from "react-countup";
+
 import {
   FaWallet,
   FaPlusCircle,
@@ -29,9 +33,7 @@ async function UserWalletPage() {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-sm text-gray-500">موجودی فعلی</p>
-              <h2 className="text-3xl font-bold mt-1 text-gray-800">
-                {wallet.balance.toLocaleString()} تومان
-              </h2>
+              <WalletBalance balance={wallet.balance} />
             </div>
           </div>
 
@@ -55,40 +57,15 @@ async function UserWalletPage() {
           ) : (
             <div className="space-y-4">
               {wallet.transactions.map((transaction) => (
-                <div
+                <TransactionItem
                   key={transaction.id}
-                  className="flex justify-between items-center border-b border-gray-100 pb-3"
-                >
-                  <div className="flex items-center gap-3">
-                    {transaction.transactionType === "DEPOSIT" ? (
-                      <FaCheckCircle className="text-green-500 text-xl" />
-                    ) : (
-                      <FaTimesCircle className="text-red-500 text-xl" />
-                    )}
-                    <div>
-                      <p className="font-medium text-gray-800">
-                        {transaction.transactionType === "DEPOSIT"
-                          ? "افزایش موجودی"
-                          : "برداشت از کیف پول"}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {new Date(transaction.createdAt).toLocaleDateString(
-                          "fa-IR"
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                  <p
-                    className={`font-medium ${
-                      transaction.transactionType === "DEPOSIT"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {transaction.transactionType === "DEPOSIT" ? "+" : "-"}
-                    {transaction.amount.toLocaleString()} تومان
-                  </p>
-                </div>
+                  id={transaction.id}
+                  transactionType={
+                    transaction.transactionType as "DEPOSIT" | "WITHDRAW"
+                  }
+                  amount={transaction.amount}
+                  createdAt={transaction.createdAt}
+                />
               ))}
             </div>
           )}
