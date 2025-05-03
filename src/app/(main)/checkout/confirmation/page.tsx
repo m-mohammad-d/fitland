@@ -49,11 +49,13 @@ function CheckoutConfirmation() {
   const [createOrder, { loading: isCreatingOrder }] = useMutation(
     CREATE_ORDER_MUTATION,
     {
-      onCompleted: (data) => {
+      onCompleted: async () => {
         toast.success("سفارش با موفقیت ثبت شد");
-        router.push(`/checkout/success`);
+
+        await router.push(`/checkout/success`);
 
         clearCart();
+
         clearCheckout();
       },
       onError: (error) => {
@@ -129,7 +131,7 @@ function CheckoutConfirmation() {
             <AiOutlineHome className="text-xl text-primary-600 mt-1" />
             <p>
               <strong>آدرس تحویل:</strong>{" "}
-              {`${data.getAddressById.province}، ${data.getAddressById.city}، ${data.getAddressById.street}، ${data.getAddressById.alley}، پلاک ${data.getAddressById.plaque}، واحد ${data.getAddressById.unit}`}
+              {`${data?.getAddressById?.province}، ${data?.getAddressById?.city}، ${data?.getAddressById?.street}، ${data?.getAddressById?.alley}، پلاک ${data?.getAddressById?.plaque}، واحد ${data?.getAddressById?.unit}`}
             </p>
           </div>
 
