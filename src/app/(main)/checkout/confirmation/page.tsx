@@ -51,7 +51,7 @@ function CheckoutConfirmation() {
     {
       onCompleted: (data) => {
         toast.success("سفارش با موفقیت ثبت شد");
-        router.push(`/order/${data.createOrder.id}`);
+        router.push(`/checkout/success`);
 
         clearCart();
         clearCheckout();
