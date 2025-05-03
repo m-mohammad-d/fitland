@@ -1,5 +1,6 @@
 "use client";
 
+import { formatJalaliDate } from "@/lib/Date";
 import CountUp from "react-countup";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
@@ -7,7 +8,7 @@ type Props = {
   id: string;
   transactionType: "DEPOSIT" | "WITHDRAW";
   amount: number;
-  createdAt: string;
+  createdAt: number;
 };
 
 export default function TransactionItem({
@@ -29,9 +30,7 @@ export default function TransactionItem({
           <p className="font-medium text-gray-800">
             {isDeposit ? "افزایش موجودی" : "برداشت از کیف پول"}
           </p>
-          <p className="text-xs text-gray-500">
-            {new Date(createdAt).toLocaleDateString("fa-IR")}
-          </p>
+          <p className="text-xs text-gray-500">{formatJalaliDate(createdAt)}</p>
         </div>
       </div>
       <p

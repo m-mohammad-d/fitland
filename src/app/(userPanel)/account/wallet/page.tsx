@@ -4,14 +4,10 @@ import { GET_WALLET_USER } from "@/graphql/queries/walletQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GraphQLFetchGetWalletResponse } from "@/types/Wallet";
 import Link from "next/link";
-import CountUp from "react-countup";
-
 import {
   FaWallet,
   FaPlusCircle,
   FaHistory,
-  FaCheckCircle,
-  FaTimesCircle,
 } from "react-icons/fa";
 
 async function UserWalletPage() {
