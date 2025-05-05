@@ -1,21 +1,56 @@
-interface Product {
+import { Address } from "./Address";
+import { Product } from "./Products";
+import { User } from "./User";
+
+export interface UserOrderProduct {
   id: string;
-  images: string[];
   name: string;
+  images: string[];
 }
 
-interface OrderItem {
-  product: Product;
+export interface UserOrderItem {
+  product: UserOrderProduct;
 }
 
-interface UserOrder {
+export interface UserOrder {
   id: string;
-  createdAt: number;
+  createdAt: string;
   totalPrice: number;
-  items: OrderItem[];
+  items: UserOrderItem[];
 }
-interface GetUserOrdersResponse {
+
+export interface GetUserOrdersResponse {
   data: {
     getUserOrders: UserOrder[];
   };
+}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  color?: string;
+  size?: string;
+  quantity: number;
+  priceAtPurchase: number;
+  product: Product;
+}
+
+export interface Order {
+  id: string;
+  user: User;
+  address: Address;
+  items: OrderItem[];
+  discountCodeId?: string;
+  deliveryDate: string;
+  paymentMethod: "CASH" | "ONLINE" | string;
+  shippingCost: number;
+  tax: number;
+  totalPrice: number;
+  status: "PENDING" | "DELIVERED" | "CANCELED" | string;
+  createdAt: number;
+}
+
+export interface GetOrderByIdResponse {
+  getOrderById: Order;
 }

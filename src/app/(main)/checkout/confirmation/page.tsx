@@ -36,6 +36,8 @@ function CheckoutConfirmation() {
       productId: item.productId,
       quantity: item.quantity,
       priceAtPurchase: item.price,
+      color: item.color,
+      size: item.size,
     })),
     addressId: checkout.addressId,
     discountCode: checkout.discountCode || "",

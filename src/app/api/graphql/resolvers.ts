@@ -237,6 +237,7 @@ const resolvers = {
           },
           discountCode: true,
           address: true,
+          user: true,
         },
       });
 

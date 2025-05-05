@@ -99,7 +99,7 @@ type Category {
 
 type Order {
   id: ID!
-  user: User!
+  user: User
   userId: String!
   items: [OrderItem!]!
   discountCode: DiscountCode
@@ -120,7 +120,9 @@ type OrderItem {
   order: Order!
   orderId: String!
   product: Product!
-  productId: String!
+  productId: String
+  color: String
+  size: String
   variantId: String
   quantity: Int!
   priceAtPurchase: Float!
@@ -151,7 +153,8 @@ input ProductFilter {
 
 input OrderItemInput {
   productId: ID!
-  variantId: ID
+  color: String
+  size: String
   quantity: Int!
   priceAtPurchase: Float!
 }
@@ -227,7 +230,7 @@ type Query {
 
   getAllOrders: [Order!]!
   getUserOrders: [Order!]!
-  getOrderById(id: String): Order
+  getOrderById(id: String): Order!
   getUserAddress: [Address!]!
   getUserWalletInfo: Wallet!
   getAddressById(id: String): Address

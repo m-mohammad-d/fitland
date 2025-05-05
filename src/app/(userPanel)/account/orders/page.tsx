@@ -1,6 +1,7 @@
 import { GET_USER_ORDERS } from "@/graphql/queries/orderQueries";
 import { formatJalaliDate } from "@/lib/Date";
 import { graphQLFetch } from "@/lib/graphqlFetch";
+import { GetUserOrdersResponse } from "@/types/Order";
 import Image from "next/image";
 import Link from "next/link";
 import { FiClock, FiDollarSign, FiArrowLeft } from "react-icons/fi";
@@ -53,7 +54,7 @@ async function UserOrdersPage() {
                 </div>
 
                 <Link
-                  href={`account/orders/${order.id}`}
+                  href={`/account/orders/${order.id}`}
                   className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 transition-colors"
                 >
                   جزئیات سفارش
@@ -75,7 +76,7 @@ async function UserOrdersPage() {
                         className="object-cover transition-transform group-hover:scale-105"
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                       />
-                          <div className="absolute inset-0 flex items-end p-2 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute inset-0 flex items-end p-2 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                         <p className="text-white text-xs truncate w-full text-center">
                           {item.product.name}
                         </p>
