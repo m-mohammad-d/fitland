@@ -1,13 +1,13 @@
 export interface Address {
   id: string;
   userId: string;
-  province: string;
-  city: string;
-  zipCode: string;
-  street: string;
-  alley?: string;
-  plaque?: string;
+  fullName: string;
+  phone: string;
+  fullAddress: string;
+  plaque: string;
   unit?: string;
+  zipCode: string;
+  details?: string;
   createdAt: string;
   updatedAt: string;
   __typename: "Address";

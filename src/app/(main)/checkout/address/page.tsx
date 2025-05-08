@@ -17,7 +17,7 @@ async function CheckOutAddress() {
       <OrderProgressBar currentStep={1} />
       <div className="px-4 my-12 flex gap-6 flex-col md:flex-row">
         <div className="w-full">
-          <AddressList addresses={res.data.getUserAddress} />
+          <AddressList addresses={res?.data?.getUserAddress} />
           <AddressModal />
         </div>
         <div className="mt-6 md:mt-0">

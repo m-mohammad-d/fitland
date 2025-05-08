@@ -189,25 +189,25 @@ type Wallet {
 type Address {
   id: ID
   userId: String
-  province: String
-  city: String
-  street: String
-  alley: String
+  fullName: String
+  phone: String
+  fullAddress: String
   plaque: String
   unit: String
   zipCode: String
+  details: String
   createdAt: String
   updatedAt: String
 }
 
 input AddAddressInput {
-  province: String!
-  city: String!
-  zipCode: String!
-  street: String!
-  alley: String
-  plaque: String
+  fullName: String!
+  phone: String!
+  fullAddress: String!
+  plaque: String!
   unit: String
+  zipCode: String!
+  details: String
 }
 type DiscountResponse {
   success: Boolean!

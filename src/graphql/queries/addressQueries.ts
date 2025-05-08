@@ -5,31 +5,30 @@ export const GET_USER_ADDRESS = gql`
     getUserAddress {
       id
       userId
-      province
-      city
-      street
-      alley
+      fullName
+      phone
+      fullAddress
       plaque
       unit
       zipCode
+      details
       createdAt
       updatedAt
     }
   }
 `;
-
 export const GET_ADDRESS_BY_ID = gql`
   query GetAddressById($id: String) {
     getAddressById(id: $id) {
       id
-      province
       userId
-      city
-      street
-      alley
+      fullName
+      phone
+      fullAddress
       plaque
       unit
       zipCode
+      details
       createdAt
       updatedAt
     }

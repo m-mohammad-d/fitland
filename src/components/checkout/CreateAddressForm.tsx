@@ -1,136 +1,104 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useMutation } from "@apollo/client";
-import { ADD_ADDRESS } from "@/graphql/mutations/AddressMutation";
-import Input from "@/components/ui/Input";
-import toast from "react-hot-toast";
-import Button from "../ui/Button";
-import { GET_USER_ADDRESS } from "@/graphql/queries/addressQueries";
-import { useRouter } from "next/navigation";
+"use client";
 
-const addressSchema = z.object({
-  province: z.string().min(1, "استان الزامی است"),
-  city: z.string().min(1, "شهر الزامی است"),
-  zipCode: z.string().min(10, "کد پستی باید ۱۰ رقمی باشد"),
-  street: z.string().min(1, "خیابان الزامی است"),
-  alley: z.string().min(1, "کوچه الزامی است"),
-  plaque: z.string().min(1, "پلاک الزامی است"),
-  unit: z.string().min(1, "واحد الزامی است"),
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import Input from "@/components/ui/Input";
+import { z } from "zod";
+import Button from "@/components/ui/Button";
+
+const schema = z.object({
+  fullName: z.string().min(2, "نام تحویل‌گیرنده الزامی است"),
+  phone: z
+    .string()
+    .min(10, "شماره تماس باید حداقل ۱۰ رقم باشد")
+    .max(11, "شماره تماس باید حداکثر ۱۱ رقم باشد")
+    .regex(/^[0-9]+$/, "شماره تماس باید فقط شامل اعداد باشد"),
+  zipCode: z
+    .string()
+    .min(10, "کد پستی باید ۱۰ رقم باشد")
+    .max(10, "کد پستی باید ۱۰ رقم باشد")
+    .regex(/^[0-9]+$/, "کد پستی باید فقط شامل اعداد باشد"),
+  plaque: z
+    .string()
+    .min(1, "پلاک الزامی است")
+    .regex(/^[0-9]+$/, "پلاک باید فقط شامل اعداد باشد"),
+  unit: z.string().optional(),
+  details: z.string().optional(),
 });
 
-type AddressFormInputs = z.infer<typeof addressSchema>;
+type FormData = z.infer<typeof schema>;
 
-const CreateAddressForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const router = useRouter();
+interface Props {
+  onSubmit: (data: FormData) => void;
+  defaultAddress?: string;
+}
 
-  const [addAddress] = useMutation(ADD_ADDRESS, {
-    onCompleted: () => {
-      toast.success("ادرس با موفقیت اضافه شد");
-      router.refresh();
-      onClose();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+const CreateAddressForm = ({ onSubmit, defaultAddress }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AddressFormInputs>({
-    resolver: zodResolver(addressSchema),
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
   });
 
-  const onFormSubmit = (data: AddressFormInputs) => {
-    addAddress({
-      variables: {
-        province: data.province,
-        city: data.city,
-        zipCode: data.zipCode,
-        street: data.street,
-        alley: data.alley,
-        plaque: data.plaque,
-        unit: data.unit,
-      },
-    });
-  };
-
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4 px-2 md:px-0 mt-4"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input
+          label="نام تحویل‌گیرنده *"
+          placeholder="مثال: علی محمدی"
+          {...register("fullName")}
+          errorMessage={errors.fullName?.message}
+        />
+        <Input
+          label="شماره تماس *"
+          placeholder="مثال: 09123456789"
+          {...register("phone")}
+          errorMessage={errors.phone?.message}
+        />
+      </div>
+
       <Input
-        label="استان"
-        id="province"
-        type="text"
-        errorMessage={errors.province?.message}
-        {...register("province")}
-        size={40}
+        label="آدرس انتخابی از نقشه"
+        value={defaultAddress}
+        disabled
         fullWidth
+        placeholder="آدرس از روی نقشه انتخاب خواهد شد"
       />
 
       <Input
-        label="شهر"
-        id="city"
-        type="text"
-        errorMessage={errors.city?.message}
-        {...register("city")}
-        size={40}
-        fullWidth
-      />
-
-      <Input
-        label="کد پستی"
-        id="zipCode"
-        type="text"
-        errorMessage={errors.zipCode?.message}
+        label="کد پستی *"
+        placeholder="مثال: 1234567890"
         {...register("zipCode")}
-        size={40}
-        fullWidth
+        errorMessage={errors.zipCode?.message}
       />
-
       <Input
-        label="خیابان"
-        id="street"
-        type="text"
-        errorMessage={errors.street?.message}
-        {...register("street")}
-        size={40}
-        fullWidth
-      />
-
-      <Input
-        label="کوچه"
-        id="alley"
-        type="text"
-        errorMessage={errors.alley?.message}
-        {...register("alley")}
-        size={40}
-        fullWidth
-      />
-
-      <Input
-        label="پلاک"
-        id="plaque"
-        type="text"
-        errorMessage={errors.plaque?.message}
+        label="پلاک *"
+        placeholder="مثال: ۱۲"
         {...register("plaque")}
-        size={40}
-        fullWidth
+        errorMessage={errors.plaque?.message}
       />
-
       <Input
         label="واحد"
-        id="unit"
-        type="text"
-        errorMessage={errors.unit?.message}
+        placeholder="مثال: ۳"
         {...register("unit")}
-        size={40}
-        fullWidth
+        errorMessage={errors.unit?.message}
       />
 
-      <div className="flex justify-end pt-4">
-        <Button type="submit">ثبت آدرس</Button>
-      </div>
+      <Input
+        label="جزئیات بیشتر (اختیاری)"
+        placeholder="مثال: طبقه دوم، واحد سمت چپ"
+        {...register("details")}
+        errorMessage={errors.details?.message}
+      />
+
+      <Button type="submit" className="w-full mt-2">
+        ثبت آدرس
+      </Button>
     </form>
   );
 };

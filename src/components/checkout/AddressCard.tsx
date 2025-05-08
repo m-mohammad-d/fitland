@@ -33,14 +33,12 @@ function AddressCard({
         </div>
 
         <div className="flex-1">
-          <h3 className="font-medium text-neutral-800">
-            {address.province}، {address.city}
-          </h3>
+          <p className="mt-1.5 text-neutral-700 text-base">
+            {address.fullAddress}
+          </p>
 
           <p className="mt-1.5 text-neutral-700 text-sm">
             {[
-              address.street,
-              address.alley && `کوچه ${address.alley}`,
               address.plaque && `پلاک ${address.plaque}`,
               address.unit && `واحد ${address.unit}`,
             ]

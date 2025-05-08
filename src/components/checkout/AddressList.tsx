@@ -20,7 +20,7 @@ function AddressList({ addresses }: AddressListProps) {
 
   return (
     <div className="space-y-4">
-      {addresses.map((address) => (
+      {addresses?.map((address) => (
         <AddressCard
           address={address}
           key={address.id}

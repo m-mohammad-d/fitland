@@ -2,34 +2,34 @@ import gql from "graphql-tag";
 
 export const ADD_ADDRESS = gql`
   mutation addAddress(
-    $province: String!
-    $city: String!
-    $zipCode: String!
-    $street: String!
-    $alley: String
-    $plaque: String
+    $fullName: String!
+    $phone: String!
+    $fullAddress: String!
+    $plaque: String!
     $unit: String
+    $zipCode: String!
+    $details: String
   ) {
     addAddress(
       input: {
-        province: $province
-        city: $city
-        zipCode: $zipCode
-        street: $street
-        alley: $alley
+        fullName: $fullName
+        phone: $phone
+        fullAddress: $fullAddress
         plaque: $plaque
         unit: $unit
+        zipCode: $zipCode
+        details: $details
       }
     ) {
       id
       userId
-      province
-      city
-      zipCode
-      street
-      alley
+      fullName
+      phone
+      fullAddress
       plaque
       unit
+      zipCode
+      details
       createdAt
       updatedAt
     }

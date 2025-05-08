@@ -51,7 +51,7 @@ type CreateOrderItemInput = {
 type CreateOrderInput = {
   addressId: string;
   deliveryDate: string;
-  paymentMethod: "ONLINE" | "CASH";
+  paymentMethod: "ONLINE" | "ON_DELIVERY" | "WALLET";
   shippingCost: number;
   tax: number;
   totalPrice: number;
@@ -59,13 +59,13 @@ type CreateOrderInput = {
   items: CreateOrderItemInput[];
 };
 type addAddressInput = {
-  province: string;
-  city: string;
-  street: string;
-  alley: string;
-  plaque: string;
-  unit: string;
+  fullName: string;
+  phone: string;
   zipCode: string;
+  plaque: string;
+  unit?: string;
+  details?: string;
+  fullAddress: string;
 };
 const prisma = new PrismaClient();
 const SECRET_KEY = process.env.JWT_SECRET!;
@@ -642,28 +642,32 @@ const resolvers = {
       if (!tokenValue) {
         throw new Error("توکن احراز هویت پیدا نشد");
       }
+
       const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
 
       if (!decodedToken || !decodedToken.userId) {
         throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
       }
+
       const { userId } = decodedToken;
 
       if (!userId) {
         throw new Error("دسترسی غیرمجاز");
       }
+
       const address = await prisma.address.create({
         data: {
           userId,
-          province: input.province,
-          city: input.city,
+          fullName: input.fullName,
+          phone: input.phone,
           zipCode: input.zipCode,
-          street: input.street,
-          alley: input.alley,
           plaque: input.plaque,
           unit: input.unit,
+          details: input.details,
+          fullAddress: input.fullAddress,
         },
       });
+
       return address;
     },
     walletDeposit: async (_: void, { amount }: { amount: number }) => {

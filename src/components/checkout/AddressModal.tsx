@@ -1,40 +1,103 @@
 "use client";
 import { BiPlus } from "react-icons/bi";
 import { useState } from "react";
-import CreateAddressForm from "./CreateAddressForm";
+import dynamic from "next/dynamic";
+import Modal from "@/components/ui/Modal";
+import CreateAddressForm from "@/components/checkout/CreateAddressForm";
+import { useMutation } from "@apollo/client";
+import { ADD_ADDRESS } from "@/graphql/mutations/AddressMutation";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-const AddressModal: React.FC = ({}) => {
+const AddressPicker = dynamic(
+  () => import("@/components/checkout/AddressPicker"),
+  { ssr: false }
+);
+interface AddressFormData {
+  fullName: string;
+  phone: string;
+  plaque: string;
+  unit?: string | undefined;
+  zipCode: string;
+  details?: string | undefined;
+}
+const AddressModal: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const router = useRouter();
 
+  const [addAddress] = useMutation(ADD_ADDRESS, {
+    onCompleted: () => {
+      toast.success("ادرس با موفقیت اضافه شد");
+      router.refresh();
+      handleCloseModal();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
   const handleOpenModal = () => setModalOpen(true);
-  const handleCloseModal = () => setModalOpen(false);
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setShowAddressForm(false);
+    setSelectedAddress("");
+  };
+
+  const handleLocationSelect = (address: string) => {
+    setSelectedAddress(address);
+    setShowAddressForm(true);
+  };
+
+  const handleSubmitAddress = async (formData: AddressFormData) => {
+    const { fullName, phone, plaque, unit, zipCode, details } = formData;
+
+    await addAddress({
+      variables: {
+        fullName,
+        phone,
+        fullAddress: selectedAddress,
+        plaque,
+        unit,
+        zipCode,
+        details,
+      },
+    });
+  };
 
   return (
     <div>
       <button
         onClick={handleOpenModal}
-        className="flex items-center p-2 text-primary-600 transition duration-200"
+        className="flex items-center p-2 text-primary-600 transition duration-200 hover:text-primary-800"
       >
         <BiPlus className="mr-2" />
         ثبت آدرس جدید
       </button>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-96 shadow-lg relative">
-            <h3 className="text-2xl font-semibold mb-4">ثبت آدرس جدید</h3>
-
-            <CreateAddressForm onClose={handleCloseModal} />
-
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            >
-              <BiPlus className="rotate-45" />
-            </button>
-          </div>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold">
+            {showAddressForm ? "تکمیل اطلاعات آدرس" : "ثبت آدرس جدید"}
+          </h3>
+          <button
+            onClick={handleCloseModal}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <BiPlus className="rotate-45" size={24} />
+          </button>
         </div>
-      )}
+
+        {showAddressForm ? (
+          <CreateAddressForm
+            onSubmit={handleSubmitAddress}
+            defaultAddress={selectedAddress}
+          />
+        ) : (
+          <AddressPicker onLocationSelect={handleLocationSelect} />
+        )}
+      </Modal>
     </div>
   );
 };
