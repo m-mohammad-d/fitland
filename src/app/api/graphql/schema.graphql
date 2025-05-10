@@ -88,6 +88,7 @@ type Comment {
   content: String!
   rating: Int!
   product: Product!
+  user: User
   createdAt: String!
 }
 
@@ -235,6 +236,7 @@ type Query {
   getUserWalletInfo: Wallet!
   getAddressById(id: String): Address
   product(id: ID!): Product
+  getProductComments(id: ID!): [Comment]
 
   categories: [Category!]!
 }

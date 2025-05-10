@@ -19,6 +19,7 @@ model User {
   lastLogin     DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  comments      Comment[] 
   addresses     Address[]
   orders        Order[]
   walletId      String?  @unique 
@@ -85,6 +86,8 @@ model Comment {
   rating    Int     
   product   Product  @relation(fields: [productId], references: [id]) 
   productId String   
+  user   User  @relation(fields: [userId], references: [id]) 
+  userId String   
   createdAt DateTime @default(now()) 
 }
 

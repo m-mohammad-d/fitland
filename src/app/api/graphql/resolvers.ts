@@ -161,7 +161,15 @@ const resolvers = {
         throw new Error("مشکلی در دریافت اطلاعات کیف پول پیش آمد");
       }
     },
-
+    getProductComments: async (_: void, { id }: { id: string }) => {
+      if (!id) {
+        throw new Error("ارسال ایدی اجباری هست");
+      }
+      return await prisma.comment.findMany({
+        where: { productId: id },
+        include: { user: true },
+      });
+    },
     getMe: async () => {
       try {
         const cookieStore = await cookies();
