@@ -1,8 +1,16 @@
+import { LIKE_COMMENT } from "@/graphql/mutations/ReactionMutation";
 import { formatJalaliDate } from "@/lib/Date";
 import { Comment } from "@/types/Comment";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
-import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import {
+  FaStar,
+  FaRegStar,
+  FaStarHalfAlt,
+  FaThumbsUp,
+  FaThumbsDown,
+} from "react-icons/fa";
+import { ImSpinner2 } from "react-icons/im";
 
 interface CommentCardProps {
   comment: Comment;
@@ -10,8 +18,51 @@ interface CommentCardProps {
 
 function CommentCard({ comment }: CommentCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [likes, setLikes] = useState(comment.likes || 0);
+  const [dislikes, setDislikes] = useState(comment.dislikes || 0);
+  const [userReaction, setUserReaction] = useState<"LIKE" | "DISLIKE" | null>(
+    comment.userReactionType
+  );
+  const [loadingType, setLoadingType] = useState<"LIKE" | "DISLIKE" | null>(
+    null
+  );
+
+  const [likeComment] = useMutation(LIKE_COMMENT);
 
   const toggleExpand = () => setExpanded(!expanded);
+
+  const handleReaction = async (type: "LIKE" | "DISLIKE") => {
+    if (loadingType) return;
+    setLoadingType(type);
+
+    try {
+      await likeComment({
+        variables: {
+          commentId: comment.id,
+          type,
+        },
+      });
+
+      if (userReaction === type) {
+        if (type === "LIKE") setLikes(likes - 1);
+        else setDislikes(dislikes - 1);
+        setUserReaction(null);
+      } else {
+        if (type === "LIKE") {
+          setLikes(likes + 1);
+          if (userReaction === "DISLIKE") setDislikes(dislikes - 1);
+        } else {
+          setDislikes(dislikes + 1);
+          if (userReaction === "LIKE") setLikes(likes - 1);
+        }
+        setUserReaction(type);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingType(null);
+    }
+  };
 
   const renderStars = () => {
     const stars = [];
@@ -59,7 +110,6 @@ function CommentCard({ comment }: CommentCardProps) {
               </svg>
             </div>
           )}
-
           <span className="xs:hidden text-neutral-400 text-xs">
             {formatJalaliDate(comment.createdAt)}
           </span>
@@ -72,7 +122,6 @@ function CommentCard({ comment }: CommentCardProps) {
                 <h4 className="font-medium text-neutral-800 truncate text-sm xs:text-base">
                   {comment.user?.name || "ناشناس"}
                 </h4>
-
                 <span className="hidden xs:block text-neutral-400 text-xs sm:text-sm whitespace-nowrap">
                   {formatJalaliDate(comment.createdAt)}
                 </span>
@@ -107,15 +156,39 @@ function CommentCard({ comment }: CommentCardProps) {
           </div>
 
           <div className="flex items-center gap-4 mt-3 sm:mt-4">
-            <button className="flex items-center gap-1 text-neutral-500 hover:text-green-500 transition-colors">
+            <button
+              className={`flex items-center gap-1 transition-colors ${
+                userReaction === "LIKE"
+                  ? "text-green-500"
+                  : "text-neutral-500 hover:text-green-500"
+              }`}
+              onClick={() => handleReaction("LIKE")}
+            >
               <FaThumbsUp className="text-sm" />
-              <span className="text-xs sm:text-sm">({comment.likes || 0})</span>
+              <span className="text-xs sm:text-sm">
+                {loadingType === "LIKE" ? (
+                  <ImSpinner2 className="animate-spin" />
+                ) : (
+                  `(${likes})`
+                )}
+              </span>
             </button>
 
-            <button className="flex items-center gap-1 text-neutral-500 hover:text-red-500 transition-colors">
+            <button
+              className={`flex items-center gap-1 transition-colors ${
+                userReaction === "DISLIKE"
+                  ? "text-red-500"
+                  : "text-neutral-500 hover:text-red-500"
+              }`}
+              onClick={() => handleReaction("DISLIKE")}
+            >
               <FaThumbsDown className="text-sm" />
               <span className="text-xs sm:text-sm">
-                ({comment.dislikes || 0})
+                {loadingType === "DISLIKE" ? (
+                  <ImSpinner2 className="animate-spin" />
+                ) : (
+                  `(${dislikes})`
+                )}
               </span>
             </button>
           </div>

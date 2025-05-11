@@ -9,6 +9,9 @@ export type Comment = {
     photo: string;
   };
   createdAt: string;
+  userReactionType: "LIKE" | "DISLIKE";
+  likes: number;
+  dislikes: number;
 };
 
 export type GetProductCommentsResponse = {

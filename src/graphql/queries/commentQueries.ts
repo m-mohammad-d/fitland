@@ -13,6 +13,9 @@ export const GET_PRODUCT_COMMENTS = gql`
         photo
       }
       createdAt
+      userReactionType
+      likes
+      dislikes
     }
   }
 `;

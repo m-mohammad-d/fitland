@@ -90,6 +90,9 @@ type Comment {
   product: Product!
   user: User
   createdAt: String!
+  userReactionType: ReactionType
+  likes: Int!
+  dislikes: Int!
 }
 
 type Category {
@@ -127,6 +130,18 @@ type OrderItem {
   variantId: String
   quantity: Int!
   priceAtPurchase: Float!
+}
+type Reaction {
+  id: ID
+  type: ReactionType
+  user: User
+  comment: Comment
+  createdAt: String
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
 }
 
 type DiscountCode {
@@ -275,6 +290,7 @@ type Mutation {
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
   walletDeposit(amount: Int): Wallet
   walletWithdraw(amount: Int): Wallet
+  likeComment(commentId: ID!, type: ReactionType!): Reaction
 
   createOrder(input: CreateOrderInput!): Order!
   addAddress(input: AddAddressInput!): Address!

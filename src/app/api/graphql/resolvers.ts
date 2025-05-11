@@ -165,11 +165,40 @@ const resolvers = {
       if (!id) {
         throw new Error("ارسال ایدی اجباری هست");
       }
-      return await prisma.comment.findMany({
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+      const decodedToken = tokenValue
+        ? (jwt.decode(tokenValue) as JwtPayload | null)
+        : null;
+      const userId = decodedToken?.userId || null;
+
+      const comments = await prisma.comment.findMany({
         where: { productId: id },
-        include: { user: true },
+        include: { user: true, reactions: true },
       });
+
+      const formattedComments = comments.map((comment) => {
+        const likeCount = comment.reactions.filter(
+          (r) => r.type === "LIKE"
+        ).length;
+        const dislikeCount = comment.reactions.filter(
+          (r) => r.type === "DISLIKE"
+        ).length;
+        const userReactionType = userId
+          ? comment.reactions.find((r) => r.userId === userId)?.type || null
+          : null;
+
+        return {
+          ...comment,
+          userReactionType,
+          likes: likeCount,
+          dislikes: dislikeCount,
+        };
+      });
+
+      return formattedComments;
     },
+
     getMe: async () => {
       try {
         const cookieStore = await cookies();
@@ -346,14 +375,33 @@ const resolvers = {
         },
       });
     },
-    addComment: async (_: void, args: AddCommentArgs) =>
-      await prisma.comment.create({
+    addComment: async (_: void, args: AddCommentArgs) => {
+      const cookieStore = await cookies();
+      const tokenValue = cookieStore.get("auth-token")?.value;
+
+      if (!tokenValue) {
+        throw new Error("توکن احراز هویت پیدا نشد");
+      }
+      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+
+      if (!decodedToken || !decodedToken.userId) {
+        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
+      }
+      const { userId } = decodedToken;
+
+      if (!userId) {
+        throw new Error("دسترسی غیرمجاز");
+      }
+
+      return await prisma.comment.create({
         data: {
+          userId,
           content: args.content,
-          rating: args.rating,
           productId: args.productId,
+          rating: args.rating,
         },
-      }),
+      });
+    },
 
     addCategory: async (_: void, args: AddCategoryArgs) => {
       return await prisma.category.create({
@@ -766,6 +814,62 @@ const resolvers = {
       });
 
       return updatedWallet;
+    },
+    likeComment: async (
+      _: void,
+      { type, commentId }: { type: "LIKE" | "DISLIKE"; commentId: string }
+    ) => {
+      try {
+        // Authentication check
+        const cookieStore = await cookies();
+        const tokenValue = cookieStore.get("auth-token")?.value;
+
+        if (!tokenValue) {
+          throw new Error("توکن احراز هویت یافت نشد");
+        }
+
+        const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
+        if (!decodedToken || !decodedToken.userId) {
+          throw new Error("ساختار توکن نامعتبر یا شناسه کاربر وجود ندارد");
+        }
+
+        const { userId } = decodedToken;
+        if (!userId) {
+          throw new Error("دسترسی غیرمجاز");
+        }
+
+        // Check if comment exists
+        const comment = await prisma.comment.findUnique({
+          where: { id: commentId },
+        });
+        if (!comment) throw new Error("کامنت یافت نشد");
+
+        // Check for existing reaction
+        const existingReaction = await prisma.reaction.findUnique({
+          where: {
+            commentId_userId: { commentId, userId },
+          },
+        });
+
+        // If same reaction exists, remove it (toggle)
+        if (existingReaction?.type === type) {
+          await prisma.reaction.delete({
+            where: { id: existingReaction.id },
+          });
+          return null;
+        }
+
+        // Create or update reaction
+        const reaction = await prisma.reaction.upsert({
+          where: { commentId_userId: { commentId, userId } },
+          update: { type },
+          create: { type, commentId, userId },
+        });
+
+        return reaction;
+      } catch (error) {
+        console.error("Error in likePost resolver:", error);
+      }
     },
   },
 };
