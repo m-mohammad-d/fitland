@@ -3,16 +3,20 @@ import { useState } from "react";
 import CommentCard from "./CommentCard";
 import { Comment } from "@/types/Comment";
 import { Drawer } from "../ui/Drawer";
+import Button from "../ui/Button";
+import AddComment from "./AddComment";
 
 interface ProductCommentListProps {
   comments: Comment[];
+  productId: string;
 }
 
-function ProductCommentList({ comments }: ProductCommentListProps) {
+function ProductCommentList({ comments, productId }: ProductCommentListProps) {
   const [sortBy, setSortBy] = useState<"newest" | "highest" | "lowest">(
     "newest"
   );
   const [showSortDrawer, setShowSortDrawer] = useState(false);
+  const [showCreateComment, setShowCreateComment] = useState(false);
 
   const sortedComments = [...comments].sort((a, b) => {
     if (sortBy === "newest") {
@@ -74,18 +78,22 @@ function ProductCommentList({ comments }: ProductCommentListProps) {
           </button>
         </div>
       </div>
-
-      {sortedComments.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm p-8 text-center text-gray-500">
-          هنوز نظری برای این محصول ثبت نشده است.
+      <div className="flex justify-between">
+        <div>
+          <Button onClick={() => setShowCreateComment(true)}>ثبت نظر</Button>
         </div>
-      ) : (
-        <div className="space-y-4">
-          {sortedComments.map((comment) => (
-            <CommentCard key={comment.id} comment={comment} />
-          ))}
-        </div>
-      )}
+        {sortedComments.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm p-8 text-center text-gray-500">
+            هنوز نظری برای این محصول ثبت نشده است.
+          </div>
+        ) : (
+          <div className="space-y-4 flex-1">
+            {sortedComments.map((comment) => (
+              <CommentCard key={comment.id} comment={comment} />
+            ))}
+          </div>
+        )}
+      </div>
 
       <Drawer
         isOpen={showSortDrawer}
@@ -111,6 +119,11 @@ function ProductCommentList({ comments }: ProductCommentListProps) {
           ))}
         </div>
       </Drawer>
+      <AddComment
+        onClose={() => setShowCreateComment(false)}
+        isOpen={showCreateComment}
+        productId={productId}
+      />
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function ProductDetailsPage({ params }: Props) {
       <div className="my-12 border-t border-neutral-500 w-full"></div>
 
       <ProductDescription description={product.description} />
-      <ProductCommentList comments={comments} />
+      <ProductCommentList comments={comments} productId={product.id} />
     </div>
   );
 }
