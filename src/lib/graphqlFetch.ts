@@ -1,9 +1,5 @@
 import { cookies } from "next/headers";
-export async function graphQLFetch<T>(
-  url: string,
-  query: string,
-  variables = {}
-): Promise<T> {
+export async function graphQLFetch<T>(url: string, query: string, variables = {}): Promise<T> {
   try {
     const cookieStore = await cookies();
 
@@ -17,7 +13,6 @@ export async function graphQLFetch<T>(
 
       body: JSON.stringify({ query, variables }),
     });
- 
 
     if (!response.ok) {
       throw new Error(response.statusText);

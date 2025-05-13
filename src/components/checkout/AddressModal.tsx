@@ -9,10 +9,7 @@ import { ADD_ADDRESS } from "@/graphql/mutations/AddressMutation";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-const AddressPicker = dynamic(
-  () => import("@/components/checkout/AddressPicker"),
-  { ssr: false }
-);
+const AddressPicker = dynamic(() => import("@/components/checkout/AddressPicker"), { ssr: false });
 interface AddressFormData {
   fullName: string;
   phone: string;
@@ -68,35 +65,20 @@ const AddressModal: React.FC = () => {
 
   return (
     <div>
-      <button
-        onClick={handleOpenModal}
-        className="flex items-center p-2 text-primary-600 transition duration-200 hover:text-primary-800"
-      >
+      <button onClick={handleOpenModal} className="text-primary-600 hover:text-primary-800 flex items-center p-2 transition duration-200">
         <BiPlus className="mr-2" />
         ثبت آدرس جدید
       </button>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold">
-            {showAddressForm ? "تکمیل اطلاعات آدرس" : "ثبت آدرس جدید"}
-          </h3>
-          <button
-            onClick={handleCloseModal}
-            className="text-gray-500 hover:text-gray-700"
-          >
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-xl font-bold">{showAddressForm ? "تکمیل اطلاعات آدرس" : "ثبت آدرس جدید"}</h3>
+          <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
             <BiPlus className="rotate-45" size={24} />
           </button>
         </div>
 
-        {showAddressForm ? (
-          <CreateAddressForm
-            onSubmit={handleSubmitAddress}
-            defaultAddress={selectedAddress}
-          />
-        ) : (
-          <AddressPicker onLocationSelect={handleLocationSelect} />
-        )}
+        {showAddressForm ? <CreateAddressForm onSubmit={handleSubmitAddress} defaultAddress={selectedAddress} /> : <AddressPicker onLocationSelect={handleLocationSelect} />}
       </Modal>
     </div>
   );

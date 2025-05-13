@@ -1,12 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, {
-  createContext,
-  useOptimistic,
-  useState,
-  useTransition,
-} from "react";
+import React, { createContext, useOptimistic, useState, useTransition } from "react";
 import { z } from "zod";
 
 const filterSchema = z.object({
@@ -27,23 +22,15 @@ type FilterContextType = {
   isPending: boolean;
   updateFilters: (_updates: Partial<Filters>) => void;
   activeSections: Record<string, boolean>;
-  setActiveSections: React.Dispatch<
-    React.SetStateAction<Record<string, boolean>>
-  >;
+  setActiveSections: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   updateSortBy: (value: string) => void;
   page: number;
   updatePage: (page: number) => void;
 };
 
-export const FilterContext = createContext<FilterContextType | undefined>(
-  undefined
-);
+export const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
-export default function FilterProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function FilterProvider({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -53,42 +40,31 @@ export default function FilterProvider({
     brand: searchParams.getAll("brand"),
     colors: searchParams.getAll("colors"),
     sizes: searchParams.getAll("sizes"),
-    minPrice: searchParams.has("minPrice")
-      ? Number(searchParams.get("minPrice"))
-      : undefined,
-    maxPrice: searchParams.has("maxPrice")
-      ? Number(searchParams.get("maxPrice"))
-      : undefined,
-    availableOnly: searchParams.has("availableOnly")
-      ? searchParams.get("availableOnly") === "true"
-      : false,
+    minPrice: searchParams.has("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
+    maxPrice: searchParams.has("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
+    availableOnly: searchParams.has("availableOnly") ? searchParams.get("availableOnly") === "true" : false,
   });
 
   // Parsing page
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
   const sortBy = searchParams.get("sortBy") || "createdAt";
 
-  const [activeSections, setActiveSections] = useState<Record<string, boolean>>(
-    {
-      brand: false,
-      category: false,
-      colors: false,
-      sizes: false,
-      availability: false,
-      price: false,
-    }
-  );
+  const [activeSections, setActiveSections] = useState<Record<string, boolean>>({
+    brand: false,
+    category: false,
+    colors: false,
+    sizes: false,
+    availability: false,
+    price: false,
+  });
 
   const [isPending, startTransition] = useTransition();
-  const [optimisticFilters, setOptimisticFilters] = useOptimistic(
-    filters.data,
-    (prevState, newFilters: Partial<Filters>) => {
-      return {
-        ...prevState,
-        ...newFilters,
-      };
-    }
-  );
+  const [optimisticFilters, setOptimisticFilters] = useOptimistic(filters.data, (prevState, newFilters: Partial<Filters>) => {
+    return {
+      ...prevState,
+      ...newFilters,
+    };
+  });
 
   function updateFilters(updates: Partial<typeof optimisticFilters>) {
     const newState = { ...optimisticFilters, ...updates };

@@ -3,24 +3,10 @@ import Modal from "../ui/Modal";
 import { CommentForm } from "./CommentForm";
 import { ADD_COMMENT } from "@/graphql/mutations/CommentMutation";
 
-function AddComment({
-  isOpen,
-  onClose,
-  productId,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  productId: string;
-}) {
+function AddComment({ isOpen, onClose, productId }: { isOpen: boolean; onClose: () => void; productId: string }) {
   const [createProductComment, { loading, error }] = useMutation(ADD_COMMENT);
 
-  const createProductCommentHandler = async ({
-    text,
-    rating,
-  }: {
-    text: string;
-    rating: number;
-  }) => {
+  const createProductCommentHandler = async ({ text, rating }: { text: string; rating: number }) => {
     try {
       await createProductComment({
         variables: {

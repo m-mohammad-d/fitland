@@ -1,18 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
-  query GetProducts(
-    $filters: ProductFilter
-    $sortBy: ProductSortField
-    $page: Int
-    $pageSize: Int
-  ) {
-    products(
-      filters: $filters
-      sortBy: $sortBy
-      page: $page
-      pageSize: $pageSize
-    ) {
+  query GetProducts($filters: ProductFilter, $sortBy: ProductSortField, $page: Int, $pageSize: Int) {
+    products(filters: $filters, sortBy: $sortBy, page: $page, pageSize: $pageSize) {
       id
       name
       description

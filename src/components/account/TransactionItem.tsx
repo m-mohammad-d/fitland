@@ -11,33 +11,19 @@ type Props = {
   createdAt: number;
 };
 
-export default function TransactionItem({
-  transactionType,
-  amount,
-  createdAt,
-}: Props) {
+export default function TransactionItem({ transactionType, amount, createdAt }: Props) {
   const isDeposit = transactionType === "DEPOSIT";
 
   return (
-    <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+    <div className="flex items-center justify-between border-b border-gray-100 pb-3">
       <div className="flex items-center gap-3">
-        {isDeposit ? (
-          <FaCheckCircle className="text-green-500 text-xl" />
-        ) : (
-          <FaTimesCircle className="text-red-500 text-xl" />
-        )}
+        {isDeposit ? <FaCheckCircle className="text-xl text-green-500" /> : <FaTimesCircle className="text-xl text-red-500" />}
         <div>
-          <p className="font-medium text-gray-800">
-            {isDeposit ? "افزایش موجودی" : "برداشت از کیف پول"}
-          </p>
+          <p className="font-medium text-gray-800">{isDeposit ? "افزایش موجودی" : "برداشت از کیف پول"}</p>
           <p className="text-xs text-gray-500">{formatJalaliDate(createdAt)}</p>
         </div>
       </div>
-      <p
-        className={`font-medium ${
-          isDeposit ? "text-green-600" : "text-red-600"
-        }`}
-      >
+      <p className={`font-medium ${isDeposit ? "text-green-600" : "text-red-600"}`}>
         {isDeposit ? "+" : "-"}
         <CountUp end={amount} duration={2.75} /> تومان
       </p>

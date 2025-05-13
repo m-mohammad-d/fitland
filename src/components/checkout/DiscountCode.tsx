@@ -57,59 +57,37 @@ function DiscountCode() {
   };
 
   return (
-    <div className="bg-white rounded-xl my-8 p-6 shadow-sm border border-gray-200">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="bg-primary-150 p-2 rounded-lg text-primary-600">
-          <BiTagAlt className="w-5 h-5" />
+    <div className="my-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="bg-primary-150 text-primary-600 rounded-lg p-2">
+          <BiTagAlt className="h-5 w-5" />
         </div>
         <div>
           <h3 className="text-lg font-semibold text-gray-900">کد تخفیف</h3>
-          <p className="text-sm text-gray-500">
-            اگر کد تخفیف دارید اینجا وارد کنید
-          </p>
+          <p className="text-sm text-gray-500">اگر کد تخفیف دارید اینجا وارد کنید</p>
         </div>
       </div>
 
-      <div className="flex flex-col items-center sm:flex-row gap-3">
+      <div className="flex flex-col items-center gap-3 sm:flex-row">
         <Input
           type="text"
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder="مثال: SPRING1403"
-          className="flex-1 h-[42px]"
+          className="h-[42px] flex-1"
           size={40}
           aria-label="کد تخفیف"
           errorMessage={message?.type === "error" ? message.text : undefined}
         />
 
-        <Button
-          onClick={handleApplyDiscount}
-          disabled={loading}
-          className="sm:w-36 h-[42px] bg-primary-600 hover:bg-primary-700"
-          aria-label="اعمال کد تخفیف"
-        >
-          {loading ? (
-            <span className="animate-pulse text-sm">در حال بررسی...</span>
-          ) : (
-            "اعمال کد"
-          )}
+        <Button onClick={handleApplyDiscount} disabled={loading} className="bg-primary-600 hover:bg-primary-700 h-[42px] sm:w-36" aria-label="اعمال کد تخفیف">
+          {loading ? <span className="animate-pulse text-sm">در حال بررسی...</span> : "اعمال کد"}
         </Button>
       </div>
 
       {message && (
-        <div
-          role="alert"
-          className={`mt-4 p-3 rounded-lg text-sm flex items-start gap-2 ${
-            message.type === "success"
-              ? "bg-green-50 text-green-700"
-              : "bg-red-50 text-red-700"
-          }`}
-        >
-          {message.type === "success" ? (
-            <HiCheckCircle className="w-5 h-5 mt-0.5" />
-          ) : (
-            <HiXCircle className="w-5 h-5 mt-0.5" />
-          )}
+        <div role="alert" className={`mt-4 flex items-start gap-2 rounded-lg p-3 text-sm ${message.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+          {message.type === "success" ? <HiCheckCircle className="mt-0.5 h-5 w-5" /> : <HiXCircle className="mt-0.5 h-5 w-5" />}
           <span>{message.text}</span>
         </div>
       )}

@@ -23,9 +23,7 @@ function AddressPicker({ onLocationSelect }: AddressPickerProps) {
 
   async function onChange(lat: number, lon: number) {
     try {
-      const { response } = await fetch(
-        `/api/getAddress?lat=${lat}&lon=${lon}&format=json`
-      ).then((res) => res.json());
+      const { response } = await fetch(`/api/getAddress?lat=${lat}&lon=${lon}&format=json`).then((res) => res.json());
 
       if (response && response.address) {
         const address = response.display_name
@@ -55,7 +53,7 @@ function AddressPicker({ onLocationSelect }: AddressPickerProps) {
         (error) => {
           console.log(error);
           toast.error("Couldn't get your location.");
-        }
+        },
       );
     } else {
       toast.error("Geolocation is not supported by this browser.");
@@ -87,10 +85,10 @@ function AddressPicker({ onLocationSelect }: AddressPickerProps) {
   };
 
   return (
-    <div className="w-full h-full relative">
+    <div className="relative h-full w-full">
       <MapViewer onChange={onChange} mapRef={mapRef} location={location} />
       <div
-        className={`bg-white rounded flex md:button-lg w-28 md:w-[156px] text-primary h-8 md:h-10 items-center justify-center z-[1000] absolute top-4 right-4 cursor-pointer`}
+        className={`md:button-lg text-primary absolute top-4 right-4 z-[1000] flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-white md:h-10 md:w-[156px]`}
         onClick={() => getUserLocation()}
       >
         <CiGps size={25} className="text-primary" />
@@ -98,7 +96,7 @@ function AddressPicker({ onLocationSelect }: AddressPickerProps) {
       </div>
 
       <div
-        className={`absolute z-[1000] flex bottom-[68px] px-1 items-center bg-white dark:bg-background-2 md:bottom-[88px] right-1/2 left-1/2 translate-x-1/2 !w-11/12 max-w-[409px] h-8 md:h-10 rounded overflow-hidden shadow-content-cards`}
+        className={`dark:bg-background-2 shadow-content-cards absolute right-1/2 bottom-[68px] left-1/2 z-[1000] flex h-8 !w-11/12 max-w-[409px] translate-x-1/2 items-center overflow-hidden rounded bg-white px-1 md:bottom-[88px] md:h-10`}
       >
         <CiLocationOn className="text-primary" size={25} />
         <input
@@ -107,10 +105,10 @@ function AddressPicker({ onLocationSelect }: AddressPickerProps) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => handleSearch(e)}
-          className="outline-none caption-md md:body-sm !w-full !h-full px-2 bg-transparent"
+          className="caption-md md:body-sm !h-full !w-full bg-transparent px-2 outline-none"
         />
       </div>
-      <div className="w-full flex items-center justify-center">
+      <div className="flex w-full items-center justify-center">
         <Button className="mt-4" onClick={handleSubmit}>
           ثبت موقعیت
         </Button>

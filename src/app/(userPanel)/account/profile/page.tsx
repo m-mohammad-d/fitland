@@ -5,10 +5,7 @@ import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 
 async function ProfilePage() {
-  const res = await graphQLFetch<GraphQLFetchGetUserResponse>(
-    process.env.NEXT_PUBLIC_BACKEND_URL || "",
-    GET_ME.loc?.source.body as string
-  );
+  const res = await graphQLFetch<GraphQLFetchGetUserResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_ME.loc?.source.body as string);
 
   const userInfo = [
     {
@@ -25,27 +22,23 @@ async function ProfilePage() {
     },
     {
       label: "جنسیت",
-      value: res.data.getMe?.gender
-        ? res.data.getMe.gender === "MALE"
-          ? "مرد"
-          : "زن"
-        : "تعیین نشده",
+      value: res.data.getMe?.gender ? (res.data.getMe.gender === "MALE" ? "مرد" : "زن") : "تعیین نشده",
     },
     { label: "ایمیل", value: res.data.getMe?.email || "تعیین نشده" },
   ];
 
   return (
-    <div className="p-6 flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-6">
       <div className="flex justify-end">
         <Link href="/account/profile/edit" className="text-primary">
           <CiEdit size={25} strokeWidth={0.7} />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {userInfo.map((item, index) => (
           <div key={index} className="flex flex-col">
-            <h3 className="text-gray-700 font-semibold">{item.label}</h3>
+            <h3 className="font-semibold text-gray-700">{item.label}</h3>
             <p className="text-gray-500">{item.value}</p>
           </div>
         ))}

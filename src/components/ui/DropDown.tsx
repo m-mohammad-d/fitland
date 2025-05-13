@@ -11,18 +11,15 @@ const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
 
   return (
     <div className="relative inline-block w-64">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full px-4 py-2 text-left bg-white border rounded-lg shadow focus:outline-none"
-      >
+      <button onClick={() => setOpen(!open)} className="w-full rounded-lg border bg-white px-4 py-2 text-left shadow focus:outline-none">
         {value || "Select an option"}
       </button>
       {open && (
-        <ul className="absolute w-full mt-2 bg-white border rounded-lg shadow-lg">
+        <ul className="absolute mt-2 w-full rounded-lg border bg-white shadow-lg">
           {options.map((option) => (
             <li
               key={option}
-              className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+              className="cursor-pointer px-4 py-2 hover:bg-gray-200"
               onClick={() => {
                 onChange(option);
                 setOpen(false);

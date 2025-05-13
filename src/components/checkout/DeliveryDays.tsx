@@ -39,36 +39,24 @@ function DeliveryDays({ workingDays }: DeliveryDaysProps) {
         {workingDays.map((day) => (
           <SwiperSlide key={day.date}>
             <div
-              className={`
-                flex flex-col items-center p-4 sm:p-6 rounded-xl h-full min-h-[180px] 
-                border-2 border-neutral-200 hover:border-primary-400 transition-colors
-                bg-white shadow-sm hover:shadow-md
-                ${
-                  checkout.deliveryDate === day.date
-                    ? "ring-2 ring-primary-400 border-primary-400"
-                    : ""
-                }
-                w-full sm:w-28 md:w-32 lg:w-36
-              `}
+              className={`hover:border-primary-400 flex h-full min-h-[180px] flex-col items-center rounded-xl border-2 border-neutral-200 bg-white p-4 shadow-sm transition-colors hover:shadow-md sm:p-6 ${
+                checkout.deliveryDate === day.date ? "ring-primary-400 border-primary-400 ring-2" : ""
+              } w-full sm:w-28 md:w-32 lg:w-36`}
               onClick={() => {
                 setCheckoutField("deliveryDate", day.date);
                 setCheckoutField("shippingCost", day.shippingPrice);
               }}
             >
-              <div className="flex justify-between items-start mb-3">
+              <div className="mb-3 flex items-start justify-between">
                 <div>
-                  <h4 className="font-bold text-lg text-secondary-700">
-                    {day.day}
-                  </h4>
-                  <p className="text-neutral-600 text-sm">{day.date}</p>
+                  <h4 className="text-secondary-700 text-lg font-bold">{day.day}</h4>
+                  <p className="text-sm text-neutral-600">{day.date}</p>
                 </div>
               </div>
 
               <div className="mt-auto text-center">
-                <p className="text-neutral-500 text-sm">هزینه ارسال:</p>
-                <p className="font-bold text-xl text-primary-600">
-                  {day.shippingPrice.toLocaleString("fa-IR")} تومان
-                </p>
+                <p className="text-sm text-neutral-500">هزینه ارسال:</p>
+                <p className="text-primary-600 text-xl font-bold">{day.shippingPrice.toLocaleString("fa-IR")} تومان</p>
               </div>
             </div>
           </SwiperSlide>

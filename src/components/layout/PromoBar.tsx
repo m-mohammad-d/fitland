@@ -21,12 +21,12 @@ export default function PromoBar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % messages.length);
-    }, 3000); 
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="w-full h-10 md:h-[50px] bg-secondary text-white flex justify-center items-center overflow-hidden">
+    <div className="bg-secondary flex h-10 w-full items-center justify-center overflow-hidden text-white md:h-[50px]">
       <AnimatePresence mode="wait">
         <motion.p
           key={messages[index]}
@@ -34,7 +34,7 @@ export default function PromoBar() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -20, opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-sm md:text-base font-medium"
+          className="text-sm font-medium md:text-base"
         >
           {messages[index]}
         </motion.p>

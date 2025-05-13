@@ -4,10 +4,7 @@ import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GraphQLFetchGetUserResponse } from "@/types/User";
 
 async function EditProfilePage() {
-  const res = await graphQLFetch<GraphQLFetchGetUserResponse>(
-    process.env.NEXT_PUBLIC_BACKEND_URL || "",
-    GET_ME.loc?.source.body as string
-  );
+  const res = await graphQLFetch<GraphQLFetchGetUserResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_ME.loc?.source.body as string);
 
   return (
     <div>

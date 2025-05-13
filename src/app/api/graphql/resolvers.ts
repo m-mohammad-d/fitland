@@ -84,15 +84,12 @@ const resolvers = {
 
       const where: any = {};
 
-      if (filters?.minPrice !== undefined)
-        where.price = { gte: filters.minPrice };
-      if (filters?.maxPrice !== undefined)
-        where.price = { ...where.price, lte: filters.maxPrice };
+      if (filters?.minPrice !== undefined) where.price = { gte: filters.minPrice };
+      if (filters?.maxPrice !== undefined) where.price = { ...where.price, lte: filters.maxPrice };
 
       if (filters?.discount) where.discount = { gte: filters.discount };
 
-      if (filters?.category?.length)
-        where.categoryId = { in: filters.category };
+      if (filters?.category?.length) where.categoryId = { in: filters.category };
 
       if (filters?.brand?.length) where.brand = { in: filters.brand };
       if (filters?.colors?.length) {
@@ -108,10 +105,7 @@ const resolvers = {
       if (filters?.availableOnly) where.stock = { gt: 0 };
 
       if (filters?.search) {
-        where.OR = [
-          { name: { contains: filters.search, mode: "insensitive" } },
-          { description: { contains: filters.search, mode: "insensitive" } },
-        ];
+        where.OR = [{ name: { contains: filters.search, mode: "insensitive" } }, { description: { contains: filters.search, mode: "insensitive" } }];
       }
 
       const skip = (page - 1) * pageSize;
@@ -167,9 +161,7 @@ const resolvers = {
       }
       const cookieStore = await cookies();
       const tokenValue = cookieStore.get("auth-token")?.value;
-      const decodedToken = tokenValue
-        ? (jwt.decode(tokenValue) as JwtPayload | null)
-        : null;
+      const decodedToken = tokenValue ? (jwt.decode(tokenValue) as JwtPayload | null) : null;
       const userId = decodedToken?.userId || null;
 
       const comments = await prisma.comment.findMany({
@@ -178,15 +170,9 @@ const resolvers = {
       });
 
       const formattedComments = comments.map((comment) => {
-        const likeCount = comment.reactions.filter(
-          (r) => r.type === "LIKE"
-        ).length;
-        const dislikeCount = comment.reactions.filter(
-          (r) => r.type === "DISLIKE"
-        ).length;
-        const userReactionType = userId
-          ? comment.reactions.find((r) => r.userId === userId)?.type || null
-          : null;
+        const likeCount = comment.reactions.filter((r) => r.type === "LIKE").length;
+        const dislikeCount = comment.reactions.filter((r) => r.type === "DISLIKE").length;
+        const userReactionType = userId ? comment.reactions.find((r) => r.userId === userId)?.type || null : null;
 
         return {
           ...comment,
@@ -242,9 +228,7 @@ const resolvers = {
 
       return {
         ...product,
-        discountedPrice: product.discount
-          ? Math.round(product.price * (1 - product.discount / 100))
-          : product.price,
+        discountedPrice: product.discount ? Math.round(product.price * (1 - product.discount / 100)) : product.price,
       };
     },
     getAllOrders: async () => {
@@ -354,10 +338,7 @@ const resolvers = {
 
   Mutation: {
     addProduct: async (_: void, args: AddProductArgs) => {
-      const discountedPrice =
-        args.discount && args.discount > 0
-          ? Math.round(args.price * (1 - args.discount / 100))
-          : null;
+      const discountedPrice = args.discount && args.discount > 0 ? Math.round(args.price * (1 - args.discount / 100)) : null;
 
       return await prisma.product.create({
         data: {
@@ -410,14 +391,7 @@ const resolvers = {
         },
       });
     },
-    signUp: async (
-      _: void,
-      {
-        email,
-        password,
-        name,
-      }: { email: string; password: string; name?: string }
-    ) => {
+    signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }) => {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
         throw new Error("این ایمیل قبلاً ثبت شده است");
@@ -474,10 +448,7 @@ const resolvers = {
       };
     },
 
-    signIn: async (
-      _: void,
-      { email, password }: { email: string; password: string; name?: string }
-    ) => {
+    signIn: async (_: void, { email, password }: { email: string; password: string; name?: string }) => {
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
         throw new Error("ایمیل یا رمز عبور اشتباه است");
@@ -540,7 +511,7 @@ const resolvers = {
         nationalCode?: string;
         gender?: string;
         photo?: string;
-      }
+      },
     ) => {
       const existingUser = await prisma.user.findUnique({ where: { id } });
       if (!existingUser) {
@@ -623,8 +594,7 @@ const resolvers = {
           throw new Error("مقدار تخفیف نباید بیشتر یا مساوی مبلغ کل باشد");
         }
       }
-      const finalPrice =
-        input.totalPrice - discountAmount + input.tax + input.shippingCost;
+      const finalPrice = input.totalPrice - discountAmount + input.tax + input.shippingCost;
 
       const order = await prisma.order.create({
         data: {
@@ -652,10 +622,7 @@ const resolvers = {
 
       return order;
     },
-    applyDiscount: async (
-      _: void,
-      { code, totalPrice }: { code: string; totalPrice: number }
-    ) => {
+    applyDiscount: async (_: void, { code, totalPrice }: { code: string; totalPrice: number }) => {
       const discount = await prisma.discountCode.findUnique({
         where: { code },
       });
@@ -815,10 +782,7 @@ const resolvers = {
 
       return updatedWallet;
     },
-    likeComment: async (
-      _: void,
-      { type, commentId }: { type: "LIKE" | "DISLIKE"; commentId: string }
-    ) => {
+    likeComment: async (_: void, { type, commentId }: { type: "LIKE" | "DISLIKE"; commentId: string }) => {
       try {
         // Authentication check
         const cookieStore = await cookies();

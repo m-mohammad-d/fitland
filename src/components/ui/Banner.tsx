@@ -6,16 +6,8 @@ interface BannerProps {
 const Banner: React.FC<BannerProps> = ({ imageUrl, mobileImageUrl }) => {
   return (
     <div className="w-full">
-      <img
-        src={mobileImageUrl}
-        alt="Mobile Banner"
-        className="w-full h-full object-cover md:hidden"
-      />
-      <img
-        src={imageUrl}
-        alt="Desktop Banner"
-        className="hidden md:block w-full h-[600px]"
-      />
+      <img src={mobileImageUrl} alt="Mobile Banner" className="h-full w-full object-cover md:hidden" />
+      <img src={imageUrl} alt="Desktop Banner" className="hidden h-[600px] w-full md:block" />
     </div>
   );
 };

@@ -35,13 +35,10 @@ export async function POST(request: Request) {
         url: uploadResult.secure_url,
         public_id: uploadResult.public_id,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json(
-      { error: "Failed to upload file" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
   }
 }

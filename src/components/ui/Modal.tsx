@@ -25,23 +25,17 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+          <motion.div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
 
           <motion.div
-            className="fixed z-50 inset-0 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial={{ opacity: 0, scale: 0.8, y: 100 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 100 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
             <div
-              className="bg-white dark:bg-background-2 rounded-2xl shadow-xl max-w-lg w-full p-6 relative"
+              className="dark:bg-background-2 relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
               onClick={(e) => e.stopPropagation()} // جلوگیری از بسته شدن با کلیک روی خود مدال
             >
               {children}
@@ -50,7 +44,7 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         </>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 };
 

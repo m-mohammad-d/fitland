@@ -235,12 +235,7 @@ type DiscountResponse {
 }
 # Queries
 type Query {
-  products(
-    sortBy: ProductSortField
-    filters: ProductFilter
-    page: Int
-    pageSize: Int
-  ): [Product!]!
+  products(sortBy: ProductSortField, filters: ProductFilter, page: Int, pageSize: Int): [Product!]!
 
   getMe: User!
 
@@ -258,18 +253,7 @@ type Query {
 
 # Mutations
 type Mutation {
-  addProduct(
-    name: String!
-    description: String!
-    price: Int!
-    stock: Int!
-    categoryId: ID!
-    images: [String!]!
-    colors: [String!]!
-    sizes: [String!]!
-    discount: Float
-    discountCode: String
-  ): Product!
+  addProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [String!]!, sizes: [String!]!, discount: Float, discountCode: String): Product!
 
   signUp(name: String!, email: String!, password: String!): User!
 
@@ -277,15 +261,7 @@ type Mutation {
 
   signOut: SignOutResponse!
 
-  updateUser(
-    id: String!
-    name: String
-    photo: String
-    email: String
-    phone: String
-    nationalCode: String
-    gender: Gender
-  ): User!
+  updateUser(id: String!, name: String, photo: String, email: String, phone: String, nationalCode: String, gender: Gender): User!
 
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
   walletDeposit(amount: Int): Wallet

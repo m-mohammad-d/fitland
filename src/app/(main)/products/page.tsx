@@ -22,25 +22,22 @@ export default function ProductsPage() {
 function ProductsPageContent() {
   const { filters, sortBy } = useFilters();
   const [showMobileFilter, setShowMobileFilter] = useState(false);
-  const { data, loading, previousData } = useQuery<GetProductsResponse>(
-    GET_PRODUCTS,
-    {
-      variables: {
-        sortBy,
-        filters,
-        page: 1,
-        pageSize: 20,
-      },
-    }
-  );
+  const { data, loading, previousData } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
+    variables: {
+      sortBy,
+      filters,
+      page: 1,
+      pageSize: 20,
+    },
+  });
 
   const products = loading ? previousData?.products : data?.products;
   const totalProducts = data?.products.length || 0;
 
   return (
     <div className="container mx-auto px-4">
-      <div className="flex flex-col lg:flex-row gap-6 mt-6">
-        <div className="hidden lg:block lg:w-80 flex-shrink-0">
+      <div className="mt-6 flex flex-col gap-6 lg:flex-row">
+        <div className="hidden flex-shrink-0 lg:block lg:w-80">
           <Filter />
         </div>
 
@@ -48,29 +45,16 @@ function ProductsPageContent() {
           <div className="mb-6">
             <Sorting totalProducts={totalProducts} />
 
-
-            <button
-              onClick={() => setShowMobileFilter(true)}
-              className="lg:hidden mt-4 flex items-center gap-2 w-full justify-center px-4 py-2 bg-gray-100 rounded-lg text-sm"
-            >
+            <button onClick={() => setShowMobileFilter(true)} className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm lg:hidden">
               <LuSettings2 />
               فیلتر محصولات
             </button>
           </div>
 
-
-          {loading && !previousData ? (
-            <ProductGridSkeleton />
-          ) : (
-            <ProductGrid products={products || []} />
-          )}
+          {loading && !previousData ? <ProductGridSkeleton /> : <ProductGrid products={products || []} />}
         </div>
 
-        <Drawer
-          isOpen={showMobileFilter}
-          onClose={() => setShowMobileFilter(false)}
-          title="فیلتر محصولات"
-        >
+        <Drawer isOpen={showMobileFilter} onClose={() => setShowMobileFilter(false)} title="فیلتر محصولات">
           <Filter />
         </Drawer>
       </div>

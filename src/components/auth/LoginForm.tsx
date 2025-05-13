@@ -48,9 +48,9 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="max-w-lg w-full mx-auto p-6 rounded-lg shadow-lg bg-white">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-primary">ورود به حساب کاربری</h1>
+    <div className="mx-auto w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
+      <div className="mb-8 text-center">
+        <h1 className="text-primary text-2xl font-bold">ورود به حساب کاربری</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -60,9 +60,7 @@ export default function LoginForm() {
           errorMessage={errors.email?.message}
           {...register("email")}
           placeholder="example@example.com"
-          className={`${
-            errors.email ? "border-error-500" : "border-neutral-300"
-          }`}
+          className={`${errors.email ? "border-error-500" : "border-neutral-300"}`}
         />
 
         <Input
@@ -71,23 +69,18 @@ export default function LoginForm() {
           errorMessage={errors.password?.message}
           {...register("password")}
           placeholder="حداقل ۶ کاراکتر"
-          className={`${
-            errors.password ? "border-error-500" : "border-neutral-300"
-          }`}
+          className={`${errors.password ? "border-error-500" : "border-neutral-300"}`}
         />
 
         <div className="text-right">
-          <Link
-            href="/forgot-password"
-            className="text-sm text-primary hover:text-primary-700 focus:outline-none"
-          >
+          <Link href="/forgot-password" className="text-primary hover:text-primary-700 text-sm focus:outline-none">
             رمز عبور را فراموش کرده‌اید؟
           </Link>
         </div>
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-primary hover:bg-primary-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-150 transition-colors"
+          className="bg-primary hover:bg-primary-700 focus:ring-primary-150 w-full rounded-lg px-4 py-2 font-medium text-white transition-colors focus:ring-2 focus:outline-none"
           disabled={loading}
         >
           {loading ? "در حال ورود..." : "ورود به حساب"}
@@ -95,10 +88,7 @@ export default function LoginForm() {
 
         <div className="text-center text-sm text-neutral-700">
           <span>حساب کاربری ندارید؟ </span>
-          <Link
-            href="/signup"
-            className="text-primary hover:text-primary-700 font-medium"
-          >
+          <Link href="/signup" className="text-primary hover:text-primary-700 font-medium">
             ثبت نام کنید
           </Link>
         </div>

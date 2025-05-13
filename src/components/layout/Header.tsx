@@ -44,54 +44,36 @@ function Header() {
       <header className="container mx-auto mt-5 flex items-center justify-between px-4 lg:px-8">
         <div>
           <Image src="/logo.svg" alt="logo" width={120} height={40} />
-          <p className="text-neutral-600 hidden lg:block">
-            فروشگاه لوازم ورزشی فیت لند
-          </p>
+          <p className="hidden text-neutral-600 lg:block">فروشگاه لوازم ورزشی فیت لند</p>
         </div>
 
-        <div className="hidden lg:flex flex-1 justify-center">
+        <div className="hidden flex-1 justify-center lg:flex">
           <SearchBar onSearch={(query) => console.log(query)} />
         </div>
 
         <div className="flex items-center gap-3">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="hidden lg:flex items-center gap-2 px-4 py-2 bg-white text-neutral-800 rounded-lg shadow-md transition"
-          >
+          <motion.button whileTap={{ scale: 0.9 }} className="hidden items-center gap-2 rounded-lg bg-white px-4 py-2 text-neutral-800 shadow-md transition lg:flex">
             {isLoggedIn ? "حساب کاربری" : "ثبت‌نام | ورود"}
             <LuUser size={20} />
           </motion.button>
 
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="relative flex items-center px-4 py-3 bg-primary rounded-xl shadow hover:bg-primary-600 text-white transition"
-          >
+          <motion.button whileTap={{ scale: 0.9 }} className="bg-primary hover:bg-primary-600 relative flex items-center rounded-xl px-4 py-3 text-white shadow transition">
             <IoBagHandleOutline size={20} />
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -left-2 bg-secondary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                {cartCount}
-              </span>
-            )}
+            {cartCount > 0 && <span className="bg-secondary absolute -top-2 -left-2 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white">{cartCount}</span>}
           </motion.button>
 
-          <button
-            className="lg:hidden p-2 rounded-lg bg-gray-200"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
+          <button className="rounded-lg bg-gray-200 p-2 lg:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             <LuMenu size={24} />
           </button>
         </div>
       </header>
 
-      <div className="hidden lg:block container mx-auto mt-4 px-4">
-        <nav className="bg-neutral-100 shadow-md py-3 px-4 rounded-xl flex justify-between items-center">
+      <div className="container mx-auto mt-4 hidden px-4 lg:block">
+        <nav className="flex items-center justify-between rounded-xl bg-neutral-100 px-4 py-3 shadow-md">
           <div className="flex gap-4">
             {menuItemsWithoutIcons.map((item) => (
               <motion.div whileTap={{ scale: 0.95 }} key={item.name}>
-                <a
-                  href={item.href}
-                  className="px-4 py-2 text-sm lg:text-base rounded-lg transition text-black hover:bg-gray-200"
-                >
+                <a href={item.href} className="rounded-lg px-4 py-2 text-sm text-black transition hover:bg-gray-200 lg:text-base">
                   {item.name}
                 </a>
               </motion.div>
@@ -101,10 +83,7 @@ function Header() {
           <div className="flex gap-4">
             {menuItemsWithIcons.map((item) => (
               <motion.div whileTap={{ scale: 0.95 }} key={item.name}>
-                <a
-                  href={item.href}
-                  className="flex items-center gap-2 px-4 py-2 text-sm lg:text-base rounded-lg transition text-black hover:bg-gray-200"
-                >
+                <a href={item.href} className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-black transition hover:bg-gray-200 lg:text-base">
                   {item.icon}
                   {item.name}
                 </a>
@@ -113,7 +92,7 @@ function Header() {
           </div>
         </nav>
       </div>
-      <div className="lg:hidden container mx-auto px-4 mt-4">
+      <div className="container mx-auto mt-4 px-4 lg:hidden">
         <SearchBar onSearch={(query) => console.log(query)} />
       </div>
       {menuOpen && (
@@ -122,41 +101,28 @@ function Header() {
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ duration: 0.3 }}
-          className="fixed top-0 right-0 w-3/4 h-full bg-white shadow-lg p-6 z-50 flex flex-col gap-6"
+          className="fixed top-0 right-0 z-50 flex h-full w-3/4 flex-col gap-6 bg-white p-6 shadow-lg"
         >
-          <button
-            className="self-end p-2 bg-gray-300 rounded-full"
-            onClick={() => setMenuOpen(false)}
-          >
+          <button className="self-end rounded-full bg-gray-300 p-2" onClick={() => setMenuOpen(false)}>
             <AiOutlineClose size={24} />
           </button>
 
           <div>
-            <h3 className="text-lg font-bold text-gray-700 mb-2">
-              دسته‌بندی‌ها
-            </h3>
+            <h3 className="mb-2 text-lg font-bold text-gray-700">دسته‌بندی‌ها</h3>
             <div className="flex flex-col gap-2">
               {menuItemsWithIcons.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition text-black hover:bg-gray-200"
-                >
+                <a key={item.name} href={item.href} className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-black transition hover:bg-gray-200">
                   {item.name}
                 </a>
               ))}
 
               {menuItemsWithoutIcons.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="px-4 py-2 text-sm rounded-lg transition text-black hover:bg-gray-200"
-                >
+                <a key={item.name} href={item.href} className="rounded-lg px-4 py-2 text-sm text-black transition hover:bg-gray-200">
                   {item.name}
                 </a>
               ))}
             </div>
-            <button className="w-full text-left px-4 mt-4 py-2 bg-gray-100 rounded-lg shadow-md flex items-center gap-2">
+            <button className="mt-4 flex w-full items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-left shadow-md">
               <LuUser size={20} />
               {isLoggedIn ? "حساب کاربری" : "ثبت‌نام | ورود"}
             </button>

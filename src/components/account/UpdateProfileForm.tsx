@@ -40,10 +40,7 @@ function UpdateProfileForm({ user }: Props) {
       email: user.email ?? "",
       phone: user.phone ?? "",
       nationalCode: user.nationalCode ?? "",
-      gender:
-        user.gender === "MALE" || user.gender === "FEMALE"
-          ? user.gender
-          : undefined,
+      gender: user.gender === "MALE" || user.gender === "FEMALE" ? user.gender : undefined,
     },
   });
 
@@ -62,42 +59,20 @@ function UpdateProfileForm({ user }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto p-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Input
-          label="نام"
-          {...register("name")}
-          errorMessage={errors.name?.message}
-        />
-        <Input
-          label="ایمیل"
-          type="email"
-          {...register("email")}
-          errorMessage={errors.email?.message}
-        />
-        <Input
-          label="شماره تلفن"
-          {...register("phone")}
-          errorMessage={errors.phone?.message}
-        />
-        <Input
-          label="کد ملی"
-          {...register("nationalCode")}
-          errorMessage={errors.nationalCode?.message}
-        />
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-2xl p-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Input label="نام" {...register("name")} errorMessage={errors.name?.message} />
+        <Input label="ایمیل" type="email" {...register("email")} errorMessage={errors.email?.message} />
+        <Input label="شماره تلفن" {...register("phone")} errorMessage={errors.phone?.message} />
+        <Input label="کد ملی" {...register("nationalCode")} errorMessage={errors.nationalCode?.message} />
         <div className="lg:col-span-2">
-          <label className="text-neutral-gray-8 block mb-2">جنسیت</label>
-          <select
-            {...register("gender")}
-            className="mt-1 w-full rounded-md border border-neutral-gray-3 px-3 py-2"
-          >
+          <label className="text-neutral-gray-8 mb-2 block">جنسیت</label>
+          <select {...register("gender")} className="border-neutral-gray-3 mt-1 w-full rounded-md border px-3 py-2">
             <option value="">انتخاب کنید</option>
             <option value="MALE">مرد</option>
             <option value="FEMALE">زن</option>
           </select>
-          {errors.gender && (
-            <p className="mt-1 text-sm text-red-500">{errors.gender.message}</p>
-          )}
+          {errors.gender && <p className="mt-1 text-sm text-red-500">{errors.gender.message}</p>}
         </div>
       </div>
 

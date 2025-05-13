@@ -7,30 +7,20 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <div className="max-w-xs bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 p-4">
-      <div className="flex justify-between items-center"></div>
+    <div className="max-w-xs overflow-hidden rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
+      <div className="flex items-center justify-between"></div>
 
-      <img
-        src={product.images[0]}
-        alt={product.name}
-        className="w-full h-40 object-cover mt-2"
-      />
+      <img src={product.images[0]} alt={product.name} className="mt-2 h-40 w-full object-cover" />
       <div className="mt-4 text-center">
-        <h2 className="text-gray-900 font-semibold">{product.name}</h2>
-        <p className="text-gray-700 mt-1">
-          {product.price.toLocaleString()} تومان
-        </p>
-        <p className="text-gray-500 text-sm mt-1">
+        <h2 className="font-semibold text-gray-900">{product.name}</h2>
+        <p className="mt-1 text-gray-700">{product.price.toLocaleString()} تومان</p>
+        <p className="mt-1 text-sm text-gray-500">
           از سایز {product.sizes} تا {product.sizes}
         </p>
 
-        <div className="flex justify-center gap-2 mt-3">
+        <div className="mt-3 flex justify-center gap-2">
           {product.colors.map((color, index) => (
-            <span
-              key={index}
-              className="w-5 h-5 rounded-full border border-gray-300"
-              style={{ backgroundColor: color.hex }}
-            ></span>
+            <span key={index} className="h-5 w-5 rounded-full border border-gray-300" style={{ backgroundColor: color.hex }}></span>
           ))}
         </div>
       </div>

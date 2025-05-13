@@ -6,10 +6,7 @@ import path from "path";
 import { parse } from "graphql";
 import resolvers from "./resolvers";
 
-const schemaPath = path.join(
-  process.cwd(),
-  "src/app/api/graphql/schema.graphql"
-);
+const schemaPath = path.join(process.cwd(), "src/app/api/graphql/schema.graphql");
 const schemaString = fs.readFileSync(schemaPath, "utf8");
 const typeDefs = parse(schemaString);
 

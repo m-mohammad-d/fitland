@@ -5,14 +5,12 @@ function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="container mx-auto md:px-4 md:py-6">
       <Header />
-      <div className="flex flex-col md:flex-row gap-6 mt-12">
-        <aside className="w-full md:w-72 flex-shrink-0">
+      <div className="mt-12 flex flex-col gap-6 md:flex-row">
+        <aside className="w-full flex-shrink-0 md:w-72">
           <AccountSidebar />
         </aside>
 
-        <main className="flex-1 bg-white md:rounded-2xl md:shadow-sm min-h-[500px] border border-neutral-400">
-          {children}
-        </main>
+        <main className="min-h-[500px] flex-1 border border-neutral-400 bg-white md:rounded-2xl md:shadow-sm">{children}</main>
       </div>
     </div>
   );

@@ -3,13 +3,7 @@ import { formatJalaliDate } from "@/lib/Date";
 import { Comment } from "@/types/Comment";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import {
-  FaStar,
-  FaRegStar,
-  FaStarHalfAlt,
-  FaThumbsUp,
-  FaThumbsDown,
-} from "react-icons/fa";
+import { FaStar, FaRegStar, FaStarHalfAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
 
 interface CommentCardProps {
@@ -20,12 +14,8 @@ function CommentCard({ comment }: CommentCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [likes, setLikes] = useState(comment.likes || 0);
   const [dislikes, setDislikes] = useState(comment.dislikes || 0);
-  const [userReaction, setUserReaction] = useState<"LIKE" | "DISLIKE" | null>(
-    comment.userReactionType
-  );
-  const [loadingType, setLoadingType] = useState<"LIKE" | "DISLIKE" | null>(
-    null
-  );
+  const [userReaction, setUserReaction] = useState<"LIKE" | "DISLIKE" | null>(comment.userReactionType);
+  const [loadingType, setLoadingType] = useState<"LIKE" | "DISLIKE" | null>(null);
 
   const [likeComment] = useMutation(LIKE_COMMENT);
 
@@ -83,113 +73,62 @@ function CommentCard({ comment }: CommentCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-neutral-100 w-full">
-      <div className="flex flex-col xs:flex-row items-start gap-3 xs:gap-4">
-        <div className="flex-shrink-0 flex items-center gap-3 xs:block">
+    <div className="w-full rounded-xl border border-neutral-100 bg-white p-4 shadow-sm md:p-5">
+      <div className="xs:flex-row xs:gap-4 flex flex-col items-start gap-3">
+        <div className="xs:block flex flex-shrink-0 items-center gap-3">
           {comment.user?.photo ? (
-            <img
-              src={comment.user.photo}
-              alt={comment.user.name}
-              className="w-10 h-10 xs:w-12 xs:h-12 rounded-full object-cover"
-            />
+            <img src={comment.user.photo} alt={comment.user.name} className="xs:w-12 xs:h-12 h-10 w-10 rounded-full object-cover" />
           ) : (
-            <div className="w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-neutral-200 flex items-center justify-center text-neutral-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 xs:h-6 xs:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
+            <div className="xs:w-12 xs:h-12 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 text-neutral-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="xs:h-6 xs:w-6 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
           )}
-          <span className="xs:hidden text-neutral-400 text-xs">
-            {formatJalaliDate(comment.createdAt)}
-          </span>
+          <span className="xs:hidden text-xs text-neutral-400">{formatJalaliDate(comment.createdAt)}</span>
         </div>
 
-        <div className="flex-1 min-w-0 w-full">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-2">
+        <div className="w-full min-w-0 flex-1">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
             <div className="w-full">
-              <div className="flex flex-col xs:flex-row xs:items-center xs:gap-2 justify-between">
-                <h4 className="font-medium text-neutral-800 truncate text-sm xs:text-base">
-                  {comment.user?.name || "ناشناس"}
-                </h4>
-                <span className="hidden xs:block text-neutral-400 text-xs sm:text-sm whitespace-nowrap">
-                  {formatJalaliDate(comment.createdAt)}
-                </span>
+              <div className="xs:flex-row xs:items-center xs:gap-2 flex flex-col justify-between">
+                <h4 className="xs:text-base truncate text-sm font-medium text-neutral-800">{comment.user?.name || "ناشناس"}</h4>
+                <span className="xs:block hidden text-xs whitespace-nowrap text-neutral-400 sm:text-sm">{formatJalaliDate(comment.createdAt)}</span>
               </div>
 
-              <div className="flex items-center gap-2 mt-1">
+              <div className="mt-1 flex items-center gap-2">
                 {renderStars()}
-                <span className="text-neutral-500 text-xs sm:text-sm">
-                  {comment.rating.toFixed(1)}
-                </span>
+                <span className="text-xs text-neutral-500 sm:text-sm">{comment.rating.toFixed(1)}</span>
               </div>
             </div>
           </div>
 
           <div className="mt-2 sm:mt-3">
-            <p
-              className={`text-neutral-700 text-sm sm:text-base ${
-                expanded ? "" : "line-clamp-3"
-              } cursor-pointer`}
-              onClick={toggleExpand}
-            >
+            <p className={`text-sm text-neutral-700 sm:text-base ${expanded ? "" : "line-clamp-3"} cursor-pointer`} onClick={toggleExpand}>
               {comment.content}
             </p>
             {comment.content.length > 100 && (
-              <button
-                onClick={toggleExpand}
-                className="text-primary-500 hover:text-primary-700 text-xs sm:text-sm mt-1 sm:mt-2 focus:outline-none"
-              >
+              <button onClick={toggleExpand} className="text-primary-500 hover:text-primary-700 mt-1 text-xs focus:outline-none sm:mt-2 sm:text-sm">
                 {expanded ? "نمایش کمتر" : "نمایش بیشتر"}
               </button>
             )}
           </div>
 
-          <div className="flex items-center gap-4 mt-3 sm:mt-4">
+          <div className="mt-3 flex items-center gap-4 sm:mt-4">
             <button
-              className={`flex items-center gap-1 transition-colors ${
-                userReaction === "LIKE"
-                  ? "text-green-500"
-                  : "text-neutral-500 hover:text-green-500"
-              }`}
+              className={`flex items-center gap-1 transition-colors ${userReaction === "LIKE" ? "text-green-500" : "text-neutral-500 hover:text-green-500"}`}
               onClick={() => handleReaction("LIKE")}
             >
               <FaThumbsUp className="text-sm" />
-              <span className="text-xs sm:text-sm">
-                {loadingType === "LIKE" ? (
-                  <ImSpinner2 className="animate-spin" />
-                ) : (
-                  `(${likes})`
-                )}
-              </span>
+              <span className="text-xs sm:text-sm">{loadingType === "LIKE" ? <ImSpinner2 className="animate-spin" /> : `(${likes})`}</span>
             </button>
 
             <button
-              className={`flex items-center gap-1 transition-colors ${
-                userReaction === "DISLIKE"
-                  ? "text-red-500"
-                  : "text-neutral-500 hover:text-red-500"
-              }`}
+              className={`flex items-center gap-1 transition-colors ${userReaction === "DISLIKE" ? "text-red-500" : "text-neutral-500 hover:text-red-500"}`}
               onClick={() => handleReaction("DISLIKE")}
             >
               <FaThumbsDown className="text-sm" />
-              <span className="text-xs sm:text-sm">
-                {loadingType === "DISLIKE" ? (
-                  <ImSpinner2 className="animate-spin" />
-                ) : (
-                  `(${dislikes})`
-                )}
-              </span>
+              <span className="text-xs sm:text-sm">{loadingType === "DISLIKE" ? <ImSpinner2 className="animate-spin" /> : `(${dislikes})`}</span>
             </button>
           </div>
         </div>

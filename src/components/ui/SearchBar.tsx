@@ -6,11 +6,7 @@ import { CiSearch } from "react-icons/ci";
 import { IoIosTrendingUp } from "react-icons/io";
 import { BsClockHistory } from "react-icons/bs";
 
-export default function SearchBar({
-  onSearch,
-}: {
-  onSearch: (query: string) => void;
-}) {
+export default function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,17 +28,9 @@ export default function SearchBar({
   };
 
   return (
-    <div className="relative w-full max-w-lg mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="relative"
-      >
-        <CiSearch
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-primary"
-          size={20}
-        />
+    <div className="relative mx-auto w-full max-w-lg">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="relative">
+        <CiSearch className="text-primary absolute top-1/2 right-3 -translate-y-1/2" size={20} />
         <input
           type="text"
           value={query}
@@ -50,7 +38,7 @@ export default function SearchBar({
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder="جستجو کنید..."
-          className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="w-full rounded-lg border border-gray-300 py-2 pr-10 pl-4 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       </motion.div>
 
@@ -61,20 +49,16 @@ export default function SearchBar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="absolute w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-2 p-3 z-10"
+            className="absolute z-10 mt-2 w-full rounded-lg border border-gray-300 bg-white p-3 shadow-lg"
           >
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="mb-3 flex items-center gap-2">
                 <BsClockHistory className="text-neutral-500" />
-                <p className="text-neutral-500 text-sm ">جستجوهای اخیر</p>
+                <p className="text-sm text-neutral-500">جستجوهای اخیر</p>
               </div>{" "}
               <div className="flex flex-wrap gap-2">
                 {recentSearches.map((item, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 text-sm bg-neutral-200 rounded-full cursor-pointer hover:bg-neutral-600"
-                    onMouseDown={() => setQuery(item)}
-                  >
+                  <span key={index} className="cursor-pointer rounded-full bg-neutral-200 px-3 py-1 text-sm hover:bg-neutral-600" onMouseDown={() => setQuery(item)}>
                     {item}
                   </span>
                 ))}
@@ -84,15 +68,15 @@ export default function SearchBar({
             <hr className="my-2" />
 
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="mb-3 flex items-center gap-2">
                 <IoIosTrendingUp className="text-neutral-500" />
-                <p className="text-neutral-500 text-sm ">جستجوهای پرطرفدار</p>
+                <p className="text-sm text-neutral-500">جستجوهای پرطرفدار</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 {popularSearches.map((item, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 text-sm bg-secondary-10 text-secondary rounded-full cursor-pointer hover:bg-secondary-50 transition duration-300"
+                    className="bg-secondary-10 text-secondary hover:bg-secondary-50 cursor-pointer rounded-full px-3 py-1 text-sm transition duration-300"
                     onMouseDown={() => setQuery(item)}
                   >
                     {item}

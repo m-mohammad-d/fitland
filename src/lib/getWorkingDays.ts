@@ -4,15 +4,7 @@ export function getWorkingDays(startOffset = 2, endOffset = 9) {
   const today = moment().locale("fa");
   const workingDays = [];
 
-  const weekDays = [
-    "یکشنبه",
-    "دوشنبه",
-    "سه‌شنبه",
-    "چهارشنبه",
-    "پنج‌شنبه",
-    "جمعه",
-    "شنبه",
-  ];
+  const weekDays = ["یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه"];
 
   for (let i = startOffset; i <= endOffset; i++) {
     const date = today.clone().add(i, "days");

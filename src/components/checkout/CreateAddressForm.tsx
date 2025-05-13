@@ -43,60 +43,21 @@ const CreateAddressForm = ({ onSubmit, defaultAddress }: Props) => {
   });
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 px-2 md:px-0 mt-4"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          label="نام تحویل‌گیرنده *"
-          placeholder="مثال: علی محمدی"
-          {...register("fullName")}
-          errorMessage={errors.fullName?.message}
-        />
-        <Input
-          label="شماره تماس *"
-          placeholder="مثال: 09123456789"
-          {...register("phone")}
-          errorMessage={errors.phone?.message}
-        />
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4 px-2 md:px-0">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Input label="نام تحویل‌گیرنده *" placeholder="مثال: علی محمدی" {...register("fullName")} errorMessage={errors.fullName?.message} />
+        <Input label="شماره تماس *" placeholder="مثال: 09123456789" {...register("phone")} errorMessage={errors.phone?.message} />
       </div>
 
-      <Input
-        label="آدرس انتخابی از نقشه"
-        value={defaultAddress}
-        disabled
-        fullWidth
-        placeholder="آدرس از روی نقشه انتخاب خواهد شد"
-      />
+      <Input label="آدرس انتخابی از نقشه" value={defaultAddress} disabled fullWidth placeholder="آدرس از روی نقشه انتخاب خواهد شد" />
 
-      <Input
-        label="کد پستی *"
-        placeholder="مثال: 1234567890"
-        {...register("zipCode")}
-        errorMessage={errors.zipCode?.message}
-      />
-      <Input
-        label="پلاک *"
-        placeholder="مثال: ۱۲"
-        {...register("plaque")}
-        errorMessage={errors.plaque?.message}
-      />
-      <Input
-        label="واحد"
-        placeholder="مثال: ۳"
-        {...register("unit")}
-        errorMessage={errors.unit?.message}
-      />
+      <Input label="کد پستی *" placeholder="مثال: 1234567890" {...register("zipCode")} errorMessage={errors.zipCode?.message} />
+      <Input label="پلاک *" placeholder="مثال: ۱۲" {...register("plaque")} errorMessage={errors.plaque?.message} />
+      <Input label="واحد" placeholder="مثال: ۳" {...register("unit")} errorMessage={errors.unit?.message} />
 
-      <Input
-        label="جزئیات بیشتر (اختیاری)"
-        placeholder="مثال: طبقه دوم، واحد سمت چپ"
-        {...register("details")}
-        errorMessage={errors.details?.message}
-      />
+      <Input label="جزئیات بیشتر (اختیاری)" placeholder="مثال: طبقه دوم، واحد سمت چپ" {...register("details")} errorMessage={errors.details?.message} />
 
-      <Button type="submit" className="w-full mt-2">
+      <Button type="submit" className="mt-2 w-full">
         ثبت آدرس
       </Button>
     </form>

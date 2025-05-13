@@ -14,13 +14,11 @@ export type User = {
   updatedAt: Date;
 };
 
-
 export type ApolloGetUserResponse = {
   getMe: User & {
     __typename: string;
   };
 };
-
 
 export type GraphQLFetchGetUserResponse = {
   data: {

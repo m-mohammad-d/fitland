@@ -3,40 +3,32 @@ import OrderProgressBar from "@/components/checkout/OrderProgressBar";
 import DiscountCode from "@/components/checkout/DiscountCode";
 function PaymentMethodPage() {
   return (
-    <div className="container mx-auto my-6 md:my-12 px-4 max-w-6xl">
+    <div className="container mx-auto my-6 max-w-6xl px-4 md:my-12">
       <OrderProgressBar currentStep={3} />
 
-      <div className="grid md:grid-cols-[1fr_340px] gap-8 mt-8">
+      <div className="mt-8 grid gap-8 md:grid-cols-[1fr_340px]">
         <div className="space-y-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            روش پرداخت خود را انتخاب کنید
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">روش پرداخت خود را انتخاب کنید</h1>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <DiscountCode />
             <PaymentMethods />
           </div>
         </div>
 
         <div className="order-first md:order-last">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
               <span className="text-emerald-600">•</span>
               نکات مهم پرداخت
             </h2>
 
-            <div className="space-y-4 text-gray-600 text-sm">
-              <p className="leading-relaxed">
-                پس از انتخاب روش پرداخت و تایید نهایی، سفارش شما ثبت خواهد شد.
-                لطفا از صحت اطلاعات پرداخت اطمینان حاصل فرمایید.
-              </p>
+            <div className="space-y-4 text-sm text-gray-600">
+              <p className="leading-relaxed">پس از انتخاب روش پرداخت و تایید نهایی، سفارش شما ثبت خواهد شد. لطفا از صحت اطلاعات پرداخت اطمینان حاصل فرمایید.</p>
 
-              <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-700">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-amber-700">
                 <p className="font-medium">توجه:</p>
-                <p>
-                  در صورت عدم موفقیت در پرداخت، سفارش به صورت قطعی ثبت نخواهد
-                  شد.
-                </p>
+                <p>در صورت عدم موفقیت در پرداخت، سفارش به صورت قطعی ثبت نخواهد شد.</p>
               </div>
             </div>
           </div>

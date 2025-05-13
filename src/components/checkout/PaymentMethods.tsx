@@ -33,14 +33,9 @@ const paymentMethods = [
 function PaymentMethods() {
   const { setCheckoutField, checkout } = useCart();
 
-  const [selectedMethod, setSelectedMethod] = useState<
-    "ONLINE" | "ON_DELIVERY" | "WALLET" | null
-  >(checkout.paymentMethod || null);
+  const [selectedMethod, setSelectedMethod] = useState<"ONLINE" | "ON_DELIVERY" | "WALLET" | null>(checkout.paymentMethod || null);
 
-  const handleSelectPaymentMethod = (
-    id: string,
-    value: "ONLINE" | "ON_DELIVERY" | "WALLET"
-  ) => {
+  const handleSelectPaymentMethod = (id: string, value: "ONLINE" | "ON_DELIVERY" | "WALLET") => {
     setSelectedMethod(value);
     setCheckoutField("paymentMethod", value);
   };
@@ -51,24 +46,15 @@ function PaymentMethods() {
         {paymentMethods.map((method) => (
           <div
             key={method.id}
-            className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 ease-in-out ${
-              selectedMethod === method.value
-                ? "border-primary-600 bg-primary-50 shadow-lg"
-                : "border-neutral-300 hover:border-primary-400"
+            className={`cursor-pointer rounded-lg border p-4 transition-all duration-200 ease-in-out ${
+              selectedMethod === method.value ? "border-primary-600 bg-primary-50 shadow-lg" : "hover:border-primary-400 border-neutral-300"
             }`}
-            onClick={() =>
-              handleSelectPaymentMethod(
-                method.id,
-                method.value as "ONLINE" | "ON_DELIVERY" | "WALLET"
-              )
-            }
+            onClick={() => handleSelectPaymentMethod(method.id, method.value as "ONLINE" | "ON_DELIVERY" | "WALLET")}
           >
             <div className="flex items-center space-x-4">
               <div className="text-primary-600">{method.icon}</div>
               <div>
-                <h3 className="text-lg font-semibold text-neutral-800">
-                  {method.name}
-                </h3>
+                <h3 className="text-lg font-semibold text-neutral-800">{method.name}</h3>
                 <p className="text-sm text-neutral-600">{method.description}</p>
               </div>
             </div>
@@ -80,8 +66,8 @@ function PaymentMethods() {
         <Link
           href={selectedMethod ? "/checkout/confirmation" : {}}
           className={cn(
-            "w-full inline-block text-center bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg",
-            selectedMethod || "bg-neutral-500 hover:bg-neutral-600"
+            "bg-primary-600 hover:bg-primary-700 inline-block w-full rounded-lg px-4 py-3 text-center font-medium text-white shadow-md transition-colors hover:shadow-lg",
+            selectedMethod || "bg-neutral-500 hover:bg-neutral-600",
           )}
         >
           تایید روش پرداخت و تکمیل سفارش

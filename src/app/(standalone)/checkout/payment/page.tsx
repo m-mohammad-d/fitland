@@ -9,8 +9,7 @@ import { toast } from "react-hot-toast";
 import { useState } from "react";
 
 function CheckoutPayment() {
-  const { checkout, items, getTotal, clearCart, clearCheckout, getFinalTotal } =
-    useCart();
+  const { checkout, items, getTotal, clearCart, clearCheckout, getFinalTotal } = useCart();
   const router = useRouter();
   const [orderError, setOrderError] = useState("");
 
@@ -49,12 +48,9 @@ function CheckoutPayment() {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
-      <PaymentGateway
-        onPaymentSuccess={handleSubmit}
-        amount={finalTotalPrice}
-      />
-      {orderError && <p className="text-red-500 mt-4 text-sm">{orderError}</p>}
+    <div className="flex h-screen flex-col items-center justify-center">
+      <PaymentGateway onPaymentSuccess={handleSubmit} amount={finalTotalPrice} />
+      {orderError && <p className="mt-4 text-sm text-red-500">{orderError}</p>}
     </div>
   );
 }

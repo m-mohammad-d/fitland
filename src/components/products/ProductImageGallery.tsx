@@ -39,47 +39,23 @@ export default function ProductImageGallery({ images }: Props) {
 
   return (
     <div className="space-y-4" dir="rtl">
-      <div
-        onClick={() => openModal(0)}
-        className="relative aspect-video w-full rounded overflow-hidden cursor-pointer bg-gray-100"
-      >
+      <div onClick={() => openModal(0)} className="relative aspect-video w-full cursor-pointer overflow-hidden rounded bg-gray-100">
         {mainImage ? (
-          <Image
-            src={mainImage}
-            alt="تصویر اصلی"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+          <Image src={mainImage} alt="تصویر اصلی" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-            بدون تصویر
-          </div>
+          <div className="flex h-full w-full items-center justify-center text-gray-400">بدون تصویر</div>
         )}
       </div>
 
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         {thumbnails.map((img, index) => (
-          <div
-            key={index + 1}
-            onClick={() => openModal(index + 1)}
-            className="relative w-20 h-20 rounded overflow-hidden bg-gray-100 cursor-pointer"
-          >
-            <Image
-              src={img}
-              alt={`تصویر ${index + 1}`}
-              fill
-              className="object-cover"
-              sizes="80px"
-            />
+          <div key={index + 1} onClick={() => openModal(index + 1)} className="relative h-20 w-20 cursor-pointer overflow-hidden rounded bg-gray-100">
+            <Image src={img} alt={`تصویر ${index + 1}`} fill className="object-cover" sizes="80px" />
           </div>
         ))}
 
         {hasMore && (
-          <div
-            onClick={() => openModal(0)}
-            className="w-20 h-20 flex items-center justify-center bg-gray-200 rounded cursor-pointer hover:bg-gray-300 text-sm text-gray-600"
-          >
+          <div onClick={() => openModal(0)} className="flex h-20 w-20 cursor-pointer items-center justify-center rounded bg-gray-200 text-sm text-gray-600 hover:bg-gray-300">
             +{images.length - 3}
           </div>
         )}
@@ -87,28 +63,16 @@ export default function ProductImageGallery({ images }: Props) {
 
       {isOpen &&
         createPortal(
-          <div
-            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
-        
-          >
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-4 left-4 text-white text-3xl z-50"
-            >
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+            <button onClick={() => setIsOpen(false)} className="absolute top-4 left-4 z-50 text-3xl text-white">
               <HiXMark />
             </button>
 
-            <div
-              ref={prevRef}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-2 bg-white rounded-full shadow-lg cursor-pointer"
-            >
-              <HiChevronRight className="w-6 h-6 text-black" />
+            <div ref={prevRef} className="absolute top-1/2 right-4 z-50 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 shadow-lg">
+              <HiChevronRight className="h-6 w-6 text-black" />
             </div>
-            <div
-              ref={nextRef}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-2 bg-white rounded-full shadow-lg cursor-pointer"
-            >
-              <HiChevronLeft className="w-6 h-6 text-black" />
+            <div ref={nextRef} className="absolute top-1/2 left-4 z-50 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 shadow-lg">
+              <HiChevronLeft className="h-6 w-6 text-black" />
             </div>
 
             <Swiper
@@ -130,42 +94,26 @@ export default function ProductImageGallery({ images }: Props) {
             >
               {images.map((img, index) => (
                 <SwiperSlide key={index}>
-                  <div className="relative w-full h-[60vh] flex items-center justify-center">
-                    <Image
-                      src={img}
-                      alt={`تصویر ${index}`}
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 768px) 90vw, 70vw"
-                    />
+                  <div className="relative flex h-[60vh] w-full items-center justify-center">
+                    <Image src={img} alt={`تصویر ${index}`} fill className="object-contain" sizes="(max-width: 768px) 90vw, 70vw" />
                   </div>
                 </SwiperSlide>
               ))}
             </Swiper>
 
-            <div className="absolute bottom-4 right-1/2 translate-x-1/2 flex gap-2 overflow-x-auto px-4">
+            <div className="absolute right-1/2 bottom-4 flex translate-x-1/2 gap-2 overflow-x-auto px-4">
               {images.map((img, index) => (
                 <div
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`relative w-16 h-16 rounded border-2 cursor-pointer transition ${
-                    index === activeIndex
-                      ? "border-white"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
+                  className={`relative h-16 w-16 cursor-pointer rounded border-2 transition ${index === activeIndex ? "border-white" : "border-transparent opacity-60 hover:opacity-100"}`}
                 >
-                  <Image
-                    src={img}
-                    alt={`پیش‌نمایش ${index}`}
-                    fill
-                    className="object-cover"
-                    sizes="64px"
-                  />
+                  <Image src={img} alt={`پیش‌نمایش ${index}`} fill className="object-cover" sizes="64px" />
                 </div>
               ))}
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

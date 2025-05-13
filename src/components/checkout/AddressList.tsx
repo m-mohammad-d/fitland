@@ -20,14 +20,7 @@ function AddressList({ addresses }: AddressListProps) {
 
   return (
     <div className="space-y-4">
-      {addresses?.map((address) => (
-        <AddressCard
-          address={address}
-          key={address.id}
-          isSelected={address.id === checkout.addressId}
-          onSelect={() => handleSelectAddress(address.id)}
-        />
-      ))}
+      {addresses?.map((address) => <AddressCard address={address} key={address.id} isSelected={address.id === checkout.addressId} onSelect={() => handleSelectAddress(address.id)} />)}
     </div>
   );
 }

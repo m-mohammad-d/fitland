@@ -7,10 +7,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import {
-  MdKeyboardArrowRight,
-  MdOutlineKeyboardArrowLeft,
-} from "react-icons/md";
+import { MdKeyboardArrowRight, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { cn } from "@/lib/utils";
 
 interface ProductHighlightProps {
@@ -19,32 +16,17 @@ interface ProductHighlightProps {
   products: Product[] | undefined;
 }
 
-const ProductHighlight: React.FC<ProductHighlightProps> = ({
-  title,
-  className,
-  products,
-}) => {
+const ProductHighlight: React.FC<ProductHighlightProps> = ({ title, className, products }) => {
   return (
-    <div
-      className={cn(
-        "rounded-lg mt-16 md:mt-20 p-4 md:p-8 relative shadow-md",
-        className
-      )}
-    >
-      <h2 className="text-lg md:text-xl text-secondary font-semibold text-center w-fit absolute -top-4 md:-top-5 rounded-bl-2xl rounded-br-2xl md:rounded-bl-3xl md:rounded-br-3xl bg-white left-1/2 transform -translate-x-1/2 px-3 md:px-6 py-1 md:py- mb-4 md:mb-8">
+    <div className={cn("relative mt-16 rounded-lg p-4 shadow-md md:mt-20 md:p-8", className)}>
+      <h2 className="text-secondary md:py- absolute -top-4 left-1/2 mb-4 w-fit -translate-x-1/2 transform rounded-br-2xl rounded-bl-2xl bg-white px-3 py-1 text-center text-lg font-semibold md:-top-5 md:mb-8 md:rounded-br-3xl md:rounded-bl-3xl md:px-6 md:text-xl">
         {title}
       </h2>
-      <div className="mx-auto relative container mt-10 px-2 md:px-6 py-3 md:py-6">
-        <button
-          id="next-btn"
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent shadow-md p-2 rounded-full text-secondary"
-        >
+      <div className="relative container mx-auto mt-10 px-2 py-3 md:px-6 md:py-6">
+        <button id="next-btn" className="text-secondary absolute top-1/2 right-0 z-10 -translate-y-1/2 transform rounded-full bg-transparent p-2 shadow-md">
           <MdKeyboardArrowRight size={20} />
         </button>
-        <button
-          id="prev-btn"
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent shadow-md p-2 rounded-full text-secondary"
-        >
+        <button id="prev-btn" className="text-secondary absolute top-1/2 left-0 z-10 -translate-y-1/2 transform rounded-full bg-transparent p-2 shadow-md">
           <MdOutlineKeyboardArrowLeft size={20} />
         </button>
 
@@ -74,9 +56,7 @@ const ProductHighlight: React.FC<ProductHighlightProps> = ({
               </SwiperSlide>
             ))
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              No products to display
-            </div>
+            <div className="py-8 text-center text-gray-500">No products to display</div>
           )}
         </Swiper>
       </div>

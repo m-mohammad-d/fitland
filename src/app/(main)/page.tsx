@@ -9,22 +9,14 @@ import { GetProductsResponse } from "@/types/Products";
 
 export default async function Home() {
   const [discountedProductsResponse, newProductsResponse] = await Promise.all([
-    graphQLFetch<GetProductsResponse>(
-      process.env.NEXT_PUBLIC_BACKEND_URL || "",
-      GET_PRODUCTS.loc?.source.body as string,
-      {
-        sortBy: "price",
-        pageSize: 8,
-      }
-    ),
-    graphQLFetch<GetProductsResponse>(
-      process.env.NEXT_PUBLIC_BACKEND_URL || "",
-      GET_PRODUCTS.loc?.source.body as string,
-      {
-        sortBy: "createdAt",
-        pageSize: 8,
-      }
-    ),
+    graphQLFetch<GetProductsResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_PRODUCTS.loc?.source.body as string, {
+      sortBy: "price",
+      pageSize: 8,
+    }),
+    graphQLFetch<GetProductsResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_PRODUCTS.loc?.source.body as string, {
+      sortBy: "createdAt",
+      pageSize: 8,
+    }),
   ]);
 
   const discountedProducts = discountedProductsResponse.data.products;
@@ -46,24 +38,10 @@ export default async function Home() {
           },
         ]}
       />{" "}
-      <Banner
-        imageUrl="/images/Baner.png"
-        mobileImageUrl="images/Baner-mobile.png"
-      />
-      <ProductHighlight
-        title="بیشترین تخفیف"
-        products={discountedProducts}
-        className="bg-primary-50"
-      />
-      <ProductHighlight
-        title="جدیدترین محصولات"
-        products={newProducts}
-        className="bg-white"
-      />
-      <Banner
-        imageUrl="/images/Baner-1.png"
-        mobileImageUrl="images/Baner-1-mobile.png"
-      />
+      <Banner imageUrl="/images/Baner.png" mobileImageUrl="images/Baner-mobile.png" />
+      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} className="bg-primary-50" />
+      <ProductHighlight title="جدیدترین محصولات" products={newProducts} className="bg-white" />
+      <Banner imageUrl="/images/Baner-1.png" mobileImageUrl="images/Baner-1-mobile.png" />
       <MainOffers
         offers={[
           {

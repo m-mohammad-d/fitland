@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  FaMapMarkedAlt,
-  FaCalendarDay,
-  FaCreditCard,
-  FaCheckCircle,
-} from "react-icons/fa";
+import { FaMapMarkedAlt, FaCalendarDay, FaCreditCard, FaCheckCircle } from "react-icons/fa";
 
 const steps = [
   { title: "انتخاب آدرس", icon: <FaMapMarkedAlt /> },
@@ -20,42 +15,25 @@ type OrderProgressBarProps = {
 const OrderProgressBar: React.FC<OrderProgressBarProps> = ({ currentStep }) => {
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep - 1;
 
-          const iconBgColor = isCompleted
-            ? "bg-primary-600"
-            : isCurrent
-            ? "bg-yellow-400"
-            : "bg-neutral-300";
+          const iconBgColor = isCompleted ? "bg-primary-600" : isCurrent ? "bg-yellow-400" : "bg-neutral-300";
 
-          const textColor = isCompleted
-            ? "text-primary-600"
-            : isCurrent
-            ? "text-yellow-400"
-            : "text-neutral-600";
+          const textColor = isCompleted ? "text-primary-600" : isCurrent ? "text-yellow-400" : "text-neutral-600";
 
           return (
-            <div
-              key={index}
-              className="flex flex-col md:flex-row items-center space-x-2"
-            >
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${iconBgColor} text-white`}
-              >
-                {step.icon}
-              </div>
-              <span className={`text-xs sm:text-base md:text-lg ${textColor}`}>
-                {step.title}
-              </span>
+            <div key={index} className="flex flex-col items-center space-x-2 md:flex-row">
+              <div className={`flex h-8 w-8 items-center justify-center rounded-full ${iconBgColor} text-white`}>{step.icon}</div>
+              <span className={`text-xs sm:text-base md:text-lg ${textColor}`}>{step.title}</span>
             </div>
           );
         })}
       </div>
 
-      <div className="w-full bg-neutral-200 rounded-full h-2.5">
+      <div className="h-2.5 w-full rounded-full bg-neutral-200">
         <div
           className="bg-primary h-2.5 rounded-full"
           style={{

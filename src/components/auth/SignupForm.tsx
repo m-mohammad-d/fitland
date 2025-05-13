@@ -56,9 +56,7 @@ export default function SignupForm() {
   const password = watch("password");
 
   useEffect(() => {
-    setPasswordStrength(
-      password ? calculatePasswordStrength(password) : { score: 0, message: "" }
-    );
+    setPasswordStrength(password ? calculatePasswordStrength(password) : { score: 0, message: "" });
   }, [password]);
 
   const onSubmit = (data: SignupFormValues) => {
@@ -72,9 +70,9 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="max-w-lg w-full mx-auto p-6 rounded-lg shadow-lg bg-white">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-primary">ثبت نام در سایت</h1>
+    <div className="mx-auto w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
+      <div className="mb-8 text-center">
+        <h1 className="text-primary text-2xl font-bold">ثبت نام در سایت</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -102,9 +100,7 @@ export default function SignupForm() {
           errorMessage={errors.password?.message}
           {...register("password")}
           placeholder="حداقل ۶ کاراکتر"
-          className={
-            errors.password ? "border-error-500" : "border-neutral-300"
-          }
+          className={errors.password ? "border-error-500" : "border-neutral-300"}
         />
 
         {password && <PasswordStrengthMeter strength={passwordStrength} />}
@@ -115,24 +111,16 @@ export default function SignupForm() {
           errorMessage={errors.confirmPassword?.message}
           {...register("confirmPassword")}
           placeholder="تکرار رمز عبور"
-          className={
-            errors.confirmPassword ? "border-error-500" : "border-neutral-300"
-          }
+          className={errors.confirmPassword ? "border-error-500" : "border-neutral-300"}
         />
 
-        <button
-          type="submit"
-          className="w-full py-2 px-4 bg-primary hover:bg-primary-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-150 transition-colors"
-        >
+        <button type="submit" className="bg-primary hover:bg-primary-700 focus:ring-primary-150 w-full rounded-lg px-4 py-2 font-medium text-white transition-colors focus:ring-2 focus:outline-none">
           {loading ? "در حال ثبت نام..." : "ثبت نام"}
         </button>
 
         <div className="text-center text-sm text-neutral-700">
           <span>قبلا ثبت نام کرده‌اید؟ </span>
-          <Link
-            href="/login"
-            className="text-primary hover:text-primary-700 font-medium"
-          >
+          <Link href="/login" className="text-primary hover:text-primary-700 font-medium">
             ورود به حساب
           </Link>
         </div>

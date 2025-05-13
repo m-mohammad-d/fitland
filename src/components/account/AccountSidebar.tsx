@@ -2,15 +2,7 @@
 import Link from "next/link";
 import { useState, ChangeEvent } from "react";
 import { useUpload } from "@/hooks/useUpload";
-import {
-  BsPlus,
-  BsHeart,
-  BsGeoAlt,
-  BsChatDots,
-  BsBoxArrowRight,
-  BsPerson,
-  BsClockHistory,
-} from "react-icons/bs";
+import { BsPlus, BsHeart, BsGeoAlt, BsChatDots, BsBoxArrowRight, BsPerson, BsClockHistory } from "react-icons/bs";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_ME } from "@/graphql/queries/userQueries";
 import { ApolloGetUserResponse } from "@/types/User";
@@ -61,8 +53,7 @@ export default function AccountSidebar() {
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
   const currentUser = userData?.getMe;
-  const profileImageSrc =
-    profileImagePreview || currentUser?.photo || DEFAULT_PROFILE_IMAGE;
+  const profileImageSrc = profileImagePreview || currentUser?.photo || DEFAULT_PROFILE_IMAGE;
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -91,38 +82,22 @@ export default function AccountSidebar() {
   };
 
   return (
-    <aside className="bg-white shadow-sm p-4 rounded-lg md:w-64 w-full">
+    <aside className="w-full rounded-lg bg-white p-4 shadow-sm md:w-64">
       <div className="flex flex-col items-center pb-4">
         <div className="relative">
-          <img
-            src={profileImageSrc}
-            alt="Profile"
-            className="h-24 w-24 rounded-full object-cover border"
-          />
+          <img src={profileImageSrc} alt="Profile" className="h-24 w-24 rounded-full border object-cover" />
           <button
-            onClick={() =>
-              document.getElementById("profileImageInput")?.click()
-            }
-            className="absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary hover:bg-primary-500 text-white border shadow"
+            onClick={() => document.getElementById("profileImageInput")?.click()}
+            className="bg-primary hover:bg-primary-500 absolute right-1 bottom-1 flex h-7 w-7 items-center justify-center rounded-full border text-white shadow"
             aria-label="Change profile picture"
           >
             <BsPlus />
           </button>
-          <input
-            type="file"
-            id="profileImageInput"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="hidden"
-          />
+          <input type="file" id="profileImageInput" accept="image/*" onChange={handleImageChange} className="hidden" />
         </div>
 
         {selectedImageFile && (
-          <button
-            onClick={handleUploadProfileImage}
-            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            disabled={isUploading}
-          >
+          <button onClick={handleUploadProfileImage} className="mt-2 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" disabled={isUploading}>
             {isUploading ? "در حال آپلود..." : "ذخیره عکس"}
           </button>
         )}
@@ -135,11 +110,8 @@ export default function AccountSidebar() {
         <ul className="space-y-3">
           {NAV_ITEMS.map(({ path, icon, label }) => (
             <li key={path}>
-              <Link
-                href={path}
-                className="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-100 rounded-md transition"
-              >
-                <span className="text-lg ml-3">{icon}</span>
+              <Link href={path} className="flex items-center rounded-md px-4 py-2 text-gray-700 transition hover:bg-gray-100">
+                <span className="ml-3 text-lg">{icon}</span>
                 <span className="text-sm">{label}</span>
               </Link>
             </li>
@@ -148,7 +120,7 @@ export default function AccountSidebar() {
       </nav>
 
       <div className="mt-6 pt-4">
-        <button className="w-full flex items-center justify-center py-2 px-4 text-red-600 hover:bg-red-100 rounded-md transition">
+        <button className="flex w-full items-center justify-center rounded-md px-4 py-2 text-red-600 transition hover:bg-red-100">
           <BsBoxArrowRight className="ml-2 text-lg" />
           <span className="text-sm">خروج</span>
         </button>

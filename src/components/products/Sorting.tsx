@@ -22,18 +22,14 @@ function Sorting({ totalProducts }: SortingProps) {
   const [showSortDrawer, setShowSortDrawer] = useState(false);
 
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="mb-6 flex items-center justify-between">
       {/* Desktop Sorting */}
-      <div className="hidden lg:flex items-center gap-4">
+      <div className="hidden items-center gap-4 lg:flex">
         {sortOptions.map((option) => (
           <button
             key={option.value}
             onClick={() => updateSortBy(option.value)}
-            className={`flex items-center gap-1 px-3 py-1 rounded-lg text-sm ${
-              sortBy === option.value
-                ? "bg-primary-100 text-primary-600 font-medium"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-1 rounded-lg px-3 py-1 text-sm ${sortBy === option.value ? "bg-primary-100 text-primary-600 font-medium" : "text-gray-700 hover:bg-gray-100"}`}
           >
             {option.icon}
             {option.label}
@@ -44,30 +40,23 @@ function Sorting({ totalProducts }: SortingProps) {
       {/* Mobile View */}
       <div className="flex items-center gap-4 lg:hidden">
         {/* Sort Button */}
-        <button
-          onClick={() => setShowSortDrawer(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg text-sm"
-        >
+        <button onClick={() => setShowSortDrawer(true)} className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm">
           مرتب‌سازی
         </button>
 
         {/* Product Count */}
-        <div className="text-gray-600 text-sm">
+        <div className="text-sm text-gray-600">
           تعداد: <span className="font-bold">{totalProducts}</span>
         </div>
       </div>
 
       {/* Desktop Product Count */}
-      <div className="hidden lg:block text-gray-600">
+      <div className="hidden text-gray-600 lg:block">
         تعداد محصولات: <span className="font-bold">{totalProducts}</span>
       </div>
 
       {/* Mobile Sort Drawer */}
-      <Drawer
-        isOpen={showSortDrawer}
-        onClose={() => setShowSortDrawer(false)}
-        title="مرتب‌سازی بر اساس"
-      >
+      <Drawer isOpen={showSortDrawer} onClose={() => setShowSortDrawer(false)} title="مرتب‌سازی بر اساس">
         <div className="space-y-3">
           {sortOptions.map((option) => (
             <button
@@ -76,19 +65,15 @@ function Sorting({ totalProducts }: SortingProps) {
                 updateSortBy(option.value);
                 setShowSortDrawer(false);
               }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-lg ${
-                sortBy === option.value
-                  ? "bg-primary-50 text-primary-600 border border-primary-200"
-                  : "bg-gray-50 hover:bg-gray-100"
+              className={`flex w-full items-center justify-between rounded-lg px-4 py-3 ${
+                sortBy === option.value ? "bg-primary-50 text-primary-600 border-primary-200 border" : "bg-gray-50 hover:bg-gray-100"
               }`}
             >
               <div className="flex items-center gap-2">
                 {option.icon}
                 {option.label}
               </div>
-              {sortBy === option.value && (
-                <span className="text-primary-500">✓</span>
-              )}
+              {sortBy === option.value && <span className="text-primary-500">✓</span>}
             </button>
           ))}
         </div>

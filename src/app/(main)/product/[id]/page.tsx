@@ -27,10 +27,9 @@ export default function ProductDetailsPage({ params }: Props) {
     variables: { id },
   });
 
-  const { data: commentData, loading: commentLoading } =
-    useQuery<GetProductCommentsResponse>(GET_PRODUCT_COMMENTS, {
-      variables: { id },
-    });
+  const { data: commentData, loading: commentLoading } = useQuery<GetProductCommentsResponse>(GET_PRODUCT_COMMENTS, {
+    variables: { id },
+  });
 
   if (productLoading || commentLoading) return <DotSpinner />;
   if (productError || !productData?.product) return notFound();
@@ -40,12 +39,12 @@ export default function ProductDetailsPage({ params }: Props) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <ProductGallery images={product.images} />
         <ProductInfo product={product} />
       </div>
 
-      <div className="my-12 border-t border-neutral-500 w-full"></div>
+      <div className="my-12 w-full border-t border-neutral-500"></div>
 
       <ProductDescription description={product.description} />
       <ProductCommentList comments={comments} productId={product.id} />
