@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaCheck, FaMinus, FaPlus, FaShoppingCart, FaTimes } from "react-icons/fa";
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
-import { Sizes } from "@/lib/Sizes";
 
 interface Props {
   product: {

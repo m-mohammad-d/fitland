@@ -1,4 +1,4 @@
-import { PasswordStrength } from "@/utils/passwordStrength";
+import { PasswordStrength } from "@/lib/passwordStrength";
 
 interface PasswordStrengthMeterProps {
   strength: PasswordStrength;

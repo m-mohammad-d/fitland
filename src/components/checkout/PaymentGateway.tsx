@@ -45,7 +45,6 @@ const PaymentGateway = ({ onPaymentSuccess, onPaymentError, className, amount = 
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<PaymentGatewayData>({
     resolver: zodResolver(paymentSchema),
   });

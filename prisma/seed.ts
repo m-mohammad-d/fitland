@@ -12,8 +12,8 @@ async function main() {
   console.log("✅ دسته‌بندی‌ها اضافه شدند.");
 
   const categories = await prisma.category.findMany();
-  const getCategory = (name) => {
-    const category = categories.find((c) => c.name === name);
+  const getCategory = (name: string) => {
+    const category = categories.find((c: { name: string; }) => c.name === name);
     if (!category) {
       throw new Error(`❌ دسته‌بندی ${name} پیدا نشد!`);
     }

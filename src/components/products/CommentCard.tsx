@@ -2,6 +2,7 @@ import { LIKE_COMMENT } from "@/graphql/mutations/ReactionMutation";
 import { formatJalaliDate } from "@/lib/Date";
 import { Comment } from "@/types/Comment";
 import { useMutation } from "@apollo/client";
+import Image from "next/image";
 import { useState } from "react";
 import { FaStar, FaRegStar, FaStarHalfAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
@@ -77,7 +78,7 @@ function CommentCard({ comment }: CommentCardProps) {
       <div className="xs:flex-row xs:gap-4 flex flex-col items-start gap-3">
         <div className="xs:block flex flex-shrink-0 items-center gap-3">
           {comment.user?.photo ? (
-            <img src={comment.user.photo} alt={comment.user.name} className="xs:w-12 xs:h-12 h-10 w-10 rounded-full object-cover" />
+            <Image src={comment.user.photo} alt={comment.user.name} width={50} height={50} className="xs:w-12 xs:h-12 h-10 w-10 rounded-full object-cover" />
           ) : (
             <div className="xs:w-12 xs:h-12 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 text-neutral-500">
               <svg xmlns="http://www.w3.org/2000/svg" className="xs:h-6 xs:w-6 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

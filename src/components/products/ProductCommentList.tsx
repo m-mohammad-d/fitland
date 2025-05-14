@@ -10,9 +10,9 @@ interface ProductCommentListProps {
   comments: Comment[];
   productId: string;
 }
-
+type SortOption = "newest" | "highest" | "lowest";
 function ProductCommentList({ comments, productId }: ProductCommentListProps) {
-  const [sortBy, setSortBy] = useState<"newest" | "highest" | "lowest">("newest");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [showSortDrawer, setShowSortDrawer] = useState(false);
   const [showCreateComment, setShowCreateComment] = useState(false);
 
@@ -42,7 +42,7 @@ function ProductCommentList({ comments, productId }: ProductCommentListProps) {
             {sortOptions.map((option) => (
               <button
                 key={option.value}
-                onClick={() => setSortBy(option.value as any)}
+                onClick={() => setSortBy(option.value as SortOption)}
                 className={`rounded-md px-4 py-2 text-sm transition-colors ${sortBy === option.value ? "text-primary-600 bg-white shadow-sm" : "text-gray-600 hover:text-gray-800"}`}
               >
                 {option.label}
@@ -79,7 +79,7 @@ function ProductCommentList({ comments, productId }: ProductCommentListProps) {
             <button
               key={option.value}
               onClick={() => {
-                setSortBy(option.value as any);
+                setSortBy(option.value as SortOption);
                 setShowSortDrawer(false);
               }}
               className={`w-full rounded-lg px-4 py-3 text-right transition-colors ${sortBy === option.value ? "bg-primary-50 text-primary-600" : "text-gray-700 hover:bg-gray-100"}`}

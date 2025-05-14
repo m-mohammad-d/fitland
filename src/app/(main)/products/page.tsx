@@ -5,7 +5,7 @@ import ProductGrid from "@/components/products/ProductGrid";
 import ProductGridSkeleton from "@/components/products/ProductGridSkeleton";
 import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
 import FilterProvider, { useFilters } from "@/provider/FilterProvider";
-import { GetProductsResponse } from "@/types/Products";
+import { ApoloGetProductsResponse } from "@/types/Products";
 import { useQuery } from "@apollo/client";
 import { LuSettings2 } from "react-icons/lu";
 import { Drawer } from "@/components/ui/Drawer";
@@ -22,7 +22,7 @@ export default function ProductsPage() {
 function ProductsPageContent() {
   const { filters, sortBy } = useFilters();
   const [showMobileFilter, setShowMobileFilter] = useState(false);
-  const { data, loading, previousData } = useQuery<GetProductsResponse>(GET_PRODUCTS, {
+  const { data, loading, previousData } = useQuery<ApoloGetProductsResponse>(GET_PRODUCTS, {
     variables: {
       sortBy,
       filters,
@@ -32,7 +32,7 @@ function ProductsPageContent() {
   });
 
   const products = loading ? previousData?.products : data?.products;
-  const totalProducts = data?.products.length || 0;
+  const totalProducts = products?.length || 0;
 
   return (
     <div className="container mx-auto px-4">

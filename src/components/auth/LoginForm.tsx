@@ -21,7 +21,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   const [mutateFunction, { loading }] = useMutation(LOGIN, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       toast.success("با موفقیت وارد حساب شدید 🎉");
       router.push("/account/profile");
     },

@@ -24,3 +24,9 @@ export interface GetProductsResponse {
     products: Product[];
   };
 }
+
+export interface ApoloGetProductsResponse {
+  products: Product[] & {
+    __typename: string;
+  };
+}

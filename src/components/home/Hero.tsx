@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineLike } from "react-icons/ai";
 import { CiCalendarDate, CiShop } from "react-icons/ci";
@@ -19,7 +20,7 @@ function Hero() {
           </Link>
         </div>
         <div className="hidden md:block">
-          <img src="/images/hero-section-image.png" alt="hero section image" />
+          <Image src="/images/hero-section-image.png" alt="hero section image" layout="responsive" width={1200} height={800} />
         </div>
         <div className="hidden md:block">
           <div className="flex items-center gap-4 rounded-lg p-4">
@@ -55,7 +56,7 @@ function Hero() {
           </div>
         </div>
       </div>
-      <img src="/images/hero-section-dot-patten.png" className="hidden w-full md:block" alt="hero-section-dot-patten" />
+      <Image src="/images/hero-section-dot-patten.png" alt="hero-section-dot-patten" className="hidden w-full md:block" layout="responsive" width={1200} height={800} />{" "}
     </div>
   );
 }

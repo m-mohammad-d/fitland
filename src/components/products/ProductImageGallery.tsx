@@ -84,10 +84,12 @@ export default function ProductImageGallery({ images }: Props) {
                 nextEl: nextRef.current!,
               }}
               onBeforeInit={(swiper) => {
-                // @ts-ignore
-                swiper.params.navigation.prevEl = prevRef.current;
-                // @ts-ignore
-                swiper.params.navigation.nextEl = nextRef.current;
+                if (swiper.params.navigation) {
+                  if (swiper.params.navigation !== true) {
+                    swiper.params.navigation.prevEl = prevRef.current;
+                    swiper.params.navigation.nextEl = nextRef.current;
+                  }
+                }
               }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               className="w-full max-w-4xl"

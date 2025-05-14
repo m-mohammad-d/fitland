@@ -5,6 +5,7 @@ import { GET_USER_ADDRESS } from "@/graphql/queries/addressQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetAddressesResponse } from "@/types/Address";
 import Link from "next/link";
+export const dynamic = "force-dynamic";
 
 async function CheckOutAddress() {
   const res = await graphQLFetch<GetAddressesResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ADDRESS.loc?.source.body as string);

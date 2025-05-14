@@ -24,7 +24,10 @@ export const primary: Story = {
       price: 120,
       stock: 50,
       images: ["nike1.jpg", "nike2.jpg"],
-      colors: ["Black", "White"],
+      colors: [
+        { name: "سیاه", hex: "#000000" },
+        { name: "سفید", hex: "#fffffff" },
+      ],
       sizes: ["40", "41", "42"],
       category: {
         name: "Accessories",

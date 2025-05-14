@@ -5,6 +5,7 @@ import { GetUserOrdersResponse } from "@/types/Order";
 import Image from "next/image";
 import Link from "next/link";
 import { FiClock, FiDollarSign, FiArrowLeft } from "react-icons/fi";
+export const dynamic = 'force-dynamic';
 
 async function UserOrdersPage() {
   const res = await graphQLFetch<GetUserOrdersResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ORDERS.loc?.source.body as string);

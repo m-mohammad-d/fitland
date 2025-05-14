@@ -8,6 +8,7 @@ import { GET_ME } from "@/graphql/queries/userQueries";
 import { ApolloGetUserResponse } from "@/types/User";
 import { UPDATE_USER } from "@/graphql/mutations/UserMutations";
 import { BiWallet } from "react-icons/bi";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   {
@@ -85,7 +86,7 @@ export default function AccountSidebar() {
     <aside className="w-full rounded-lg bg-white p-4 shadow-sm md:w-64">
       <div className="flex flex-col items-center pb-4">
         <div className="relative">
-          <img src={profileImageSrc} alt="Profile" className="h-24 w-24 rounded-full border object-cover" />
+          <Image src={profileImageSrc} width={96} height={96} alt="Profile" className="h-24 w-24 rounded-full border object-cover" />
           <button
             onClick={() => document.getElementById("profileImageInput")?.click()}
             className="bg-primary hover:bg-primary-500 absolute right-1 bottom-1 flex h-7 w-7 items-center justify-center rounded-full border text-white shadow"

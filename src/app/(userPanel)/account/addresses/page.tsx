@@ -3,6 +3,7 @@ import AddressModal from "@/components/checkout/AddressModal";
 import { GET_USER_ADDRESS } from "@/graphql/queries/addressQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetAddressesResponse } from "@/types/Address";
+export const dynamic = 'force-dynamic';
 
 async function UserAddressList() {
   const res = await graphQLFetch<GetAddressesResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ADDRESS.loc?.source.body as string);

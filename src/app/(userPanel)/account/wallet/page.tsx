@@ -5,6 +5,7 @@ import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GraphQLFetchGetWalletResponse } from "@/types/Wallet";
 import Link from "next/link";
 import { FaWallet, FaPlusCircle, FaHistory } from "react-icons/fa";
+export const dynamic = "force-dynamic";
 
 async function UserWalletPage() {
   const res = await graphQLFetch<GraphQLFetchGetWalletResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_WALLET_USER.loc?.source.body as string);

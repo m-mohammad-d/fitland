@@ -1,4 +1,5 @@
 import { Product } from "@/types/Products";
+import Image from "next/image";
 import React from "react";
 
 interface ProductCardProps {
@@ -10,7 +11,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div className="max-w-xs overflow-hidden rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
       <div className="flex items-center justify-between"></div>
 
-      <img src={product.images[0]} alt={product.name} className="mt-2 h-40 w-full object-cover" />
+      <Image src={product.images[0]} alt={product.name} height={160} width={160} className="mt-2 h-40 w-full object-cover" />
       <div className="mt-4 text-center">
         <h2 className="font-semibold text-gray-900">{product.name}</h2>
         <p className="mt-1 text-gray-700">{product.price.toLocaleString()} تومان</p>

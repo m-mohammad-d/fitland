@@ -30,7 +30,7 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 export default function SignupForm() {
   const router = useRouter();
   const [mutateFunction, { loading }] = useMutation(SIGN_UP, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       toast.success("اکانت با موفقیت ایجاد شد");
       router.push("/account/profile");
     },

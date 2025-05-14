@@ -15,8 +15,9 @@ type FilterKey = "category" | "brand" | "colors" | "sizes";
 
 const Filter = () => {
   const { filters, updateFilters, activeSections, setActiveSections } = useFilters();
-  const { data, loading } = useQuery<GetCategorysResponse>(GET_CATEGORIES);
+  const { data } = useQuery<GetCategorysResponse>(GET_CATEGORIES);
   const [isPending, startTransition] = useTransition();
+  console.log(isPending);
 
   const [priceInputs, setPriceInputs] = useState({
     minPrice: filters.minPrice || 0,

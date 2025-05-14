@@ -74,7 +74,7 @@ const resolvers = {
     products: async (_: void, args: Args) => {
       const { sortBy, filters, page = 1, pageSize = 10 } = args;
 
-      let orderBy: Record<string, "asc" | "desc"> = {};
+      const orderBy: Record<string, "asc" | "desc"> = {};
       if (sortBy) {
         const isDescending = sortBy.endsWith("Desc");
         const column = isDescending ? sortBy.replace("Desc", "") : sortBy;
@@ -82,16 +82,18 @@ const resolvers = {
         orderBy[column] = isDescending ? "desc" : "asc";
       }
 
-      const where: any = {};
+      const where: Prisma.ProductWhereInput = {};
 
       if (filters?.minPrice !== undefined) where.price = { gte: filters.minPrice };
-      if (filters?.maxPrice !== undefined) where.price = { ...where.price, lte: filters.maxPrice };
-
+      if (filters?.maxPrice !== undefined) {
+        where.price = {
+          ...(typeof where.price === "object" && where.price !== null ? where.price : {}),
+          lte: filters.maxPrice,
+        };
+      }
       if (filters?.discount) where.discount = { gte: filters.discount };
 
       if (filters?.category?.length) where.categoryId = { in: filters.category };
-
-      if (filters?.brand?.length) where.brand = { in: filters.brand };
       if (filters?.colors?.length) {
         where.OR = filters.colors.map((color: { name: string }) => ({
           colors: {
@@ -152,6 +154,7 @@ const resolvers = {
 
         return wallet;
       } catch (error) {
+        console.error(error)
         throw new Error("مشکلی در دریافت اطلاعات کیف پول پیش آمد");
       }
     },

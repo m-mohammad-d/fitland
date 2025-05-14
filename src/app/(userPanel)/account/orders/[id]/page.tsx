@@ -7,10 +7,6 @@ import { useQuery } from "@apollo/client";
 import { use } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { FiPhone, FiUser, FiMapPin, FiCalendar, FiTruck, FiCreditCard, FiHash } from "react-icons/fi";
-import Image from "next/image";
-import { colors } from "@/lib/Colors";
-import Link from "next/link";
-import { BiComment } from "react-icons/bi";
 import OrderItemCard from "@/components/account/OrderItemCard";
 
 interface Props {
@@ -69,10 +65,7 @@ function OrderDetailsPage({ params }: Props) {
         <div>
           <p className="mb-1 font-medium text-neutral-700">آدرس:</p>
           <p className="leading-relaxed">
-            {`${data?.getOrderById.address.province}، ${data?.getOrderById.address.city}، ${data?.getOrderById.address.street}`}
-            {data?.getOrderById.address.alley ? `، کوچه ${data?.getOrderById.address.alley}` : ""}
-            {`، پلاک ${data?.getOrderById.address.plaque}`}
-            {data?.getOrderById.address.unit ? `، واحد ${data?.getOrderById.address.unit}` : ""}
+            {data?.getOrderById.address.fullAddress}
             {` - کدپستی: ${data?.getOrderById.address.zipCode}`}
           </p>
         </div>
