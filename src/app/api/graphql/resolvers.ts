@@ -14,6 +14,7 @@ type Filters = {
   search?: string;
 };
 
+
 type Args = {
   sortBy?: string;
   filters?: Filters;
@@ -154,7 +155,7 @@ const resolvers = {
 
         return wallet;
       } catch (error) {
-        console.error(error)
+        console.error(error);
         throw new Error("مشکلی در دریافت اطلاعات کیف پول پیش آمد");
       }
     },

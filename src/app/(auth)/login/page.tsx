@@ -1,6 +1,18 @@
 import LoginForm from "@/components/auth/LoginForm";
 import Image from "next/image";
-
+import { Metadata } from "next/types";
+export const metadata: Metadata = {
+  title: "ورود به فیت‌لند",
+  description: "برای مشاهده سفارشات و خرید راحت‌تر، وارد حساب کاربری خود شوید.",
+  openGraph: {
+    title: "ورود به فیت‌لند | FitLand",
+    description: "با ورود به حساب، از امکانات بیشتری در فروشگاه فیت‌لند بهره‌مند شوید.",
+  },
+  twitter: {
+    title: "ورود به فیت‌لند",
+    description: "وارد حساب خود شوید و خرید خود را ساده‌تر کنید.",
+  },
+};
 function Login() {
   return (
     <div className="relative flex h-screen items-center justify-center overflow-hidden">

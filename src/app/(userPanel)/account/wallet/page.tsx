@@ -4,9 +4,21 @@ import { GET_WALLET_USER } from "@/graphql/queries/walletQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GraphQLFetchGetWalletResponse } from "@/types/Wallet";
 import Link from "next/link";
+import { Metadata } from "next/types";
 import { FaWallet, FaPlusCircle, FaHistory } from "react-icons/fa";
 export const dynamic = "force-dynamic";
-
+export const metadata: Metadata = {
+  title: "کیف پول",
+  description: "مدیریت موجودی و پرداخت‌های شما با استفاده از کیف پول.",
+  openGraph: {
+    title: "کیف پول | FitLand",
+    description: "پرداخت سریع و راحت با کیف پول فیت‌لند.",
+  },
+  twitter: {
+    title: "کیف پول من",
+    description: "بررسی موجودی و تراکنش‌های کیف پول شما.",
+  },
+};
 async function UserWalletPage() {
   const res = await graphQLFetch<GraphQLFetchGetWalletResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_WALLET_USER.loc?.source.body as string);
   const wallet = res.data.getUserWalletInfo;

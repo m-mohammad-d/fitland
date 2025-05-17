@@ -2,7 +2,19 @@ import DeliveryDays from "@/components/checkout/DeliveryDays";
 import OrderProgressBar from "@/components/checkout/OrderProgressBar";
 import { getWorkingDays } from "@/lib/getWorkingDays";
 import Link from "next/link";
-
+import { Metadata } from "next/types";
+export const metadata: Metadata = {
+  title: "روش ارسال",
+  description: "روش ارسال مناسب را برای سفارش خود انتخاب کنید.",
+  openGraph: {
+    title: "انتخاب روش ارسال | FitLand",
+    description: "ارسال سریع یا عادی؟ روش مورد نظر خود را انتخاب کنید.",
+  },
+  twitter: {
+    title: "ارسال سفارش",
+    description: "روش ارسال دلخواه‌تان را انتخاب نمایید.",
+  },
+};
 function DeliveryDatePage() {
   const workingDays = getWorkingDays();
 

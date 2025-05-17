@@ -3,8 +3,20 @@ import AddressModal from "@/components/checkout/AddressModal";
 import { GET_USER_ADDRESS } from "@/graphql/queries/addressQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetAddressesResponse } from "@/types/Address";
-export const dynamic = 'force-dynamic';
-
+import { Metadata } from "next/types";
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "آدرس‌های من",
+  description: "مدیریت آدرس‌های ثبت‌شده برای ارسال سفارشات.",
+  openGraph: {
+    title: "آدرس‌ها | FitLand",
+    description: "افزودن، ویرایش یا حذف آدرس‌های تحویل شما.",
+  },
+  twitter: {
+    title: "آدرس‌های ثبت شده",
+    description: "آدرس‌های خود را برای ارسال سریع‌تر مدیریت کنید.",
+  },
+};
 async function UserAddressList() {
   const res = await graphQLFetch<GetAddressesResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ADDRESS.loc?.source.body as string);
 

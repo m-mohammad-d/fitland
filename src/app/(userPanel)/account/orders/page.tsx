@@ -4,9 +4,21 @@ import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetUserOrdersResponse } from "@/types/Order";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next/types";
 import { FiClock, FiDollarSign, FiArrowLeft } from "react-icons/fi";
-export const dynamic = 'force-dynamic';
-
+export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "سفارش‌های من",
+  description: "نمایش لیست سفارش‌هایی که تاکنون ثبت کرده‌اید.",
+  openGraph: {
+    title: "سفارش‌های من | FitLand",
+    description: "مدیریت و مشاهده وضعیت سفارش‌های شما در فیت‌لند.",
+  },
+  twitter: {
+    title: "سفارش‌های من",
+    description: "سفارش‌های قبلی و در حال پردازش خود را بررسی کنید.",
+  },
+};
 async function UserOrdersPage() {
   const res = await graphQLFetch<GetUserOrdersResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ORDERS.loc?.source.body as string);
 

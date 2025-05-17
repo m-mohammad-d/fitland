@@ -5,8 +5,21 @@ import { GET_USER_ADDRESS } from "@/graphql/queries/addressQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetAddressesResponse } from "@/types/Address";
 import Link from "next/link";
+import { Metadata } from "next/types";
 export const dynamic = "force-dynamic";
 
+export const metadata: Metadata = {
+  title: "آدرس تحویل",
+  description: "لطفاً آدرس تحویل سفارش خود را وارد کنید.",
+  openGraph: {
+    title: "انتخاب آدرس | FitLand",
+    description: "برای دریافت سفارش، آدرس مناسب را وارد کنید.",
+  },
+  twitter: {
+    title: "آدرس سفارش",
+    description: "آدرس تحویل کالا را وارد نمایید.",
+  },
+};
 async function CheckOutAddress() {
   const res = await graphQLFetch<GetAddressesResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ADDRESS.loc?.source.body as string);
 

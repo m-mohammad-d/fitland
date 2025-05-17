@@ -2,12 +2,37 @@ import { Metadata } from "next";
 import "./globals.css";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
 import { Toaster } from "react-hot-toast";
+import { BASE_URL } from "@/lib/Config";
 
 export const metadata: Metadata = {
-  title: "فیت لند | فروشگاه آنلاین لباس ورزشی",
-  description: "خرید انواع لباس و پوشاک ورزشی با بهترین کیفیت و قیمت از فیت لند. ارسال سریع و تضمین کیفیت.",
-  keywords: ["لباس ورزشی", "پوشاک ورزشی", "کفش ورزشی", "فیت لند", "خرید آنلاین لباس"],
-  creator: "فیت لند",
+  title: {
+    default: "فروشگاه فیت‌لند | FitLand",
+    template: "%s | FitLand",
+  },
+  description: "فروشگاه آنلاین لباس ورزشی با بهترین کیفیت و قیمت مناسب.",
+  metadataBase: new URL(BASE_URL),
+  openGraph: {
+    type: "website",
+    locale: "fa_IR",
+    url: BASE_URL,
+    title: "فروشگاه فیت‌لند | FitLand",
+    description: "خرید لباس ورزشی شیک، با کیفیت و اقتصادی فقط از فیت‌لند.",
+    siteName: "فیت‌لند",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "فروشگاه فیت‌لند | FitLand",
+    description: "لباس ورزشی مناسب سلیقه تو!",
+    site: "@fitland",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

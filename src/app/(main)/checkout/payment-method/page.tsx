@@ -1,6 +1,19 @@
 import PaymentMethods from "@/components/checkout/PaymentMethods";
 import OrderProgressBar from "@/components/checkout/OrderProgressBar";
 import DiscountCode from "@/components/checkout/DiscountCode";
+import { Metadata } from "next/types";
+export const metadata: Metadata = {
+  title: "روش پرداخت",
+  description: "یکی از روش‌های پرداخت را انتخاب کنید تا سفارش نهایی شود.",
+  openGraph: {
+    title: "پرداخت | FitLand",
+    description: "پرداخت اینترنتی یا کیف پول؟ انتخاب با شماست.",
+  },
+  twitter: {
+    title: "پرداخت سفارش",
+    description: "روش دلخواه برای پرداخت سفارش خود را مشخص کنید.",
+  },
+};
 function PaymentMethodPage() {
   return (
     <div className="container mx-auto my-6 max-w-6xl px-4 md:my-12">
