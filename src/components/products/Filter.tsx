@@ -6,9 +6,9 @@ import { GET_CATEGORIES } from "@/graphql/queries/categoryQueries";
 import { GetCategorysResponse } from "@/types/Category";
 import { FiXCircle, FiCheck, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Brands } from "@/lib/Brands";
-import { colors } from "@/lib/Colors";
-import { Sizes } from "@/lib/Sizes";
+import { Brands } from "@/constants/Brands";
+import { colors } from "@/constants/Colors";
+import { Sizes } from "@/constants/Sizes";
 import { cn } from "@/lib/utils";
 
 type FilterKey = "category" | "brand" | "colors" | "sizes";
