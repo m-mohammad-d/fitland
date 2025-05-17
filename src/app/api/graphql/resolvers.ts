@@ -1,7 +1,8 @@
+import { clearAuthCookie, setAuthCookie, signToken } from "@/lib/Auth";
+import { GraphQLContext } from "@/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { cookies } from "next/headers";
+
 type Filters = {
   minPrice?: number;
   maxPrice?: number;
@@ -68,7 +69,6 @@ type addAddressInput = {
   fullAddress: string;
 };
 const prisma = new PrismaClient();
-const SECRET_KEY = process.env.JWT_SECRET!;
 const resolvers = {
   Query: {
     products: async (_: void, args: Args) => {
@@ -123,22 +123,11 @@ const resolvers = {
       });
       return products;
     },
-    getUserWalletInfo: async () => {
+    getUserWalletInfo: async (_parent: void, _args: void, context: GraphQLContext) => {
       try {
-        const cookieStore = await cookies();
-        const tokenValue = cookieStore.get("auth-token")?.value;
+        const userId = context.user?.id;
+        console.log(context);
 
-        if (!tokenValue) {
-          throw new Error("توکن احراز هویت یافت نشد");
-        }
-
-        const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-        if (!decodedToken || !decodedToken.userId) {
-          throw new Error("ساختار توکن نامعتبر است یا شناسه کاربری موجود نیست");
-        }
-
-        const { userId } = decodedToken;
         const wallet = await prisma.wallet.findUnique({
           where: {
             userId,
@@ -158,14 +147,12 @@ const resolvers = {
         throw new Error("مشکلی در دریافت اطلاعات کیف پول پیش آمد");
       }
     },
-    getProductComments: async (_: void, { id }: { id: string }) => {
+    getProductComments: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
       if (!id) {
         throw new Error("ارسال ایدی اجباری هست");
       }
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-      const decodedToken = tokenValue ? (jwt.decode(tokenValue) as JwtPayload | null) : null;
-      const userId = decodedToken?.userId || null;
+
+      const userId = context?.user?.id || null;
 
       const comments = await prisma.comment.findMany({
         where: { productId: id },
@@ -188,22 +175,9 @@ const resolvers = {
       return formattedComments;
     },
 
-    getMe: async () => {
+    getMe: async (_parent: void, _args: void, context: GraphQLContext) => {
       try {
-        const cookieStore = await cookies();
-        const tokenValue = cookieStore.get("auth-token")?.value;
-
-        if (!tokenValue) {
-          throw new Error("Authentication token not found");
-        }
-
-        const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-        if (!decodedToken || !decodedToken.userId) {
-          throw new Error("Invalid token structure or missing id");
-        }
-
-        const { userId } = decodedToken;
+        const userId = context?.user?.id;
 
         const user = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -271,21 +245,8 @@ const resolvers = {
 
       return order;
     },
-    getUserOrders: async () => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("توکن نامعتبر یا شناسه کاربر موجود نیست");
-      }
-
-      const { userId } = decodedToken;
+    getUserOrders: async (_parent: void, _args: void, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       return await prisma.order.findMany({
         where: { userId },
@@ -303,21 +264,8 @@ const resolvers = {
         },
       });
     },
-    getUserAddress: async () => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("توکن نامعتبر یا شناسه کاربر موجود نیست");
-      }
-
-      const { userId } = decodedToken;
+    getUserAddress: async (_parent: void, _args: void, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       return await prisma.address.findMany({
         where: { userId },
@@ -359,19 +307,8 @@ const resolvers = {
         },
       });
     },
-    addComment: async (_: void, args: AddCommentArgs) => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
-      }
-      const { userId } = decodedToken;
+    addComment: async (_: void, args: AddCommentArgs, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       if (!userId) {
         throw new Error("دسترسی غیرمجاز");
@@ -394,7 +331,7 @@ const resolvers = {
         },
       });
     },
-    signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }) => {
+    signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }, context: GraphQLContext) => {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
         throw new Error("این ایمیل قبلاً ثبت شده است");
@@ -430,19 +367,9 @@ const resolvers = {
         },
       });
 
-      const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
-        expiresIn: "7d",
-      });
+      const token = signToken({ id: user.id, role: user.role });
 
-      const cookieStore = await cookies();
-
-      cookieStore.set("auth-token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        path: "/",
-      });
+      await setAuthCookie(token);
 
       return {
         id: user.id,
@@ -462,19 +389,9 @@ const resolvers = {
         throw new Error("ایمیل یا رمز عبور اشتباه است");
       }
 
-      const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
-        expiresIn: "7d",
-      });
+      const token = signToken({ id: user.id, role: user.role });
 
-      const cookieStore = await cookies();
-      cookieStore.set("auth-token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 7,
-        path: "/",
-      });
-
+      await setAuthCookie(token);
       return {
         id: user.id,
         name: user.name,
@@ -483,14 +400,7 @@ const resolvers = {
     },
 
     signOut: async () => {
-      const cookieStore = await cookies();
-      cookieStore.set("auth-token", "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        expires: new Date(0),
-        path: "/",
-      });
+      await clearAuthCookie();
 
       return {
         success: true,
@@ -558,19 +468,8 @@ const resolvers = {
 
       return updatedUser;
     },
-    createOrder: async (_: void, { input }: { input: CreateOrderInput }) => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
-      }
-      const { userId } = decodedToken;
+    createOrder: async (_: void, { input }: { input: CreateOrderInput }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       if (!userId) {
         throw new Error("دسترسی غیرمجاز");
@@ -661,21 +560,8 @@ const resolvers = {
         code: discount.code,
       };
     },
-    addAddress: async (_: void, { input }: { input: addAddressInput }) => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
-      }
-
-      const { userId } = decodedToken;
+    addAddress: async (_: void, { input }: { input: addAddressInput }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       if (!userId) {
         throw new Error("دسترسی غیرمجاز");
@@ -696,19 +582,8 @@ const resolvers = {
 
       return address;
     },
-    walletDeposit: async (_: void, { amount }: { amount: number }) => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
-      }
-      const { userId } = decodedToken;
+    walletDeposit: async (_: void, { amount }: { amount: number }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       if (!userId) {
         throw new Error("دسترسی غیرمجاز");
@@ -736,21 +611,8 @@ const resolvers = {
       });
       return updatedWallet;
     },
-    walletWithdraw: async (_: void, { amount }: { amount: number }) => {
-      const cookieStore = await cookies();
-      const tokenValue = cookieStore.get("auth-token")?.value;
-
-      if (!tokenValue) {
-        throw new Error("توکن احراز هویت پیدا نشد");
-      }
-
-      const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-
-      if (!decodedToken || !decodedToken.userId) {
-        throw new Error("ساختار توکن نامعتبر است یا شناسه کاربر موجود نیست");
-      }
-
-      const { userId } = decodedToken;
+    walletWithdraw: async (_: void, { amount }: { amount: number }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
 
       if (!userId) {
         throw new Error("دسترسی غیرمجاز");
@@ -785,22 +647,11 @@ const resolvers = {
 
       return updatedWallet;
     },
-    likeComment: async (_: void, { type, commentId }: { type: "LIKE" | "DISLIKE"; commentId: string }) => {
+    likeComment: async (_: void, { type, commentId }: { type: "LIKE" | "DISLIKE"; commentId: string }, context: GraphQLContext) => {
       try {
         // Authentication check
-        const cookieStore = await cookies();
-        const tokenValue = cookieStore.get("auth-token")?.value;
+        const userId = context?.user?.id;
 
-        if (!tokenValue) {
-          throw new Error("توکن احراز هویت یافت نشد");
-        }
-
-        const decodedToken = jwt.decode(tokenValue) as JwtPayload | null;
-        if (!decodedToken || !decodedToken.userId) {
-          throw new Error("ساختار توکن نامعتبر یا شناسه کاربر وجود ندارد");
-        }
-
-        const { userId } = decodedToken;
         if (!userId) {
           throw new Error("دسترسی غیرمجاز");
         }
