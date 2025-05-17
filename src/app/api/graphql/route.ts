@@ -5,15 +5,22 @@ import fs from "fs";
 import path from "path";
 import { parse } from "graphql";
 import resolvers from "./resolvers";
+import { getUserFromTokenHeader } from "@/lib/Auth";
 
 const schemaPath = path.join(process.cwd(), "src/app/api/graphql/schema.graphql");
 const schemaString = fs.readFileSync(schemaPath, "utf8");
 const typeDefs = parse(schemaString);
 
 const server = new ApolloServer({ typeDefs, resolvers });
+
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {
-  context: async (req) => ({ req }),
+  context: async (req) => {
+    const cookieHeader = req.headers.get("cookie");
+    const user = getUserFromTokenHeader(cookieHeader);
+    return { req, user };
+  },
 });
+
 export async function GET(request: NextRequest) {
   return handler(request);
 }
