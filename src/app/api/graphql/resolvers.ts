@@ -1,77 +1,13 @@
 import { clearAuthCookie, setAuthCookie, signToken } from "@/lib/Auth";
-import { GraphQLContext } from "@/types/graphql";
+import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs } from "./types";
 
-type Filters = {
-  minPrice?: number;
-  maxPrice?: number;
-  discount?: number;
-  category?: string[];
-  brand?: string[];
-  colors?: string[];
-  sizes?: string[];
-  availableOnly?: boolean;
-  search?: string;
-};
-
-type Args = {
-  sortBy?: string;
-  filters?: Filters;
-  page?: number;
-  pageSize?: number;
-};
-type AddProductArgs = {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  categoryId: string;
-  images: string[];
-  colors: { name: string }[];
-  sizes: string[];
-  discount?: number;
-  discountCode?: string | null;
-};
-type AddCommentArgs = {
-  content: string;
-  rating: number;
-  productId: string;
-};
-type AddCategoryArgs = {
-  name: string;
-};
-type CreateOrderItemInput = {
-  productId: string;
-  color?: string | null;
-  size?: string | null;
-  quantity: number;
-  priceAtPurchase: number;
-};
-
-type CreateOrderInput = {
-  addressId: string;
-  deliveryDate: string;
-  paymentMethod: "ONLINE" | "ON_DELIVERY" | "WALLET";
-  shippingCost: number;
-  tax: number;
-  totalPrice: number;
-  discountCode?: string;
-  items: CreateOrderItemInput[];
-};
-type addAddressInput = {
-  fullName: string;
-  phone: string;
-  zipCode: string;
-  plaque: string;
-  unit?: string;
-  details?: string;
-  fullAddress: string;
-};
 const prisma = new PrismaClient();
 const resolvers = {
   Query: {
-    products: async (_: void, args: Args) => {
+    products: async (_: void, args: ProductQueryArgs) => {
       const { sortBy, filters, page = 1, pageSize = 10 } = args;
 
       const orderBy: Record<string, "asc" | "desc"> = {};
@@ -560,7 +496,7 @@ const resolvers = {
         code: discount.code,
       };
     },
-    addAddress: async (_: void, { input }: { input: addAddressInput }, context: GraphQLContext) => {
+    addAddress: async (_: void, { input }: { input: AddAddressInput }, context: GraphQLContext) => {
       const userId = context?.user?.id;
 
       if (!userId) {

@@ -7,7 +7,7 @@ import path from "path";
 import { parse } from "graphql";
 import resolvers from "./resolvers";
 import { getUserFromTokenHeader } from "@/lib/Auth";
-import { GraphQLContext } from "@/types/graphql";
+import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 
 const schemaPath = path.join(process.cwd(), "src/app/api/graphql/schema.graphql");
 const schemaString = fs.readFileSync(schemaPath, "utf8");
