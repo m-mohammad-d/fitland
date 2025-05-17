@@ -8,12 +8,11 @@ type Filters = {
   discount?: number;
   category?: string[];
   brand?: string[];
-  colors?: { name: string }[];
+  colors?: string[];
   sizes?: string[];
   availableOnly?: boolean;
   search?: string;
 };
-
 
 type Args = {
   sortBy?: string;
@@ -96,9 +95,9 @@ const resolvers = {
 
       if (filters?.category?.length) where.categoryId = { in: filters.category };
       if (filters?.colors?.length) {
-        where.OR = filters.colors.map((color: { name: string }) => ({
+        where.OR = filters.colors.map((color: string) => ({
           colors: {
-            array_contains: [{ name: color.name }],
+            array_contains: [{ name: color }],
           },
         }));
       }
