@@ -1,4 +1,4 @@
-# Enums
+# ----- Enums -------
 enum ProductSortField {
   price
   priceDesc
@@ -37,8 +37,18 @@ enum DiscountType {
   AMOUNT
   PERCENT
 }
+enum TransactionType {
+  DEPOSIT
+  PAYMENT
+}
 
-# Types
+enum ReactionType {
+  LIKE
+  DISLIKE
+}
+
+# ----- Types -------
+
 type Color {
   name: String!
   hex: String!
@@ -59,10 +69,7 @@ type User {
   addresses: [Address!]!
   orders: [Order!]!
 }
-enum TransactionType {
-  DEPOSIT
-  PAYMENT
-}
+
 type Product {
   id: ID!
   name: String!
@@ -139,11 +146,6 @@ type Reaction {
   createdAt: String
 }
 
-enum ReactionType {
-  LIKE
-  DISLIKE
-}
-
 type DiscountCode {
   id: ID!
   code: String!
@@ -152,8 +154,51 @@ type DiscountCode {
   isActive: Boolean!
   orders: [Order!]!
 }
+type Transaction {
+  id: String!
+  walletId: String!
+  amount: Float!
+  transactionType: TransactionType!
+  createdAt: String!
+}
 
-# Input Types
+type DiscountResponse {
+  success: Boolean!
+  message: String!
+  discountAmount: Float
+  discountPercent: Float
+  type: String
+  code: String
+}
+# Sign Out Response Type
+type SignOutResponse {
+  success: Boolean!
+}
+
+type Wallet {
+  id: String!
+  userId: String!
+  balance: Float!
+  createdAt: String!
+  updatedAt: String!
+  transactions: [Transaction!]!
+}
+type Address {
+  id: ID
+  userId: String
+  fullName: String
+  phone: String
+  fullAddress: String
+  plaque: String
+  unit: String
+  zipCode: String
+  details: String
+  createdAt: String
+  updatedAt: String
+}
+
+# ----- Inputs -------
+
 input ProductFilter {
   minPrice: Int
   maxPrice: Int
@@ -186,36 +231,6 @@ input CreateOrderInput {
   totalPrice: Float!
 }
 
-type Transaction {
-  id: String!
-  walletId: String!
-  amount: Float!
-  transactionType: TransactionType!
-  createdAt: String!
-}
-
-type Wallet {
-  id: String!
-  userId: String!
-  balance: Float!
-  createdAt: String!
-  updatedAt: String!
-  transactions: [Transaction!]!
-}
-type Address {
-  id: ID
-  userId: String
-  fullName: String
-  phone: String
-  fullAddress: String
-  plaque: String
-  unit: String
-  zipCode: String
-  details: String
-  createdAt: String
-  updatedAt: String
-}
-
 input AddAddressInput {
   fullName: String!
   phone: String!
@@ -225,15 +240,9 @@ input AddAddressInput {
   zipCode: String!
   details: String
 }
-type DiscountResponse {
-  success: Boolean!
-  message: String!
-  discountAmount: Float
-  discountPercent: Float
-  type: String
-  code: String
-}
-# Queries
+
+# ----- Queries -------
+
 type Query {
   products(sortBy: ProductSortField, filters: ProductFilter, page: Int, pageSize: Int): [Product!]!
 
@@ -251,7 +260,8 @@ type Query {
   categories: [Category!]!
 }
 
-# Mutations
+# ----- Mutations -------
+
 type Mutation {
   addProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [String!]!, sizes: [String!]!, discount: Float, discountCode: String): Product!
 
@@ -272,9 +282,4 @@ type Mutation {
   addAddress(input: AddAddressInput!): Address!
   applyDiscount(code: String!, totalPrice: Float!): DiscountResponse!
   addCategory(name: String!): Category!
-}
-
-# Sign Out Response Type
-type SignOutResponse {
-  success: Boolean!
 }

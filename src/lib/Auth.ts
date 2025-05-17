@@ -28,9 +28,7 @@ export function getUserFromTokenHeader(cookieHeader: string | null): AuthPayload
   if (!token) return null;
 
   const user = verifyToken(token);
-  console.log("user");
 
-  console.log(user);
 
   return user;
 }
