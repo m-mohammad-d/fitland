@@ -15,7 +15,7 @@ function CommentCard({ comment }: CommentCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [likes, setLikes] = useState(comment.likes || 0);
   const [dislikes, setDislikes] = useState(comment.dislikes || 0);
-  const [userReaction, setUserReaction] = useState<"LIKE" | "DISLIKE" | null>(comment.userReactionType);
+  const [userReaction, setUserReaction] = useState<"LIKE" | "DISLIKE" | undefined>(comment.userReactionType);
   const [loadingType, setLoadingType] = useState<"LIKE" | "DISLIKE" | null>(null);
 
   const [likeComment] = useMutation(LIKE_COMMENT);
@@ -37,7 +37,7 @@ function CommentCard({ comment }: CommentCardProps) {
       if (userReaction === type) {
         if (type === "LIKE") setLikes(likes - 1);
         else setDislikes(dislikes - 1);
-        setUserReaction(null);
+        setUserReaction(undefined);
       } else {
         if (type === "LIKE") {
           setLikes(likes + 1);

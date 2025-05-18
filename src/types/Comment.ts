@@ -9,7 +9,7 @@ export type Comment = {
     photo: string;
   };
   createdAt: string;
-  userReactionType: "LIKE" | "DISLIKE";
+  userReactionType?: "LIKE" | "DISLIKE";
   likes: number;
   dislikes: number;
 };
