@@ -9,6 +9,7 @@ import { LOGIN } from "@/graphql/mutations/AuthMutations";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import UploadSpinner from "../ui/UploadSpinner";
 
 const loginSchema = z.object({
   email: z.string().email("ایمیل معتبر وارد کنید").min(1, "ایمیل الزامی است"),
@@ -83,7 +84,7 @@ export default function LoginForm() {
           className="bg-primary hover:bg-primary-700 focus:ring-primary-150 w-full rounded-lg px-4 py-2 font-medium text-white transition-colors focus:ring-2 focus:outline-none"
           disabled={loading}
         >
-          {loading ? "در حال ورود..." : "ورود به حساب"}
+          {loading ? <UploadSpinner /> : "ورود به حساب"}
         </button>
 
         <div className="text-center text-sm text-neutral-700">
