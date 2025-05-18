@@ -1,9 +1,9 @@
+import Footer from "@/components/layout/Footer";
 import type { Meta, StoryObj } from "@storybook/react";
-import PromoBar from "../components/layout/PromoBar";
 
-const meta: Meta<typeof PromoBar> = {
-  title: "layout/PromoBar",
-  component: PromoBar,
+const meta: Meta<typeof Footer> = {
+  title: "layout/Footer",
+  component: Footer,
   parameters: {
     backgrounds: {
       default: "light",
@@ -13,7 +13,7 @@ const meta: Meta<typeof PromoBar> = {
 
 export default meta;
 
-type Story = StoryObj<typeof PromoBar>;
+type Story = StoryObj<typeof Footer>;
 
 export const primary: Story = {
   args: {},
