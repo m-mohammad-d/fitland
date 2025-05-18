@@ -43,7 +43,7 @@ function OrderDetailsPage({ params }: Props) {
         <div className="flex items-center gap-2">
           <FiCalendar className="text-green-600" />
           <span className="text-neutral-700">تاریخ ثبت:</span>
-          <span className="font-medium">{formatJalaliDate(data?.getOrderById.createdAt as number)}</span>
+          <span className="font-medium">{formatJalaliDate(data?.getOrderById.createdAt as number)}</span>z
         </div>
       </div>
 

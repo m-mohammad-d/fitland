@@ -10,7 +10,10 @@ export interface Product {
   price: number;
   stock: number;
   images: string[];
-  colors: {
+  discount: number;
+  createdAt: number;
+  updatedAt: number;
+  colors?: {
     name: string;
     hex: string;
   }[];

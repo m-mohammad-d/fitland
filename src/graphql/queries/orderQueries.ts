@@ -68,13 +68,13 @@ export const GET_ORDER_BY_ID = gql`
       address {
         id
         userId
-        province
-        city
-        street
-        alley
+        fullName
+        phone
+        fullAddress
         plaque
         unit
         zipCode
+        details
         createdAt
         updatedAt
       }
