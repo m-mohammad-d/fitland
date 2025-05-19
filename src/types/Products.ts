@@ -24,12 +24,18 @@ export interface Product {
 
 export interface GetProductsResponse {
   data: {
-    products: Product[];
+    products: {
+      items: Product[];
+      totalCount: number;
+    };
   };
 }
 
 export interface ApoloGetProductsResponse {
-  products: Product[] & {
+  products: {
+    items: Product[];
+    totalCount: number;
+  } & {
     __typename: string;
   };
 }

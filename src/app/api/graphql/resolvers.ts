@@ -42,6 +42,8 @@ const resolvers = {
       }
 
       const orderBy: Record<string, "asc" | "desc"> = {};
+
+
       if (sortBy) {
         const isDesc = sortBy.endsWith("Desc");
         const column = isDesc ? sortBy.replace("Desc", "") : sortBy;
@@ -50,6 +52,7 @@ const resolvers = {
 
       const skip = (page - 1) * pageSize;
       const take = pageSize;
+      const totalCount = await prisma.product.count({ where });
 
       const products = await prisma.product.findMany({
         where,
@@ -59,10 +62,13 @@ const resolvers = {
         include: { category: true },
       });
 
-      return products.map((product) => ({
-        ...product,
-        discountedPrice: product.discount ? Math.round(product.price * (1 - product.discount / 100)) : product.price,
-      }));
+      return {
+        items: products.map((product) => ({
+          ...product,
+          discountedPrice: product.discount ? Math.round(product.price * (1 - product.discount / 100)) : product.price,
+        })),
+        totalCount,
+      };
     },
 
     getUserWalletInfo: async (_parent: void, _args: void, context: GraphQLContext) => {

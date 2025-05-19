@@ -10,23 +10,23 @@ import Filter from "./Filter";
 import ProductGrid from "./ProductGrid";
 import ProductGridSkeleton from "./ProductGridSkeleton";
 import Sorting from "./Sorting";
+import Pagination from "../ui/Pagination";
 
 export default function ProductsPageContent() {
-  const { filters, sortBy } = useFilters();
-  console.log("sortBy : " + sortBy);
-
+  const { filters, sortBy, page, updatePage } = useFilters();
+  const pageSize = 8;
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const { data, loading, previousData } = useQuery<ApoloGetProductsResponse>(GET_PRODUCTS, {
     variables: {
       sortBy,
       filters,
-      page: 1,
-      pageSize: 20,
+      page: page,
+      pageSize: pageSize,
     },
   });
 
-  const products = loading ? previousData?.products : data?.products;
-  const totalProducts = products?.length || 0;
+  const products = loading ? previousData?.products.items : data?.products.items;
+  const totalProducts = data?.products.totalCount || 0;
 
   return (
     <div className="container mx-auto px-4">
@@ -45,6 +45,7 @@ export default function ProductsPageContent() {
             </button>
           </div>
           {loading ? <ProductGridSkeleton /> : <ProductGrid products={products || []} />}
+          <Pagination currentPage={page} totalPages={Math.ceil(totalProducts / pageSize)} onPageChange={updatePage} />
         </div>
 
         <Drawer isOpen={showMobileFilter} onClose={() => setShowMobileFilter(false)} title="فیلتر محصولات">

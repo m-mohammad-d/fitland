@@ -196,6 +196,10 @@ type Address {
   createdAt: String
   updatedAt: String
 }
+type ProductsResponse {
+  items: [Product!]!
+  totalCount: Int!
+}
 
 # ----- Inputs -------
 
@@ -244,7 +248,7 @@ input AddAddressInput {
 # ----- Queries -------
 
 type Query {
-  products(sortBy: ProductSortField, filters: ProductFilter, page: Int, pageSize: Int): [Product!]!
+  products(sortBy: ProductSortField, filters: ProductFilter, page: Int, pageSize: Int): ProductsResponse!
 
   getMe: User!
 
