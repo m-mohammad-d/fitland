@@ -19,7 +19,7 @@ interface ProductHighlightProps {
 const ProductHighlight: React.FC<ProductHighlightProps> = ({ title, className, products }) => {
   return (
     <div className={cn("relative mt-16 rounded-lg p-4 shadow-md md:mt-20 md:p-8", className)}>
-      <h2 className="text-secondary md:py- absolute -top-4 left-1/2 mb-4 w-fit -translate-x-1/2 transform rounded-br-2xl rounded-bl-2xl bg-white px-3 py-1 text-center text-lg font-semibold md:-top-5 md:mb-8 md:rounded-br-3xl md:rounded-bl-3xl md:px-6 md:text-xl">
+      <h2 className="text-secondary absolute -top-4 left-1/2 mb-4 w-fit -translate-x-1/2 transform rounded-br-2xl rounded-bl-2xl bg-white px-3 py-1 text-center text-lg font-semibold md:-top-5 md:mb-8 md:rounded-br-3xl md:rounded-bl-3xl md:px-6 md:py-3 md:text-xl">
         {title}
       </h2>
       <div className="relative container mx-auto mt-10 px-2 py-3 md:px-6 md:py-6">

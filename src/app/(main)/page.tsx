@@ -6,7 +6,7 @@ import Banner from "@/components/ui/Banner";
 import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetProductsResponse } from "@/types/Products";
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const [discountedProductsResponse, newProductsResponse] = await Promise.all([
@@ -40,7 +40,7 @@ export default async function Home() {
         ]}
       />{" "}
       <Banner imageUrl="/images/Baner.png" mobileImageUrl="/images/Baner-mobile.png" />
-      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} className="bg-primary-50" />
+      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} className="bg-[#FFF7F4]" />
       <ProductHighlight title="جدیدترین محصولات" products={newProducts} className="bg-white" />
       <Banner imageUrl="/images/Baner-1.png" mobileImageUrl="/images/Baner-1-mobile.png" />
       <MainOffers
