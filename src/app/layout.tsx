@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fa" dir="rtl">
       <body>
-        <NextTopLoader color="#fa541c" shadow="0 0 10px #417F56,0 0 5px #fa541c"/>
+        <NextTopLoader color="#fa541c" shadow="0 0 10px #417F56,0 0 5px #fa541c" showSpinner={false} crawl={false} />
         <ApolloClientProvider>{children}</ApolloClientProvider>
         <Toaster position="top-center" />
       </body>
