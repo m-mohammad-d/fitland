@@ -30,7 +30,7 @@ export default function ProductsPageContent() {
     <div className="container mx-auto px-4">
       <div className="mt-6 flex flex-col gap-6 lg:flex-row">
         <div className="hidden flex-shrink-0 lg:block lg:w-80">
-          <Filter />
+          <Filter  />
         </div>
 
         <div className="flex-1">
@@ -42,12 +42,11 @@ export default function ProductsPageContent() {
               فیلتر محصولات
             </button>
           </div>
-
-          {loading && !previousData ? <ProductGridSkeleton /> : <ProductGrid products={products || []} />}
+          {loading  ? <ProductGridSkeleton /> : <ProductGrid products={products || []} />}
         </div>
 
         <Drawer isOpen={showMobileFilter} onClose={() => setShowMobileFilter(false)} title="فیلتر محصولات">
-          <Filter />
+          <Filter/>
         </Drawer>
       </div>
     </div>

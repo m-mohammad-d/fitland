@@ -1,5 +1,5 @@
 "use client";
-import { useTransition, useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useFilters } from "@/provider/FilterProvider";
 import { useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "@/graphql/queries/categoryQueries";
@@ -16,8 +16,6 @@ type FilterKey = "category" | "brand" | "colors" | "sizes";
 const Filter = () => {
   const { filters, updateFilters, activeSections, setActiveSections } = useFilters();
   const { data } = useQuery<GetCategorysResponse>(GET_CATEGORIES);
-  const [isPending, startTransition] = useTransition();
-  console.log(isPending);
 
   const [priceInputs, setPriceInputs] = useState({
     minPrice: filters.minPrice || 0,
@@ -42,9 +40,7 @@ const Filter = () => {
     }
 
     if (hasUpdates) {
-      startTransition(() => {
-        updateFilters(updates);
-      });
+      updateFilters(updates);
     }
   }, [debouncedMinPrice, debouncedMaxPrice]);
 
@@ -57,33 +53,29 @@ const Filter = () => {
 
   const handleSelection = useCallback(
     (value: string, key: FilterKey) => {
-      startTransition(() => {
-        const currentValues = filters[key] || [];
-        const newValues = currentValues.includes(value) ? currentValues.filter((item) => item !== value) : [...currentValues, value];
+      const currentValues = filters[key] || [];
+      const newValues = currentValues.includes(value) ? currentValues.filter((item) => item !== value) : [...currentValues, value];
 
-        updateFilters({
-          [key]: newValues,
-        });
+      updateFilters({
+        [key]: newValues,
       });
     },
     [filters, updateFilters],
   );
 
   const resetFilters = useCallback(() => {
-    startTransition(() => {
-      updateFilters({
-        category: [],
-        brand: [],
-        colors: [],
-        sizes: [],
-        availableOnly: false,
-        minPrice: undefined,
-        maxPrice: undefined,
-      });
-      setPriceInputs({
-        minPrice: 0,
-        maxPrice: 10000000,
-      });
+    updateFilters({
+      category: [],
+      brand: [],
+      colors: [],
+      sizes: [],
+      availableOnly: false,
+      minPrice: undefined,
+      maxPrice: undefined,
+    });
+    setPriceInputs({
+      minPrice: 0,
+      maxPrice: 10000000,
     });
   }, [updateFilters]);
 
@@ -223,7 +215,7 @@ const Filter = () => {
               <input
                 type="checkbox"
                 checked={filters.availableOnly || false}
-                onChange={() => startTransition(() => updateFilters({ availableOnly: !filters.availableOnly }))}
+                onChange={() => updateFilters({ availableOnly: !filters.availableOnly })}
                 className="h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
               />
             </label>
