@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { createContext, useOptimistic, useState, useTransition } from "react";
-import { z } from "zod";
+import { object, z } from "zod";
 
 const filterSchema = z.object({
   category: z.array(z.string()).default([]).optional(),
@@ -67,18 +67,20 @@ export default function FilterProvider({ children }: { children: React.ReactNode
   });
 
   function updateFilters(updates: Partial<typeof optimisticFilters>) {
-    const newState = { ...optimisticFilters, ...updates, sortBy };
-    const newSearchParams = new URLSearchParams();
+    const newState = { ...optimisticFilters, ...updates };
+    const newSearchParams = new URLSearchParams(searchParams.toString());
 
-    Object.entries(newState).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((v) => {
-          newSearchParams.append(key, v);
-        });
-      } else if (value !== undefined) {
-        newSearchParams.set(key, String(value));
-      }
-    });
+    Object.entries(newState)
+      .filter(Boolean)
+      .forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          value.forEach((v) => {
+            newSearchParams.append(key, v);
+          });
+        } else if (value !== undefined) {
+          newSearchParams.set(key, String(value));
+        }
+      });
 
     startTransition(() => {
       setOptimisticFilters(updates || {});
