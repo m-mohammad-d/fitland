@@ -9,8 +9,8 @@ interface SortingProps {
 }
 
 const sortOptions = [
-  { value: "stockDesc", label: "بیشترین موجودی", icon: <FiChevronUp /> },
-  { value: "stock", label: "کمترین موجودی", icon: <FiChevronDown /> },
+  { value: "stockDesc", label: "پر فروش ترین", icon: <FiChevronUp /> },
+  { value: "createdAtDesc", label: "جدید ترین", icon: <FiChevronUp /> },
   { value: "discountDesc", label: "بیشترین تخفیف", icon: <FiChevronUp /> },
   { value: "discount", label: "کمترین تخفیف", icon: <FiChevronDown /> },
   { value: "priceDesc", label: "گران‌ترین", icon: <FiChevronUp /> },

@@ -17,17 +17,17 @@ const menuItemsWithIcons = [
   {
     name: "پرفروش‌ترین‌ها",
     icon: <FaFire size={16} className="text-primary" />,
-    href: "/bestsellers",
+    href: "/products?sortBy=stockDesc",
   },
   {
     name: "تخفیفات ویژه",
     icon: <FaTags size={16} className="text-primary" />,
-    href: "/discounts",
+    href: "/products?sortBy=discountDesc",
   },
   {
     name: "جدیدترین محصولات",
     icon: <FaBoxOpen size={16} className="text-primary" />,
-    href: "/new-arrivals",
+    href: "/products?sortBy=createdAtDesc",
   },
 ];
 
