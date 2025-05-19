@@ -18,7 +18,7 @@ const filterSchema = z.object({
 type Filters = z.infer<typeof filterSchema>;
 type FilterContextType = {
   filters: Filters;
-  sortBy: string;
+  sortBy: string | null;
   isPending: boolean;
   updateFilters: (_updates: Partial<Filters>) => void;
   activeSections: Record<string, boolean>;
@@ -47,7 +47,7 @@ export default function FilterProvider({ children }: { children: React.ReactNode
 
   // Parsing page
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
-  const sortBy = searchParams.get("sortBy") || "createdAt";
+  const sortBy = searchParams.get("sortBy") || null;
 
   const [activeSections, setActiveSections] = useState<Record<string, boolean>>({
     brand: false,
@@ -67,7 +67,7 @@ export default function FilterProvider({ children }: { children: React.ReactNode
   });
 
   function updateFilters(updates: Partial<typeof optimisticFilters>) {
-    const newState = { ...optimisticFilters, ...updates };
+    const newState = { ...optimisticFilters, ...updates, sortBy };
     const newSearchParams = new URLSearchParams();
 
     Object.entries(newState).forEach(([key, value]) => {

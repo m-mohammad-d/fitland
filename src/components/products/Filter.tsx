@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 type FilterKey = "category" | "brand" | "colors" | "sizes";
 
 const Filter = () => {
-  const { filters, updateFilters, activeSections, setActiveSections } = useFilters();
+  const { filters, updateFilters, activeSections, setActiveSections, sortBy , updateSortBy } = useFilters();
   const { data } = useQuery<GetCategorysResponse>(GET_CATEGORIES);
 
   const [priceInputs, setPriceInputs] = useState({
