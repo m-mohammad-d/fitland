@@ -3,6 +3,7 @@ import "./globals.css";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
 import { Toaster } from "react-hot-toast";
 import { BASE_URL } from "@/lib/Config";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: {
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fa" dir="rtl">
       <body>
+        <NextTopLoader color="#fa541c" shadow="0 0 10px #417F56,0 0 5px #fa541c"/>
         <ApolloClientProvider>{children}</ApolloClientProvider>
         <Toaster position="top-center" />
       </body>

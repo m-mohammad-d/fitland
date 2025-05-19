@@ -36,6 +36,7 @@
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.2.0",
     "next": "15.2.2",
+    "nextjs-toploader": "^3.8.16",
     "nuqs": "^2.4.1",
     "pg": "^8.14.1",
     "postcss": "^8.5.3",
