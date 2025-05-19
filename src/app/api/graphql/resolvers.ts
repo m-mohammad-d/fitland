@@ -3,6 +3,7 @@ import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs } from "./types";
+import { GraphQLError } from "graphql";
 
 const prisma = new PrismaClient();
 const resolvers = {
@@ -10,55 +11,60 @@ const resolvers = {
     products: async (_: void, args: ProductQueryArgs) => {
       const { sortBy, filters, page = 1, pageSize = 10 } = args;
 
-      const orderBy: Record<string, "asc" | "desc"> = {};
-      if (sortBy) {
-        const isDescending = sortBy.endsWith("Desc");
-        const column = isDescending ? sortBy.replace("Desc", "") : sortBy;
-
-        orderBy[column] = isDescending ? "desc" : "asc";
-      }
-
       const where: Prisma.ProductWhereInput = {};
 
-      if (filters?.minPrice !== undefined) where.price = { gte: filters.minPrice };
-      if (filters?.maxPrice !== undefined) {
-        where.price = {
-          ...(typeof where.price === "object" && where.price !== null ? where.price : {}),
-          lte: filters.maxPrice,
-        };
+      if (filters) {
+        const { minPrice, maxPrice, discount, category, colors, sizes, availableOnly, search } = filters;
+
+        if (minPrice !== undefined || maxPrice !== undefined) {
+          where.price = {
+            ...(minPrice !== undefined ? { gte: minPrice } : {}),
+            ...(maxPrice !== undefined ? { lte: maxPrice } : {}),
+          };
+        }
+
+        if (discount) where.discount = { gte: discount };
+        if (category?.length) where.categoryId = { in: category };
+        if (sizes?.length) where.sizes = { hasSome: sizes };
+        if (availableOnly) where.stock = { gt: 0 };
+
+        if (colors?.length) {
+          where.OR = colors.map((color) => ({
+            colors: {
+              array_contains: [{ name: color }],
+            },
+          }));
+        }
+
+        if (search) {
+          where.OR = [{ name: { contains: search, mode: "insensitive" } }, { description: { contains: search, mode: "insensitive" } }];
+        }
       }
-      if (filters?.discount) where.discount = { gte: filters.discount };
 
-      if (filters?.category?.length) where.categoryId = { in: filters.category };
-      if (filters?.colors?.length) {
-        where.OR = filters.colors.map((color: string) => ({
-          colors: {
-            array_contains: [{ name: color }],
-          },
-        }));
-      }
-
-      if (filters?.sizes?.length) where.sizes = { hasSome: filters.sizes };
-
-      if (filters?.availableOnly) where.stock = { gt: 0 };
-
-      if (filters?.search) {
-        where.OR = [{ name: { contains: filters.search, mode: "insensitive" } }, { description: { contains: filters.search, mode: "insensitive" } }];
+      const orderBy: Record<string, "asc" | "desc"> = {};
+      if (sortBy) {
+        const isDesc = sortBy.endsWith("Desc");
+        const column = isDesc ? sortBy.replace("Desc", "") : sortBy;
+        orderBy[column] = isDesc ? "desc" : "asc";
       }
 
       const skip = (page - 1) * pageSize;
       const take = pageSize;
+
       const products = await prisma.product.findMany({
         where,
         orderBy,
         skip,
         take,
-        include: {
-          category: true,
-        },
+        include: { category: true },
       });
-      return products;
+
+      return products.map((product) => ({
+        ...product,
+        discountedPrice: product.discount ? Math.round(product.price * (1 - product.discount / 100)) : product.price,
+      }));
     },
+
     getUserWalletInfo: async (_parent: void, _args: void, context: GraphQLContext) => {
       try {
         const userId = context.user?.id;
@@ -74,18 +80,39 @@ const resolvers = {
         });
 
         if (!wallet) {
-          throw new Error("کیف پول پیدا نشد");
+          throw new GraphQLError("کیف پول پیدا نشد", {
+            extensions: {
+              code: "NOT_FOUND",
+              http: {
+                status: 404,
+              },
+            },
+          });
         }
 
         return wallet;
       } catch (error) {
         console.error(error);
-        throw new Error("مشکلی در دریافت اطلاعات کیف پول پیش آمد");
+        throw new GraphQLError("مشکلی در دریافت اطلاعات کیف پول پیش آمد", {
+          extensions: {
+            code: "INTERNAL_SERVER_ERROR",
+            http: {
+              status: 500,
+            },
+          },
+        });
       }
     },
     getProductComments: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
       if (!id) {
-        throw new Error("ارسال ایدی اجباری هست");
+        throw new GraphQLError("ارسال آیدی اجباری است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: {
+              status: 400,
+            },
+          },
+        });
       }
 
       const userId = context?.user?.id || null;
@@ -118,7 +145,14 @@ const resolvers = {
         const user = await prisma.user.findUnique({ where: { id: userId } });
 
         if (!user) {
-          throw new Error("User not found");
+          throw new GraphQLError("User not found", {
+            extensions: {
+              code: "NOT_FOUND",
+              http: {
+                status: 404,
+              },
+            },
+          });
         }
 
         return user;
@@ -159,7 +193,14 @@ const resolvers = {
     },
     getOrderById: async (_: void, { id }: { id: string }) => {
       if (!id) {
-        throw new Error("ارسال ایدی اجباری هست");
+        throw new GraphQLError("ارسال آیدی اجباری است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: {
+              status: 400,
+            },
+          },
+        });
       }
       const order = await prisma.order.findUnique({
         where: { id },
@@ -176,7 +217,14 @@ const resolvers = {
       });
 
       if (!order) {
-        throw new Error("سفارش پیدا نشد");
+        throw new GraphQLError("سفارش پیدا نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: {
+              status: 404,
+            },
+          },
+        });
       }
 
       return order;
@@ -209,14 +257,21 @@ const resolvers = {
     },
     getAddressById: async (_: void, { id }: { id: string }) => {
       if (!id) {
-        throw new Error("ارسال ایدی اجباری هست");
+        throw new GraphQLError("ارسال آیدی اجباری است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: {
+              status: 400,
+            },
+          },
+        });
       }
       const address = await prisma.address.findUnique({
         where: { id },
       });
 
       if (!address) {
-        throw new Error("ادرسی پیدا نشد");
+        throw new GraphQLError("ادرسی پیدا نشد");
       }
 
       return address;
@@ -247,7 +302,14 @@ const resolvers = {
       const userId = context?.user?.id;
 
       if (!userId) {
-        throw new Error("دسترسی غیرمجاز");
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHORIZED",
+            http: {
+              status: 401,
+            },
+          },
+        });
       }
 
       return await prisma.comment.create({
@@ -270,7 +332,14 @@ const resolvers = {
     signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }, context: GraphQLContext) => {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
-        throw new Error("این ایمیل قبلاً ثبت شده است");
+        throw new GraphQLError("این ایمیل قبلاً ثبت شده است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: {
+              status: 400,
+            },
+          },
+        });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -293,7 +362,14 @@ const resolvers = {
       });
 
       if (!user.id) {
-        throw new Error("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید");
+        throw new GraphQLError("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید", {
+          extensions: {
+            code: "INTERNAL_SERVER_ERROR",
+            http: {
+              status: 500,
+            },
+          },
+        });
       }
 
       await prisma.wallet.create({
@@ -317,14 +393,23 @@ const resolvers = {
     signIn: async (_: void, { email, password }: { email: string; password: string; name?: string }) => {
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
-        throw new Error("ایمیل یا رمز عبور اشتباه است");
+        throw new GraphQLError("ایمیل یا رمز عبور اشتباه است", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
       }
 
       const isValid = await bcrypt.compare(password, user.password);
       if (!isValid) {
-        throw new Error("ایمیل یا رمز عبور اشتباه است");
+        throw new GraphQLError("ایمیل یا رمز عبور اشتباه است", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
       }
-
       const token = signToken({ id: user.id, role: user.role });
 
       await setAuthCookie(token);
@@ -364,20 +449,35 @@ const resolvers = {
     ) => {
       const existingUser = await prisma.user.findUnique({ where: { id } });
       if (!existingUser) {
-        throw new Error("User not found");
+        throw new GraphQLError("کاربر پیدا نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
       }
 
       if (email && email !== existingUser.email) {
         const emailExists = await prisma.user.findUnique({ where: { email } });
         if (emailExists) {
-          throw new Error("Email already in use");
+          throw new GraphQLError("این ایمیل قبلاً ثبت شده است", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              http: { status: 400 },
+            },
+          });
         }
       }
 
       if (phone && phone !== existingUser.phone) {
         const phoneExists = await prisma.user.findUnique({ where: { phone } });
         if (phoneExists) {
-          throw new Error("Phone number already in use");
+          throw new GraphQLError("این شماره تلفن قبلاً ثبت شده است", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              http: { status: 400 },
+            },
+          });
         }
       }
 
@@ -386,7 +486,12 @@ const resolvers = {
         genderEnum = gender.toUpperCase() as "MALE" | "FEMALE";
 
         if (!["MALE", "FEMALE"].includes(genderEnum)) {
-          throw new Error("Invalid gender value");
+          throw new GraphQLError("مقدار وارد شده برای جنسیت نامعتبر است", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              http: { status: 400 },
+            },
+          });
         }
       }
 
@@ -408,7 +513,12 @@ const resolvers = {
       const userId = context?.user?.id;
 
       if (!userId) {
-        throw new Error("دسترسی غیرمجاز");
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
       }
       let discountCodeId: string | undefined = undefined;
       let discountAmount: number = 0;
@@ -419,7 +529,12 @@ const resolvers = {
         });
 
         if (!discount || !discount.isActive) {
-          throw new Error("کد تخفیف نامعتبر یا غیرفعال است");
+          throw new GraphQLError("کد تخفیف نامعتبر یا غیرفعال است", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              http: { status: 400 },
+            },
+          });
         }
         discountCodeId = discount.id;
         if (discount.type === "AMOUNT") {
@@ -429,7 +544,12 @@ const resolvers = {
         }
 
         if (discountAmount >= input.totalPrice) {
-          throw new Error("مقدار تخفیف نباید بیشتر یا مساوی مبلغ کل باشد");
+          throw new GraphQLError("مقدار تخفیف نباید بیشتر یا مساوی مبلغ کل باشد", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              http: { status: 400 },
+            },
+          });
         }
       }
       const finalPrice = input.totalPrice - discountAmount + input.tax + input.shippingCost;
@@ -500,7 +620,12 @@ const resolvers = {
       const userId = context?.user?.id;
 
       if (!userId) {
-        throw new Error("دسترسی غیرمجاز");
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
       }
 
       const address = await prisma.address.create({
@@ -522,7 +647,12 @@ const resolvers = {
       const userId = context?.user?.id;
 
       if (!userId) {
-        throw new Error("دسترسی غیرمجاز");
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
       }
 
       const wallet = await prisma.wallet.findUnique({
@@ -530,7 +660,14 @@ const resolvers = {
       });
 
       if (!wallet) {
-        throw new Error("کیف پول پیدا نشد");
+        throw new GraphQLError("کیف پول پیدا نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: {
+              status: 404,
+            },
+          },
+        });
       }
       const updatedWallet = await prisma.wallet.update({
         where: { userId },
@@ -551,7 +688,12 @@ const resolvers = {
       const userId = context?.user?.id;
 
       if (!userId) {
-        throw new Error("دسترسی غیرمجاز");
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
       }
 
       const wallet = await prisma.wallet.findUnique({
@@ -559,13 +701,22 @@ const resolvers = {
       });
 
       if (!wallet) {
-        throw new Error("کیف پول پیدا نشد");
+        throw new GraphQLError("کیف پول پیدا نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
       }
 
       if (wallet.balance < amount) {
-        throw new Error("موجودی کافی نیست");
+        throw new GraphQLError("موجودی کافی نیست", {
+          extensions: {
+            code: "BAD_REQUEST",
+            http: { status: 400 },
+          },
+        });
       }
-
       const updatedWallet = await prisma.wallet.update({
         where: { userId },
         data: {
@@ -589,14 +740,27 @@ const resolvers = {
         const userId = context?.user?.id;
 
         if (!userId) {
-          throw new Error("دسترسی غیرمجاز");
+          throw new GraphQLError("دسترسی غیرمجاز", {
+            extensions: {
+              code: "UNAUTHENTICATED",
+              http: { status: 401 },
+            },
+          });
         }
 
         // Check if comment exists
         const comment = await prisma.comment.findUnique({
           where: { id: commentId },
         });
-        if (!comment) throw new Error("کامنت یافت نشد");
+        if (!comment)
+          throw new GraphQLError("کامنت یافت نشد", {
+            extensions: {
+              code: "NOT_FOUND",
+              http: {
+                status: 404,
+              },
+            },
+          });
 
         // Check for existing reaction
         const existingReaction = await prisma.reaction.findUnique({
