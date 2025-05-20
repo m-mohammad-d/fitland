@@ -9,7 +9,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <Link href={`product/${product.id}`}>
+    <Link href={`/product/${product.id}`}>
       <div className="my-4 max-w-xs space-y-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-6 shadow-lg">
         <div className="flex items-center justify-between"></div>
 
