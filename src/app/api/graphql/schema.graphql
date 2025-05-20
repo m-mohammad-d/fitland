@@ -201,6 +201,24 @@ type ProductsResponse {
   totalCount: Int!
 }
 
+type List {
+  id: ID!
+  title: String!
+  user: User!
+  userId: String!
+  products: [ListProduct]
+  createdAt: String!
+}
+
+type ListProduct {
+  id: ID!
+  list: List!
+  listId: String!
+  product: Product!
+  productId: String!
+  addedAt: String!
+}
+
 # ----- Inputs -------
 
 input ProductFilter {
@@ -262,6 +280,9 @@ type Query {
   getProductComments(id: ID!): [Comment]
 
   categories: [Category!]!
+
+  getUserLists: [List!]!
+  getListById(id: ID!): List!
 }
 
 # ----- Mutations -------
@@ -288,4 +309,10 @@ type Mutation {
   addAddress(input: AddAddressInput!): Address!
   applyDiscount(code: String!, totalPrice: Float!): DiscountResponse!
   addCategory(name: String!): Category!
+
+  createList(title: String!): List!
+  updateList(id: ID!, title: String!): List!
+  deleteList(id: ID!): List!
+  addProductToList(listId: ID!, productId: ID!): ListProduct!
+  removeProductFromList(listId: ID!, productId: ID!): ListProduct!
 }

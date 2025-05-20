@@ -282,6 +282,76 @@ const resolvers = {
 
       return address;
     },
+    getUserLists: async (_parent: void, _args: void, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      return await prisma.list.findMany({
+        where: { userId },
+        include: {
+          products: {
+            include: {
+              product: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    },
+
+    getListById: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      const list = await prisma.list.findUnique({
+        where: { id },
+        include: {
+          products: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
+
+      if (!list) {
+        throw new GraphQLError("فهرست مورد نظر یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      if (list.userId !== userId) {
+        throw new GraphQLError("شما دسترسی به این فهرست را ندارید", {
+          extensions: {
+            code: "FORBIDDEN",
+            http: { status: 403 },
+          },
+        });
+      }
+
+      return list;
+    },
   },
 
   Mutation: {
@@ -872,6 +942,259 @@ const resolvers = {
       });
 
       return deletedComment;
+    },
+    createList: async (_: void, { title }: { title: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      if (!title || title.trim().length === 0) {
+        throw new GraphQLError("عنوان فهرست نمی‌تواند خالی باشد", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+
+      return await prisma.list.create({
+        data: {
+          title,
+          userId,
+        },
+      });
+    },
+
+    updateList: async (_: void, { id, title }: { id: string; title: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      if (!title || title.trim().length === 0) {
+        throw new GraphQLError("عنوان فهرست نمی‌تواند خالی باشد", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+
+      const list = await prisma.list.findUnique({
+        where: { id },
+      });
+
+      if (!list) {
+        throw new GraphQLError("فهرست مورد نظر یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      if (list.userId !== userId) {
+        throw new GraphQLError("شما دسترسی به این فهرست را ندارید", {
+          extensions: {
+            code: "FORBIDDEN",
+            http: { status: 403 },
+          },
+        });
+      }
+
+      return await prisma.list.update({
+        where: { id },
+        data: { title },
+      });
+    },
+
+    deleteList: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      const list = await prisma.list.findUnique({
+        where: { id },
+      });
+
+      if (!list) {
+        throw new GraphQLError("فهرست مورد نظر یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      if (list.userId !== userId) {
+        throw new GraphQLError("شما دسترسی به این فهرست را ندارید", {
+          extensions: {
+            code: "FORBIDDEN",
+            http: { status: 403 },
+          },
+        });
+      }
+
+      // Delete all list products first
+      await prisma.listProduct.deleteMany({
+        where: { listId: id },
+      });
+
+      // Then delete the list
+      return await prisma.list.delete({
+        where: { id },
+      });
+    },
+    addProductToList: async (_: void, { listId, productId }: { listId: string; productId: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      const list = await prisma.list.findUnique({
+        where: { id: listId },
+      });
+
+      if (!list) {
+        throw new GraphQLError("فهرست مورد نظر یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      if (list.userId !== userId) {
+        throw new GraphQLError("شما دسترسی به این فهرست را ندارید", {
+          extensions: {
+            code: "FORBIDDEN",
+            http: { status: 403 },
+          },
+        });
+      }
+
+      const product = await prisma.product.findUnique({
+        where: { id: productId },
+      });
+
+      if (!product) {
+        throw new GraphQLError("محصول مورد نظر یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      try {
+        return await prisma.listProduct.create({
+          data: {
+            listId,
+            productId,
+          },
+          include: {
+            product: true,
+          },
+        });
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+          throw new GraphQLError("این محصول قبلاً به فهرست اضافه شده است", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              http: { status: 400 },
+            },
+          });
+        }
+        throw error;
+      }
+    },
+
+    removeProductFromList: async (_: void, { listId, productId }: { listId: string; productId: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      const list = await prisma.list.findUnique({
+        where: { id: listId },
+      });
+
+      if (!list) {
+        throw new GraphQLError("فهرست مورد نظر یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      if (list.userId !== userId) {
+        throw new GraphQLError("شما دسترسی به این فهرست را ندارید", {
+          extensions: {
+            code: "FORBIDDEN",
+            http: { status: 403 },
+          },
+        });
+      }
+
+      const listProduct = await prisma.listProduct.findUnique({
+        where: {
+          listId_productId: {
+            listId,
+            productId,
+          },
+        },
+      });
+
+      if (!listProduct) {
+        throw new GraphQLError("این محصول در فهرست وجود ندارد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+
+      return await prisma.listProduct.delete({
+        where: {
+          listId_productId: {
+            listId,
+            productId,
+          },
+        },
+      });
     },
   },
 };
