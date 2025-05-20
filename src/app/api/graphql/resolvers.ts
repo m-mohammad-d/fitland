@@ -2,8 +2,9 @@ import { clearAuthCookie, setAuthCookie, signToken } from "@/lib/Auth";
 import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs } from "./types";
+import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs } from "./types";
 import { GraphQLError } from "graphql";
+import { updateCommentSchema } from "@/validator/Comment";
 
 const prisma = new PrismaClient();
 const resolvers = {
@@ -42,7 +43,6 @@ const resolvers = {
       }
 
       const orderBy: Record<string, "asc" | "desc"> = {};
-
 
       if (sortBy) {
         const isDesc = sortBy.endsWith("Desc");
@@ -794,6 +794,47 @@ const resolvers = {
       } catch (error) {
         console.error("Error in likePost resolver:", error);
       }
+    },
+    updateComment: async (_: void, args: UpdateCommentArgs, context: GraphQLContext) => {
+      const { user } = context;
+      const { commentId, content, rating } = args;
+      const parsed = updateCommentSchema.safeParse(args);
+
+      if (!parsed.success) {
+        const message = parsed.error.errors.map((e) => e.message).join("، ");
+        throw new GraphQLError(message, {
+          extensions: { code: "BAD_USER_INPUT", http: 400 },
+        });
+      }
+
+      if (!user) {
+        throw new GraphQLError("برای ویرایش کامنت ابتدا وارد حساب کاربری خود شوید.", {
+          extensions: { code: "UNAUTHORIZED", http: 401 },
+        });
+      }
+
+      const existingComment = await prisma.comment.findUnique({
+        where: { id: commentId },
+      });
+
+      if (!existingComment) {
+        throw new GraphQLError("کامنت مورد نظر پیدا نشد.", {
+          extensions: { code: "NOT_FOUND", http: 404 },
+        });
+      }
+
+      if (existingComment.userId !== user.id) {
+        throw new GraphQLError("شما اجازه ویرایش این کامنت را ندارید.", {
+          extensions: { code: "FORBIDDEN", http: 403 },
+        });
+      }
+
+      const updatedComment = await prisma.comment.update({
+        where: { id: commentId },
+        data: { content, rating },
+      });
+
+      return updatedComment;
     },
   },
 };

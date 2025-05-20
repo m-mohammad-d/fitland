@@ -3,3 +3,9 @@ export type AddCommentArgs = {
   rating: number;
   productId: string;
 };
+
+export type UpdateCommentArgs = {
+  commentId: string;
+  content: string;
+  rating: number;
+};
