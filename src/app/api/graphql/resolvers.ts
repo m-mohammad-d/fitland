@@ -4,7 +4,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs } from "./types";
 import { GraphQLError } from "graphql";
-import { updateCommentSchema } from "@/validator/Comment";
+import { CommentSchema } from "@/validator/Comment";
 
 const prisma = new PrismaClient();
 const resolvers = {
@@ -798,7 +798,7 @@ const resolvers = {
     updateComment: async (_: void, args: UpdateCommentArgs, context: GraphQLContext) => {
       const { user } = context;
       const { commentId, content, rating } = args;
-      const parsed = updateCommentSchema.safeParse(args);
+      const parsed = CommentSchema.safeParse(args);
 
       if (!parsed.success) {
         const message = parsed.error.errors.map((e) => e.message).join("، ");

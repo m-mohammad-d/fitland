@@ -278,6 +278,7 @@ type Mutation {
   updateUser(id: String!, name: String, photo: String, email: String, phone: String, nationalCode: String, gender: Gender): User!
 
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
+  updateComment(commentId: ID!, content: String!, rating: Int!): Comment!
   walletDeposit(amount: Int): Wallet
   walletWithdraw(amount: Int): Wallet
   likeComment(commentId: ID!, type: ReactionType!): Reaction

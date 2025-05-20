@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { IoClose } from "react-icons/io5";
 
 type ModalProps = {
   isOpen: boolean;
@@ -38,7 +39,16 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
               className="dark:bg-background-2 relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
               onClick={(e) => e.stopPropagation()} // جلوگیری از بسته شدن با کلیک روی خود مدال
             >
-              {children}
+              <button
+                onClick={onClose}
+                className="absolute left-4 top-4 rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                aria-label="بستن"
+              >
+                <IoClose className="h-5 w-5" />
+              </button>
+              <div className="mt-6">
+                {children}
+              </div>
             </div>
           </motion.div>
         </>

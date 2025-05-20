@@ -1,11 +1,18 @@
 import { LIKE_COMMENT } from "@/graphql/mutations/ReactionMutation";
 import { formatJalaliDate } from "@/lib/Date";
 import { Comment } from "@/types/Comment";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import { useState } from "react";
-import { FaStar, FaRegStar, FaStarHalfAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
-import { ImSpinner2 } from "react-icons/im";
+import { GET_ME } from "@/graphql/queries/userQueries";
+import { ApolloGetUserResponse } from "@/types/User";
+import UpdateComment from "./UpdateComment";
+import CommentActions from "./CommentActions";
+import CommentReactions from "./CommentReactions";
+import CommentRating from "./CommentRating";
+import { BsDot } from "react-icons/bs";
+import { HiOutlineClock } from "react-icons/hi";
+import { RiUserLine } from "react-icons/ri";
 
 interface CommentCardProps {
   comment: Comment;
@@ -17,10 +24,12 @@ function CommentCard({ comment }: CommentCardProps) {
   const [dislikes, setDislikes] = useState(comment.dislikes || 0);
   const [userReaction, setUserReaction] = useState<"LIKE" | "DISLIKE" | undefined>(comment.userReactionType);
   const [loadingType, setLoadingType] = useState<"LIKE" | "DISLIKE" | null>(null);
-
+  const [showUpdateComment, setShowUpdateComment] = useState(false);
+  
+  const { data: getMe } = useQuery<ApolloGetUserResponse>(GET_ME);
   const [likeComment] = useMutation(LIKE_COMMENT);
 
-  const toggleExpand = () => setExpanded(!expanded);
+  const isCommentOwner = comment.user?.id === getMe?.getMe.id;
 
   const handleReaction = async (type: "LIKE" | "DISLIKE") => {
     if (loadingType) return;
@@ -55,85 +64,85 @@ function CommentCard({ comment }: CommentCardProps) {
     }
   };
 
-  const renderStars = () => {
-    const stars = [];
-    const fullStars = Math.floor(comment.rating);
-    const hasHalfStar = comment.rating % 1 >= 0.5;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(<FaStar key={i} className="text-yellow-400" />);
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<FaStarHalfAlt key={i} className="text-yellow-400" />);
-      } else {
-        stars.push(<FaRegStar key={i} className="text-yellow-400" />);
-      }
-    }
-
-    return stars;
-  };
-
   return (
-    <div className="w-full rounded-xl border border-neutral-100 bg-white p-4 shadow-sm md:p-5">
-      <div className="xs:flex-row xs:gap-4 flex flex-col items-start gap-3">
-        <div className="xs:block flex flex-shrink-0 items-center gap-3">
-          {comment.user?.photo ? (
-            <Image src={comment.user.photo} alt={comment.user.name} width={50} height={50} className="xs:w-12 xs:h-12 h-10 w-10 rounded-full object-cover" />
-          ) : (
-            <div className="xs:w-12 xs:h-12 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 text-neutral-500">
-              <svg xmlns="http://www.w3.org/2000/svg" className="xs:h-6 xs:w-6 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </div>
-          )}
-          <span className="xs:hidden text-xs text-neutral-400">{formatJalaliDate(comment.createdAt)}</span>
+    <div className="w-full rounded-xl border border-neutral-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md md:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
+        <div className="flex flex-shrink-0 items-start gap-3">
+          <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white shadow-sm">
+            {comment.user?.photo ? (
+              <Image 
+                src={comment.user.photo} 
+                alt={comment.user.name} 
+                fill
+                className="object-cover" 
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-neutral-100 text-neutral-400">
+                <RiUserLine className="h-6 w-6" />
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="w-full min-w-0 flex-1">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
-            <div className="w-full">
-              <div className="xs:flex-row xs:items-center xs:gap-2 flex flex-col justify-between">
-                <h4 className="xs:text-base truncate text-sm font-medium text-neutral-800">{comment.user?.name || "ناشناس"}</h4>
-                <span className="xs:block hidden text-xs whitespace-nowrap text-neutral-400 sm:text-sm">{formatJalaliDate(comment.createdAt)}</span>
+        <div className="flex-1 min-w-0">
+          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="text-base font-medium text-gray-900">
+                  {comment.user?.name || "ناشناس"}
+                </h4>
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <BsDot className="h-4 w-4" />
+                  <div className="flex items-center gap-1">
+                    <HiOutlineClock className="h-4 w-4" />
+                    <span>{formatJalaliDate(comment.createdAt)}</span>
+                  </div>
+                </div>
               </div>
-
-              <div className="mt-1 flex items-center gap-2">
-                {renderStars()}
-                <span className="text-xs text-neutral-500 sm:text-sm">{comment.rating.toFixed(1)}</span>
-              </div>
+              <CommentRating rating={comment.rating} />
             </div>
+            
+            {isCommentOwner && (
+              <CommentActions 
+                onEdit={() => setShowUpdateComment(true)} 
+              />
+            )}
           </div>
 
-          <div className="mt-2 sm:mt-3">
-            <p className={`text-sm text-neutral-700 sm:text-base ${expanded ? "" : "line-clamp-3"} cursor-pointer`} onClick={toggleExpand}>
+          <div className="mb-4">
+            <p 
+              className={`text-sm text-gray-700 sm:text-base ${expanded ? "" : "line-clamp-3"} cursor-pointer`} 
+              onClick={() => setExpanded(!expanded)}
+            >
               {comment.content}
             </p>
             {comment.content.length > 100 && (
-              <button onClick={toggleExpand} className="text-primary-500 hover:text-primary-700 mt-1 text-xs focus:outline-none sm:mt-2 sm:text-sm">
+              <button 
+                onClick={() => setExpanded(!expanded)} 
+                className="mt-1 text-sm font-medium text-primary-600 hover:text-primary-700 focus:outline-none"
+              >
                 {expanded ? "نمایش کمتر" : "نمایش بیشتر"}
               </button>
             )}
           </div>
 
-          <div className="mt-3 flex items-center gap-4 sm:mt-4">
-            <button
-              className={`flex items-center gap-1 transition-colors ${userReaction === "LIKE" ? "text-green-500" : "text-neutral-500 hover:text-green-500"}`}
-              onClick={() => handleReaction("LIKE")}
-            >
-              <FaThumbsUp className="text-sm" />
-              <span className="text-xs sm:text-sm">{loadingType === "LIKE" ? <ImSpinner2 className="animate-spin" /> : `(${likes})`}</span>
-            </button>
-
-            <button
-              className={`flex items-center gap-1 transition-colors ${userReaction === "DISLIKE" ? "text-red-500" : "text-neutral-500 hover:text-red-500"}`}
-              onClick={() => handleReaction("DISLIKE")}
-            >
-              <FaThumbsDown className="text-sm" />
-              <span className="text-xs sm:text-sm">{loadingType === "DISLIKE" ? <ImSpinner2 className="animate-spin" /> : `(${dislikes})`}</span>
-            </button>
+          <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+            <CommentReactions
+              likes={likes}
+              dislikes={dislikes}
+              userReaction={userReaction}
+              loadingType={loadingType}
+              onReaction={handleReaction}
+            />
           </div>
         </div>
       </div>
+
+      <UpdateComment 
+        isOpen={showUpdateComment} 
+        onClose={() => setShowUpdateComment(false)} 
+        comment={comment} 
+      />
     </div>
   );
 }

@@ -3,14 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { FaStar } from "react-icons/fa";
+import { CommentSchema } from "@/validator/Comment";
 
-// Define the schema for comment validation
-const commentSchema = z.object({
-  text: z.string().min(1, "نظر شما نمی‌تواند خالی باشد").max(1000, "نظر شما نمی‌تواند بیشتر از ۱۰۰۰ کاراکتر باشد"),
-  rating: z.number().min(1, "لطفاً امتیاز دهید").max(5, "امتیاز نمی‌تواند بیشتر از ۵ باشد"),
-});
-
-type CommentFormValues = z.infer<typeof commentSchema>;
+type CommentFormValues = z.infer<typeof CommentSchema>;
 
 interface CommentFormProps {
   onSubmit: (data: CommentFormValues) => void;
@@ -27,9 +22,9 @@ export function CommentForm({ onSubmit, defaultValues, loading, onCancel }: Comm
     watch,
     formState: { errors },
   } = useForm<CommentFormValues>({
-    resolver: zodResolver(commentSchema),
+    resolver: zodResolver(CommentSchema),
     defaultValues: {
-      text: defaultValues?.text || "",
+      content: defaultValues?.content || "",
       rating: defaultValues?.rating || 0,
     },
   });
@@ -62,12 +57,12 @@ export function CommentForm({ onSubmit, defaultValues, loading, onCancel }: Comm
         </label>
         <textarea
           id="text"
-          {...register("text")}
+          {...register("content")}
           rows={4}
           className="focus:ring-primary-500 focus:border-primary-500 w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:outline-none"
           placeholder="نظر خود را بنویسید..."
         />
-        {errors.text && <p className="mt-1 text-sm text-red-600">{errors.text.message}</p>}
+        {errors.content && <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>}
       </div>
 
       <div className="flex justify-end gap-3">

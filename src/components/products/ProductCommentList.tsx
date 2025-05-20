@@ -5,6 +5,8 @@ import { Comment } from "@/types/Comment";
 import { Drawer } from "../ui/Drawer";
 import Button from "../ui/Button";
 import AddComment from "./AddComment";
+import Image from "next/image";
+import { FaStar, FaThumbsUp } from "react-icons/fa";
 
 interface ProductCommentListProps {
   comments: Comment[];
@@ -58,10 +60,55 @@ function ProductCommentList({ comments, productId }: ProductCommentListProps) {
           </button>
         </div>
       </div>
-      <div className="flex justify-between">
-        <div>
-          <Button onClick={() => setShowCreateComment(true)}>ثبت نظر</Button>
+
+      <div className="mb-8 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2">
+                {comments.slice(0, 3).map((comment, index) => (
+                  <div key={index} className="relative h-8 w-8 overflow-hidden rounded-full border-2 border-white">
+                    {comment.user?.photo ? (
+                      <Image src={comment.user.photo} alt={comment.user.name} fill className="object-cover" />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-neutral-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-900">{comments.length} نظر</span>
+                <span className="text-xs text-gray-500">از {new Set(comments.map((c) => c.user?.id)).size} کاربر</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <FaStar className="text-yellow-400" />
+                <span className="text-sm font-medium text-gray-900">{Math.round(comments.reduce((acc, curr) => acc + curr.rating, 0) / comments.length || 0)}</span>
+              </div>
+              <div className="h-4 w-px bg-gray-200"></div>
+              <div className="flex items-center gap-2">
+                <FaThumbsUp className="text-green-500" />
+                <span className="text-sm text-gray-600">{comments.reduce((acc, curr) => acc + (curr.likes || 0), 0)} پسند</span>
+              </div>
+            </div>
+          </div>
+
+          <Button onClick={() => setShowCreateComment(true)} className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2 px-6 py-2.5 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            ثبت نظر جدید
+          </Button>
         </div>
+      </div>
+
+      <div className="flex justify-between">
         {sortedComments.length === 0 ? (
           <div className="rounded-xl bg-white p-8 text-center text-gray-500 shadow-sm">هنوز نظری برای این محصول ثبت نشده است.</div>
         ) : (
