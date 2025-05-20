@@ -6,12 +6,12 @@ import { ADD_COMMENT } from "@/graphql/mutations/CommentMutation";
 function AddComment({ isOpen, onClose, productId }: { isOpen: boolean; onClose: () => void; productId: string }) {
   const [createProductComment, { loading }] = useMutation(ADD_COMMENT);
 
-  const createProductCommentHandler = async ({ text, rating }: { text: string; rating: number }) => {
+  const createProductCommentHandler = async ({ content, rating }: { content: string; rating: number }) => {
     try {
       await createProductComment({
         variables: {
           productId,
-          content: text,
+          content,
           rating,
         },
       });

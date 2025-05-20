@@ -282,6 +282,7 @@ type Mutation {
   walletDeposit(amount: Int): Wallet
   walletWithdraw(amount: Int): Wallet
   likeComment(commentId: ID!, type: ReactionType!): Reaction
+  deleteComment(commentId: ID!): Comment!
 
   createOrder(input: CreateOrderInput!): Order!
   addAddress(input: AddAddressInput!): Address!

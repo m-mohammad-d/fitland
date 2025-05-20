@@ -836,6 +836,43 @@ const resolvers = {
 
       return updatedComment;
     },
+    deleteComment: async (_: void, { commentId }: { commentId: string }, context: GraphQLContext) => {
+      const { user } = context;
+
+      if (!user) {
+        throw new GraphQLError("برای حذف کامنت ابتدا وارد حساب کاربری خود شوید.", {
+          extensions: { code: "UNAUTHORIZED", http: 401 },
+        });
+      }
+
+      const existingComment = await prisma.comment.findUnique({
+        where: { id: commentId },
+      });
+
+      if (!existingComment) {
+        throw new GraphQLError("کامنت مورد نظر پیدا نشد.", {
+          extensions: { code: "NOT_FOUND", http: 404 },
+        });
+      }
+
+      if (existingComment.userId !== user.id) {
+        throw new GraphQLError("شما اجازه حذف این کامنت را ندارید.", {
+          extensions: { code: "FORBIDDEN", http: 403 },
+        });
+      }
+
+      // Delete all reactions first
+      await prisma.reaction.deleteMany({
+        where: { commentId },
+      });
+
+      // Then delete the comment
+      const deletedComment = await prisma.comment.delete({
+        where: { id: commentId },
+      });
+
+      return deletedComment;
+    },
   },
 };
 
