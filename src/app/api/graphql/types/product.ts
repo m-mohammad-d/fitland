@@ -24,7 +24,7 @@ export type AddProductArgs = {
   stock: number;
   categoryId: string;
   images: string[];
-  colors: { name: string }[];
+  colors: { name: string; hex: string }[];
   sizes: string[];
   discount?: number;
   discountCode?: string | null;

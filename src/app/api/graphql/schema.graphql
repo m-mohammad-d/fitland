@@ -262,7 +262,10 @@ input AddAddressInput {
   zipCode: String!
   details: String
 }
-
+input ColorInput {
+  name: String!
+  hex: String!
+}
 # ----- Queries -------
 
 type Query {
@@ -288,7 +291,7 @@ type Query {
 # ----- Mutations -------
 
 type Mutation {
-  addProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [String!]!, sizes: [String!]!, discount: Float, discountCode: String): Product!
+  addProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [ColorInput!]!, sizes: [String!]!, discount: Float, discountCode: String): Product!
 
   signUp(name: String!, email: String!, password: String!): User!
 

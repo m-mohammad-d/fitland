@@ -8,6 +8,11 @@ export interface Category {
   name: string;
 }
 
-export interface GetCategorysResponse {
+export interface ApolloGetCategorysResponse {
   categories: Category[];
+}
+export interface GraphQLFetchGetCategorysResponse {
+  data: {
+    categories: Category[];
+  };
 }
