@@ -7,10 +7,19 @@ export const SIGN_UP = gql`
     }
   }
 `;
+
 export const LOGIN = gql`
   mutation signIn($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
       id
+    }
+  }
+`;
+
+export const SIGN_OUT = gql`
+  mutation signOut {
+    signOut {
+      success
     }
   }
 `;
