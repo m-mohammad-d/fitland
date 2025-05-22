@@ -27,5 +27,17 @@ export type AddProductArgs = {
   colors: { name: string; hex: string }[];
   sizes: string[];
   discount?: number;
-  discountCode?: string | null;
+};
+
+export type UpdateProductArgs = {
+  id: string;
+  name?: string;
+  description?: string;
+  price?: number;
+  stock?: number;
+  categoryId?: string;
+  images?: string[];
+  colors?: { name: string; hex: string }[];
+  sizes?: string[];
+  discount?: number;
 };

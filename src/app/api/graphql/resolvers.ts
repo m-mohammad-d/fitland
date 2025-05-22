@@ -2,7 +2,7 @@ import { clearAuthCookie, setAuthCookie, signToken } from "@/lib/Auth";
 import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs } from "./types";
+import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs, UpdateProductArgs } from "./types";
 import { GraphQLError } from "graphql";
 import { CommentSchema } from "@/validator/Comment";
 
@@ -369,9 +369,25 @@ const resolvers = {
           colors: args.colors,
           sizes: args.sizes,
           discount: args.discount || 0,
-          discountCode: args.discountCode || null,
           discountedPrice,
         },
+      });
+    },
+    updateProduct: async (_: void, args: UpdateProductArgs, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHORIZED",
+            http: { status: 401 },
+          },
+        });
+      }
+
+      return await prisma.product.update({
+        where: { id: args.id },
+        data: args,
       });
     },
     addComment: async (_: void, args: AddCommentArgs, context: GraphQLContext) => {

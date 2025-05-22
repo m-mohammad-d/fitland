@@ -292,7 +292,7 @@ type Query {
 
 type Mutation {
   addProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [ColorInput!]!, sizes: [String!]!, discount: Float, discountCode: String): Product!
-
+updateProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [ColorInput!]!, sizes: [String!]!, discount: Float, discountCode: String) : Product
   signUp(name: String!, email: String!, password: String!): User!
 
   signIn(email: String!, password: String!): User!
