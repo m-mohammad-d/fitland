@@ -356,8 +356,6 @@ const resolvers = {
 
   Mutation: {
     addProduct: async (_: void, args: AddProductArgs) => {
-      const discountedPrice = args.discount && args.discount > 0 ? Math.round(args.price * (1 - args.discount / 100)) : null;
-
       return await prisma.product.create({
         data: {
           name: args.name,
@@ -369,7 +367,6 @@ const resolvers = {
           colors: args.colors,
           sizes: args.sizes,
           discount: args.discount || 0,
-          discountedPrice,
         },
       });
     },

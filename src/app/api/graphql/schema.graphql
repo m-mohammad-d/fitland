@@ -74,10 +74,11 @@ type Product {
   id: ID!
   name: String!
   description: String!
+  brand: String!
   price: Int!
   discountedPrice: Int
   stock: Int!
-  category: Category!
+  category: Category
   categoryId: String!
   images: [String!]!
   colors: [Color]
@@ -291,8 +292,31 @@ type Query {
 # ----- Mutations -------
 
 type Mutation {
-  addProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [ColorInput!]!, sizes: [String!]!, discount: Float, discountCode: String): Product!
-updateProduct(name: String!, description: String!, price: Int!, stock: Int!, categoryId: ID!, images: [String!]!, colors: [ColorInput!]!, sizes: [String!]!, discount: Float, discountCode: String) : Product
+  addProduct(
+    name: String!
+    description: String!
+    price: Int!
+    stock: Int!
+    categoryId: ID!
+    images: [String!]!
+    brand: String!
+    colors: [ColorInput!]!
+    sizes: [String!]!
+    discount: Float
+  ): Product!
+  updateProduct(
+    id: ID!
+    name: String!
+    description: String!
+    price: Int!
+    stock: Int!
+    brand: String!
+    categoryId: ID!
+    images: [String!]!
+    colors: [ColorInput!]!
+    sizes: [String!]!
+    discount: Float
+  ): Product
   signUp(name: String!, email: String!, password: String!): User!
 
   signIn(email: String!, password: String!): User!

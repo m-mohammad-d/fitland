@@ -10,15 +10,19 @@ export interface Product {
   price: number;
   stock: number;
   images: string[];
-  discount: number;
-  createdAt: number;
-  updatedAt: number;
-  colors?: {
-    name: string;
+  colors: {
     hex: string;
+    name: string;
   }[];
   sizes: string[];
-  category: Category;
+  category: {
+    id: string;
+    name: string;
+  };
+  categoryId: string;
+  brand: string;
+  discount: number;
+  isActive: boolean;
   __typename: "Product";
 }
 

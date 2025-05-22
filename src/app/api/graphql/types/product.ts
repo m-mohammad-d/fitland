@@ -20,6 +20,7 @@ export type ProductQueryArgs = {
 export type AddProductArgs = {
   name: string;
   description: string;
+  brand: string;
   price: number;
   stock: number;
   categoryId: string;
@@ -33,6 +34,7 @@ export type UpdateProductArgs = {
   id: string;
   name?: string;
   description?: string;
+  brand?: string;
   price?: number;
   stock?: number;
   categoryId?: string;

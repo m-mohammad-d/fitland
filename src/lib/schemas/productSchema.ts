@@ -10,7 +10,6 @@ export const productSchema = z.object({
   images: z.array(z.string()).min(1, "حداقل یک تصویر الزامی است"),
   colors: z.array(z.string()).min(1, "حداقل یک رنگ الزامی است"),
   sizes: z.array(z.string()).min(1, "حداقل یک سایز الزامی است"),
-  isActive: z.boolean().default(true),
   discount: z.number().min(0).max(100).optional(),
 });
 

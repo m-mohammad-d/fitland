@@ -80,7 +80,7 @@ export default function ImageUpload({ value = [], onChange, maxImages = 5 }: Ima
     <div className="space-y-4">
       <div className="flex flex-wrap gap-4">
         {value.map((url, index) => (
-          <div key={url} className="relative h-24 w-24">
+          <div key={`${url} ${index}}`} className="relative h-24 w-24">
             <Image src={url} alt={`Uploaded image ${index + 1}`} fill className="rounded-lg object-cover" />
             <button type="button" onClick={() => removeImage(index)} className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600">
               <FiX className="h-4 w-4" />
