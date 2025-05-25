@@ -318,7 +318,7 @@ type Mutation {
     discount: Float
   ): Product
   signUp(name: String!, email: String!, password: String!): User!
-
+  deleteProduct(id:ID!) : Product!
   signIn(email: String!, password: String!): User!
 
   signOut: SignOutResponse!

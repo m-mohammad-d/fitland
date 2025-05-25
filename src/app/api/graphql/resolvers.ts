@@ -387,6 +387,25 @@ const resolvers = {
         data: args,
       });
     },
+    deleteProduct: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+
+      if (!userId || context?.user?.role !== "ADMIN") {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHORIZED",
+            http: {
+              status: 401,
+            },
+          },
+        });
+      }
+
+      return await prisma.product.delete({
+        where: { id },
+      });
+    },
+
     addComment: async (_: void, args: AddCommentArgs, context: GraphQLContext) => {
       const userId = context?.user?.id;
 
