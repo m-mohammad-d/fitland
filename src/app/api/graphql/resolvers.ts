@@ -352,6 +352,145 @@ const resolvers = {
 
       return list;
     },
+
+    getSalesStats: async (_: void, { days }: { days: number }) => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+
+      const orders = await prisma.order.findMany({
+        where: {
+          createdAt: {
+            gte: startDate,
+          },
+          status: {
+            not: "CANCELED",
+          },
+        },
+        select: {
+          totalPrice: true,
+          createdAt: true,
+        },
+      });
+
+      const totalSales = orders.reduce((sum, order) => sum + order.totalPrice, 0);
+
+      // Group sales by day
+      const salesByDay = orders.reduce(
+        (acc, order) => {
+          const date = order.createdAt.toISOString().split("T")[0];
+          acc[date] = (acc[date] || 0) + order.totalPrice;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      // Transform salesByDay object into an array of objects
+      const salesByDayArray = Object.entries(salesByDay).map(([date, amount]) => ({
+        date,
+        amount,
+      }));
+
+      return {
+        totalSales,
+        salesByDay: salesByDayArray,
+      };
+    },
+
+    getOrdersStats: async (_: void, { days }: { days: number }) => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+
+      const orders = await prisma.order.findMany({
+        where: {
+          createdAt: {
+            gte: startDate,
+          },
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          status: true,
+        },
+      });
+
+      const totalOrders = orders.length;
+
+      // Group orders by day
+      const ordersByDay = orders.reduce(
+        (acc, order) => {
+          const date = order.createdAt.toISOString().split("T")[0];
+          acc[date] = (acc[date] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      // Count orders by status
+      const ordersByStatus = orders.reduce(
+        (acc, order) => {
+          acc[order.status] = (acc[order.status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      // Transform objects into arrays
+      const ordersByDayArray = Object.entries(ordersByDay).map(([date, count]) => ({
+        date,
+        count,
+      }));
+
+      const ordersByStatusArray = Object.entries(ordersByStatus).map(([status, count]) => ({
+        status,
+        count,
+      }));
+
+      return {
+        totalOrders,
+        ordersByDay: ordersByDayArray,
+        ordersByStatus: ordersByStatusArray,
+      };
+    },
+
+    getNewUsersStats: async (_: void, { days }: { days: number }) => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+
+      const users = await prisma.user.findMany({
+        where: {
+          createdAt: {
+            gte: startDate,
+          },
+        },
+        select: {
+          id: true,
+          createdAt: true,
+        },
+      });
+
+      const totalNewUsers = users.length;
+
+      // Group new users by day
+      const usersByDay = users.reduce(
+        (acc, user) => {
+          const date = user.createdAt.toISOString().split("T")[0];
+          acc[date] = (acc[date] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      // Transform object into array
+      const usersByDayArray = Object.entries(usersByDay).map(([date, count]) => ({
+        date,
+        count,
+      }));
+
+      return {
+        totalNewUsers,
+        usersByDay: usersByDayArray,
+      };
+    },
   },
 
   Mutation: {

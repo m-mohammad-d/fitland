@@ -1,14 +1,6 @@
-import { AuthPayload } from "@/lib/Auth";
-import { NextRequest } from "next/server";
-
-export interface GraphQLContext {
-  req: NextRequest;
-  user: AuthPayload | null;
-}
-
 export type DailySales = {
   date: string;
-  amount: number;
+  count: number;
 };
 
 export type SalesStats = {
@@ -40,4 +32,4 @@ export type DailyUsers = {
 export type NewUsersStats = {
   totalNewUsers: number;
   usersByDay: DailyUsers[];
-};
+}; 

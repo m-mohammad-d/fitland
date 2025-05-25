@@ -54,6 +54,44 @@ type Color {
   hex: String!
 }
 
+# New types for statistics
+
+type SalesStats {
+  totalSales: Float
+  salesByDay: [DailySales!]
+}
+
+type DailySales {
+  date: String
+  total: Float
+}
+
+type OrdersStats {
+  totalOrders: Int
+  ordersByDay: [DailyOrders!]
+  ordersByStatus: [OrderStatusCount!]
+}
+
+type DailyOrders {
+  date: String
+  count: Int
+}
+
+type OrderStatusCount {
+  status: String
+  count: Int
+}
+
+type NewUsersStats {
+  totalNewUsers: Int
+  usersByDay: [DailyUsers!]
+}
+
+type DailyUsers {
+  date: String
+  count: Int
+}
+
 type User {
   id: ID!
   name: String!
@@ -287,6 +325,10 @@ type Query {
 
   getUserLists: [List!]!
   getListById(id: ID!): List!
+
+  getSalesStats(days: Int!): SalesStats!
+  getOrdersStats(days: Int!): OrdersStats!
+  getNewUsersStats(days: Int!): NewUsersStats!
 }
 
 # ----- Mutations -------
