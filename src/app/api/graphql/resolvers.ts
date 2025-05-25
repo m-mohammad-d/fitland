@@ -390,7 +390,7 @@ const resolvers = {
     deleteProduct: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
       const userId = context?.user?.id;
 
-      if (!userId || context?.user?.role !== "ADMIN") {
+      if (!userId) {
         throw new GraphQLError("دسترسی غیرمجاز", {
           extensions: {
             code: "UNAUTHORIZED",

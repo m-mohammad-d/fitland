@@ -10,7 +10,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/Input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, ArrowUpDown, ChevronLeft, ChevronRight, Pencil, Trash2, Package, Tag, Layers, AlertCircle } from "lucide-react";
+import { FiMoreHorizontal, FiArrowDown, FiChevronLeft, FiChevronRight, FiEdit, FiTrash2, FiPackage, FiTag, FiLayers, FiAlertCircle } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import ConfirmModal from "@/components/ui/ConfirmModal";
@@ -50,7 +50,7 @@ function ManageProducts() {
             </div>
           ) : (
             <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-neutral-100">
-              <Package className="h-8 w-8 text-neutral-400" />
+              <FiPackage className="h-8 w-8 text-neutral-400" />
             </div>
           );
         },
@@ -60,7 +60,7 @@ function ManageProducts() {
           return (
             <Button variant="text" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="flex items-center gap-2 text-neutral-700">
               نام محصول
-              <ArrowUpDown className="h-4 w-4" />
+              <FiArrowDown className="h-4 w-4" />
             </Button>
           );
         },
@@ -71,7 +71,7 @@ function ManageProducts() {
           return (
             <Button variant="text" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="flex items-center gap-2 text-neutral-700">
               قیمت
-              <ArrowUpDown className="h-4 w-4" />
+              <FiArrowDown className="h-4 w-4" />
             </Button>
           );
         },
@@ -115,7 +115,7 @@ function ManageProducts() {
           return (
             <Button variant="text" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="flex items-center gap-2 text-neutral-700">
               موجودی
-              <ArrowUpDown className="h-4 w-4" />
+              <FiArrowDown className="h-4 w-4" />
             </Button>
           );
         },
@@ -124,7 +124,7 @@ function ManageProducts() {
           const stock = row.original.stock;
           return (
             <div className="flex items-center gap-2">
-              <Layers className="h-4 w-4 text-neutral-500" />
+              <FiLayers className="h-4 w-4 text-neutral-500" />
               <span className={stock > 0 ? "text-green-600" : "text-red-600"}>{stock > 0 ? stock : "ناموجود"}</span>
             </div>
           );
@@ -135,7 +135,7 @@ function ManageProducts() {
         accessorKey: "category.name",
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            <Tag className="h-4 w-4 text-neutral-500" />
+            <FiTag className="h-4 w-4 text-neutral-500" />
             <span>{row.original.category.name}</span>
           </div>
         ),
@@ -148,18 +148,18 @@ function ManageProducts() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="text" size="small" className="h-8 w-8 p-0">
-                    <MoreHorizontal className="h-4 w-4" />
+                    <FiMoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
                     <Link href={`/dashboard/products/edit/${row.original.id}`} className="flex items-center gap-2">
-                      <Pencil className="h-4 w-4" />
+                      <FiEdit className="h-4 w-4" />
                       <span>ویرایش</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center gap-2 text-red-600 focus:text-red-600" onClick={() => setDeleteConfirmId(row.original.id)}>
-                    <Trash2 className="h-4 w-4" />
+                    <FiTrash2 className="h-4 w-4" />
                     <span>حذف</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -196,7 +196,7 @@ function ManageProducts() {
   if (error)
     return (
       <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
-        <AlertCircle className="h-12 w-12 text-red-500" />
+        <FiAlertCircle className="h-12 w-12 text-red-500" />
         <p className="text-lg text-neutral-700">خطا در دریافت اطلاعات</p>
       </div>
     );
@@ -261,12 +261,12 @@ function ManageProducts() {
         <div className="flex flex-col items-center justify-between gap-4 border-t border-neutral-200 px-4 py-4 sm:flex-row md:px-6">
           <div className="flex items-center gap-2">
             <Button variant="outline" size="small" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="gap-2">
-              <ChevronRight className="h-4 w-4" />
+              <FiChevronRight className="h-4 w-4" />
               قبلی
             </Button>
             <Button variant="outline" size="small" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="gap-2">
               بعدی
-              <ChevronLeft className="h-4 w-4" />
+              <FiChevronLeft className="h-4 w-4" />
             </Button>
           </div>
           <div className="text-sm text-neutral-700">
