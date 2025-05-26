@@ -54,8 +54,6 @@ type Color {
   hex: String!
 }
 
-# New types for statistics
-
 type SalesStats {
   totalSales: Float
   salesByDay: [DailySales!]

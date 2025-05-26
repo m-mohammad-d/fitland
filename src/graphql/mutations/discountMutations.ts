@@ -12,3 +12,12 @@ export const APPLY_DISCOUNT = gql`
     }
   }
 `;
+
+export const UPDATE_DISCOUNT_STATUS = gql`
+  mutation updateDiscountCode($input: updateDiscountCodeInput!) {
+    updateDiscountCode(input: $input) {
+      id
+      isActive
+    }
+  }
+`;
