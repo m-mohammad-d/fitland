@@ -367,7 +367,9 @@ const resolvers = {
 
       return list;
     },
-
+    getAllDiscountCodes: async () => {
+      return await prisma.discountCode.findMany();
+    },
     getSalesStats: async (_: void, { days }: { days: number }) => {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
