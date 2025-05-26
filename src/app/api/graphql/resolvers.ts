@@ -2,7 +2,18 @@ import { clearAuthCookie, setAuthCookie, signToken } from "@/lib/Auth";
 import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs, UpdateProductArgs, AddDiscountCodeInput } from "./types";
+import type {
+  AddAddressInput,
+  AddCategoryArgs,
+  AddCommentArgs,
+  AddProductArgs,
+  CreateOrderInput,
+  UpdateDiscountCodeInput,
+  ProductQueryArgs,
+  UpdateCommentArgs,
+  UpdateProductArgs,
+  AddDiscountCodeInput,
+} from "./types";
 import { GraphQLError } from "graphql";
 import { CommentSchema } from "@/validator/Comment";
 
@@ -967,6 +978,43 @@ const resolvers = {
         },
       });
       return discountCode;
+    },
+    updateDiscountCode: async (_: void, { input }: { input: UpdateDiscountCodeInput }, context: GraphQLContext) => {
+      const { code, value, isActive, type, id } = input;
+      const userId = context?.user?.id;
+      const userRole = context?.user?.role;
+      if (!userId || userRole !== "ADMIN") {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+      const existingDiscountCode = await prisma.discountCode.findUnique({
+        where: { id },
+      });
+      if (!existingDiscountCode) {
+        throw new GraphQLError("کد تخفیف یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+      if (type === "PERCENT" && value > 100) {
+        throw new GraphQLError("مقدار تخفیف باید کمتر از 100 باشد", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+      const updatedDiscountCode = await prisma.discountCode.update({
+        where: { id },
+        data: { code, value, isActive, type },
+      });
+      return updatedDiscountCode;
     },
     addAddress: async (_: void, { input }: { input: AddAddressInput }, context: GraphQLContext) => {
       const userId = context?.user?.id;

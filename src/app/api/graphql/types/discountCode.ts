@@ -5,3 +5,10 @@ export type AddDiscountCodeInput = {
   value: number;
 };
 
+export type UpdateDiscountCodeInput = {
+  id: string;
+  code: string;
+  isActive: boolean;
+  type: "PERCENT" | "AMOUNT";
+  value: number;
+};

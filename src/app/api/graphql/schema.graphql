@@ -311,6 +311,13 @@ input addDiscountCodeInput {
   type: String
   value: Int
 }
+input updateDiscountCodeInput {
+  id: String
+  code: String
+  isActive: Boolean
+  type: String
+  value: Int
+}
 # ----- Queries -------
 
 type Query {
@@ -376,6 +383,8 @@ type Mutation {
   applyDiscount(code: String!, totalPrice: Float!): DiscountResponse!
   addCategory(name: String!): Category!
   addDiscountCode(input: addDiscountCodeInput!): DiscountCode!
+  updateDiscountCode(input: updateDiscountCodeInput!): DiscountCode!
+
   createList(title: String!): List!
   updateList(id: ID!, title: String!): List!
   deleteList(id: ID!): List!
