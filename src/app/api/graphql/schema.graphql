@@ -311,7 +311,7 @@ type Query {
   products(sortBy: ProductSortField, filters: ProductFilter, page: Int, pageSize: Int): ProductsResponse!
 
   getMe: User!
-  getAllUsers : [User!]!
+  getAllUsers: [User!]!
   getAllOrders: [Order!]!
   getUserOrders: [Order!]!
   getOrderById(id: String): Order!
@@ -355,7 +355,7 @@ type Mutation {
   signOut: SignOutResponse!
 
   updateUser(id: String!, name: String, photo: String, email: String, phone: String, nationalCode: String, gender: Gender): User!
-
+  deleteUser(id: String!): User!
   addComment(productId: ID!, content: String!, rating: Int!): Comment!
   updateComment(commentId: ID!, content: String!, rating: Int!): Comment!
   walletDeposit(amount: Int): Wallet

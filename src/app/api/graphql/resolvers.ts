@@ -167,7 +167,7 @@ const resolvers = {
         throw error;
       }
     },
-    getAllUsers: async (_parent: void, _args: void, context: GraphQLContext ) => {
+    getAllUsers: async (_parent: void, _args: void, context: GraphQLContext) => {
       const userId = context?.user?.id;
       const userRole = context?.user?.role;
       if (!userId || userRole !== "ADMIN") {
@@ -689,6 +689,7 @@ const resolvers = {
         success: true,
       };
     },
+
     updateUser: async (
       _: void,
       {
@@ -771,6 +772,29 @@ const resolvers = {
 
       return updatedUser;
     },
+    deleteUser: async (_: void, { id }: { id: string }, context: GraphQLContext) => {
+      const userId = context?.user?.id;
+      const userRole = context?.user?.role;
+      if (!userId || userRole !== "ADMIN") {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+      await prisma.orderItem.deleteMany({ where: { order: { userId: id } } });
+      await prisma.listProduct.deleteMany({ where: { list: { userId: id } } });
+      await prisma.transaction.deleteMany({ where: { wallet: { userId: id } } });
+      await prisma.order.deleteMany({ where: { userId: id } });
+      await prisma.list.deleteMany({ where: { userId: id } });
+      await prisma.address.deleteMany({ where: { userId: id } });
+      await prisma.reaction.deleteMany({ where: { userId: id } });
+      await prisma.comment.deleteMany({ where: { userId: id } });
+      await prisma.wallet.delete({ where: { userId: id } });
+      return await prisma.user.delete({ where: { id } });
+    },
+
     createOrder: async (_: void, { input }: { input: CreateOrderInput }, context: GraphQLContext) => {
       const userId = context?.user?.id;
 
