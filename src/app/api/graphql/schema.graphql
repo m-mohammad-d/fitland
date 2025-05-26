@@ -311,7 +311,7 @@ type Query {
   products(sortBy: ProductSortField, filters: ProductFilter, page: Int, pageSize: Int): ProductsResponse!
 
   getMe: User!
-
+  getAllUsers : [User!]!
   getAllOrders: [Order!]!
   getUserOrders: [Order!]!
   getOrderById(id: String): Order!

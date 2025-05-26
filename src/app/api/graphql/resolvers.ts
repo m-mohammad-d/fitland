@@ -167,7 +167,22 @@ const resolvers = {
         throw error;
       }
     },
+    getAllUsers: async (_parent: void, _args: void, context: GraphQLContext ) => {
+      const userId = context?.user?.id;
+      const userRole = context?.user?.role;
+      if (!userId || userRole !== "ADMIN") {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: {
+              status: 401,
+            },
+          },
+        });
+      }
 
+      return await prisma.user.findMany();
+    },
     categories: async () => {
       return await prisma.category.findMany();
     },
