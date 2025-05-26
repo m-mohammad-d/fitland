@@ -13,6 +13,7 @@ import type {
   UpdateCommentArgs,
   UpdateProductArgs,
   AddDiscountCodeInput,
+  UpdateCategoryArgs,
 } from "./types";
 import { GraphQLError } from "graphql";
 import { CommentSchema } from "@/validator/Comment";
@@ -624,6 +625,39 @@ const resolvers = {
         },
       });
     },
+    updateCategory: async (_: void, {input}: {input: UpdateCategoryArgs}, context: GraphQLContext) => {
+      const {id, name} = input;
+      const userId = context?.user?.id;
+      const isAdmin = context?.user?.role === "ADMIN";
+
+      if (userId && !isAdmin) {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHORIZED",
+            http: {
+              status: 401,
+            },
+          },
+        });
+      }
+      const existingCategory = await prisma.category.findUnique({ where: { id } });
+      if (!existingCategory) {
+        throw new GraphQLError("دسته‌بندی یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: {
+              status: 404,
+            },
+          },
+        });
+      }
+
+      return await prisma.category.update({
+        where: { id: id },
+        data: { name },
+      });
+    },
+
     signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }, context: GraphQLContext) => {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {

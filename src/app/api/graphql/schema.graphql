@@ -280,7 +280,10 @@ input OrderItemInput {
   quantity: Int!
   priceAtPurchase: Float!
 }
-
+input updateCategoryInput {
+  id: ID!
+  name: String
+}
 input CreateOrderInput {
   items: [OrderItemInput!]!
   addressId: ID!
@@ -384,7 +387,7 @@ type Mutation {
   addCategory(name: String!): Category!
   addDiscountCode(input: addDiscountCodeInput!): DiscountCode!
   updateDiscountCode(input: updateDiscountCodeInput!): DiscountCode!
-
+  updateCategory(input: updateCategoryInput!): Category!
   createList(title: String!): List!
   updateList(id: ID!, title: String!): List!
   deleteList(id: ID!): List!
