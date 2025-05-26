@@ -2,7 +2,7 @@ import { clearAuthCookie, setAuthCookie, signToken } from "@/lib/Auth";
 import { GraphQLContext } from "@/app/api/graphql/types/graphql";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs, UpdateProductArgs } from "./types";
+import type { AddAddressInput, AddCategoryArgs, AddCommentArgs, AddProductArgs, CreateOrderInput, ProductQueryArgs, UpdateCommentArgs, UpdateProductArgs, AddDiscountCodeInput } from "./types";
 import { GraphQLError } from "graphql";
 import { CommentSchema } from "@/validator/Comment";
 
@@ -923,6 +923,50 @@ const resolvers = {
         type: discount.type,
         code: discount.code,
       };
+    },
+    addDiscountCode: async (_: void, { input }: { input: AddDiscountCodeInput }, context: GraphQLContext) => {
+      const { code, value, isActive, type } = input;
+      const userId = context?.user?.id;
+      const userRole = context?.user?.role;
+      if (!userId || userRole !== "ADMIN") {
+        throw new GraphQLError("دسترسی غیرمجاز", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+      const existingDiscountCode = await prisma.discountCode.findUnique({
+        where: { code },
+      });
+
+      if (existingDiscountCode) {
+        throw new GraphQLError("کد تخفیف قبلاً ثبت شده است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+
+      if (type === "PERCENT" && value > 100) {
+        throw new GraphQLError("مقدار تخفیف باید کمتر از 100 باشد", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+
+      const discountCode = await prisma.discountCode.create({
+        data: {
+          code,
+          isActive,
+          type: type as "PERCENT" | "AMOUNT",
+          value,
+        },
+      });
+      return discountCode;
     },
     addAddress: async (_: void, { input }: { input: AddAddressInput }, context: GraphQLContext) => {
       const userId = context?.user?.id;

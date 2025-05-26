@@ -305,6 +305,12 @@ input ColorInput {
   name: String!
   hex: String!
 }
+input addDiscountCodeInput {
+  code: String
+  isActive: Boolean
+  type: String
+  value: Int
+}
 # ----- Queries -------
 
 type Query {
@@ -330,7 +336,7 @@ type Query {
   getOrdersStats(days: Int!): OrdersStats!
   getNewUsersStats(days: Int!): NewUsersStats!
   getAllDiscountCodes: [DiscountCode!]!
-  getDiscountCodeById(id:ID!) : DiscountCode!
+  getDiscountCodeById(id: ID!): DiscountCode!
 }
 
 # ----- Mutations -------
@@ -369,7 +375,7 @@ type Mutation {
   addAddress(input: AddAddressInput!): Address!
   applyDiscount(code: String!, totalPrice: Float!): DiscountResponse!
   addCategory(name: String!): Category!
-
+  addDiscountCode(input: addDiscountCodeInput!): DiscountCode!
   createList(title: String!): List!
   updateList(id: ID!, title: String!): List!
   deleteList(id: ID!): List!
