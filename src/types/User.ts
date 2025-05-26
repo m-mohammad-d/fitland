@@ -9,9 +9,9 @@ export type User = {
   gender?: Gender | null;
   photo?: string | null;
   role: Role;
-  lastLogin?: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
+  lastLogin?: number | null;
+  createdAt: number;
+  updatedAt: number;
 };
 
 export type ApolloGetUserResponse = {
@@ -23,5 +23,15 @@ export type ApolloGetUserResponse = {
 export type GraphQLFetchGetUserResponse = {
   data: {
     getMe: User;
+  };
+};
+
+export type ApolloGetAllUsersResponse = {
+  getAllUsers: User[];
+};
+
+export type GraphQLFetchGetAllUsersResponse = {
+  data: {
+    getAllUsers: User[];
   };
 };
