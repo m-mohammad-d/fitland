@@ -330,6 +330,7 @@ type Query {
   getOrdersStats(days: Int!): OrdersStats!
   getNewUsersStats(days: Int!): NewUsersStats!
   getAllDiscountCodes: [DiscountCode!]!
+  getDiscountCodeById(id:ID!) : DiscountCode!
 }
 
 # ----- Mutations -------

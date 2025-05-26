@@ -370,6 +370,26 @@ const resolvers = {
     getAllDiscountCodes: async () => {
       return await prisma.discountCode.findMany();
     },
+    getDiscountCodeById: async (_: void, { id }: { id: string }) => {
+      if (!id) {
+        throw new GraphQLError("ارسال آیدی اجباری است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+      const discountCode = await prisma.discountCode.findUnique({ where: { id } });
+      if (!discountCode) {
+        throw new GraphQLError("کد تخفیف یافت نشد", {
+          extensions: {
+            code: "NOT_FOUND",
+            http: { status: 404 },
+          },
+        });
+      }
+      return discountCode;
+    },
     getSalesStats: async (_: void, { days }: { days: number }) => {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
