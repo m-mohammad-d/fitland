@@ -20,7 +20,7 @@ function Hero() {
           </Link>
         </div>
         <div className="hidden md:block">
-          <Image src="/images/hero-section-image.png" alt="hero section image" layout="responsive" width={1200} height={800} />
+          <Image src="/images/hero-section-image.webp" alt="hero section image" layout="responsive" width={1200} height={800} />
         </div>
         <div className="hidden md:block">
           <div className="flex items-center gap-4 rounded-lg p-4">
@@ -56,7 +56,7 @@ function Hero() {
           </div>
         </div>
       </div>
-      <Image src="/images/hero-section-dot-patten.png" alt="hero-section-dot-patten" className="hidden w-full md:block" layout="responsive" width={1200} height={800} />{" "}
+      <Image src="/images/hero-section-dot-patten.webp" alt="hero-section-dot-patten" className="hidden w-full md:block" layout="responsive" width={1200} height={800} />{" "}
     </div>
   );
 }

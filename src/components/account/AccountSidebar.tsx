@@ -43,7 +43,7 @@ const NAV_ITEMS = [
   },
 ];
 
-const DEFAULT_PROFILE_IMAGE = "/userLogo.jpg";
+const DEFAULT_PROFILE_IMAGE = "/userLogo.webp";
 
 export default function AccountSidebar() {
   const { uploadFile, isUploading } = useUpload();

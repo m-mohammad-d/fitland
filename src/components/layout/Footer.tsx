@@ -70,9 +70,9 @@ export default function Footer() {
           </div>
           <div className="flex flex-col items-center space-y-4">
             <div className="flex space-x-4">
-              <Image src="/images/E-Namad.png" alt="ای نماد" width={80} height={80} />
-              <Image src="/images/nationalRegistrationMark.png" alt="نشان ملی ثبت" width={80} height={80} />
-              <Image src="/images/authorizedBusinessUnion.png" alt="اتحادیه کشوری کسب و کار های مجاز" width={80} height={80} />
+              <Image src="/images/E-Namad.webp" alt="ای نماد" width={80} height={80} />
+              <Image src="/images/nationalRegistrationMark.webp" alt="نشان ملی ثبت" width={80} height={80} />
+              <Image src="/images/authorizedBusinessUnion.webp" alt="اتحادیه کشوری کسب و کار های مجاز" width={80} height={80} />
             </div>
             <p className="text-sm text-orange-400">یک هفته ضمانت بازگشت ✍</p>
           </div>

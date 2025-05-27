@@ -9,7 +9,7 @@ type Props = {
   location?: LatLngExpression;
 };
 const customIcon = new Icon({
-  iconUrl: "/icons/location-sign.png",
+  iconUrl: "/icons/location-sign.webp",
   iconSize: [24, 24],
 });
 
@@ -30,7 +30,7 @@ export default function MapViewer({ onChange, mapRef, location }: Props) {
 
   return (
     <MapContainer center={location ? location : [35.6892, 51.389]} zoom={30} ref={mapRef} style={{ height: "300px", width: "100%", borderRadius: "0.5rem" }}>
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.webp" />
       <Marker position={position} icon={customIcon} />
       <MapClickHandler />
     </MapContainer>

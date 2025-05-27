@@ -13,7 +13,7 @@ async function main() {
 
   const categories = await prisma.category.findMany();
   const getCategory = (name: string) => {
-    const category = categories.find((c: { name: string; }) => c.name === name);
+    const category = categories.find((c: { name: string }) => c.name === name);
     if (!category) {
       throw new Error(`❌ دسته‌بندی ${name} پیدا نشد!`);
     }
@@ -26,7 +26,6 @@ async function main() {
         name: "کفش دویدن نایک",
         description: "کفش سبک و مناسب برای دویدن",
         price: 1200000,
-        discountedPrice: 1000000,
         discount: 16.67,
         stock: 20,
         categoryId: getCategory("کفش"),
@@ -42,7 +41,6 @@ async function main() {
         name: "تی‌شرت ورزشی آدیداس",
         description: "تی‌شرت نخی و قابل تنفس",
         price: 350000,
-        discountedPrice: 280000,
         discount: 20,
         stock: 50,
         categoryId: getCategory("تی‌شرت"),
@@ -58,7 +56,6 @@ async function main() {
         name: "هودی اسپرت نایک",
         description: "هودی گرم و مناسب برای زمستان",
         price: 800000,
-        discountedPrice: null,
         discount: 0,
         stock: 30,
         categoryId: getCategory("هودی"),
@@ -73,7 +70,6 @@ async function main() {
         name: "ساعت هوشمند شیائومی",
         description: "ساعت هوشمند با قابلیت نمایش ضربان قلب",
         price: 2000000,
-        discountedPrice: 1800000,
         discount: 10,
         stock: 15,
         categoryId: getCategory("اکسسوری"),
@@ -85,7 +81,6 @@ async function main() {
         name: "کفش فوتبال آدیداس",
         description: "کفش مخصوص چمن مصنوعی",
         price: 1500000,
-        discountedPrice: null,
         discount: 0,
         stock: 10,
         categoryId: getCategory("کفش"),
@@ -100,7 +95,6 @@ async function main() {
         name: "شلوار ورزشی پوما",
         description: "شلوار سبک و مناسب برای ورزش",
         price: 600000,
-        discountedPrice: 540000,
         discount: 10,
         stock: 25,
         categoryId: getCategory("شلوار ورزشی"),
@@ -116,7 +110,6 @@ async function main() {
         name: "کلاه بیسبال نیویورک یانکیز",
         description: "کلاه با طراحی خاص و مناسب برای استفاده روزمره",
         price: 300000,
-        discountedPrice: 270000,
         discount: 10,
         stock: 40,
         categoryId: getCategory("اکسسوری"),

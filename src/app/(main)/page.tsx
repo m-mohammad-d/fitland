@@ -28,30 +28,30 @@ export default async function Home() {
       <MainOffers
         offers={[
           {
-            image: "/images/nike-shirt.jpg",
+            image: "/images/nike-shirt.webp",
             title: "جدید ترین تخفیفات فصل برند نایک",
             brand: "نایک",
           },
           {
-            image: "/images/puma-shirt.jpg",
+            image: "/images/puma-shirt.webp",
             title: "جدید ترین تخفیفات فصل برند پوما",
             brand: "پوما",
           },
         ]}
       />{" "}
-      <Banner imageUrl="/images/Baner.png" mobileImageUrl="/images/Baner-mobile.png" />
+      <Banner imageUrl="/images/Baner.webp" mobileImageUrl="/images/Baner-mobile.webp" />
       <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} className="bg-[#FFF7F4]" />
       <ProductHighlight title="جدیدترین محصولات" products={newProducts} className="bg-white" />
-      <Banner imageUrl="/images/Baner-1.png" mobileImageUrl="/images/Baner-1-mobile.png" />
+      <Banner imageUrl="/images/Baner-1.webp" mobileImageUrl="/images/Baner-1-mobile.webp" />
       <MainOffers
         offers={[
           {
-            image: "/images/adidas-shirt.png",
+            image: "/images/adidas-shirt.webp",
             title: "جدیدترین محصولات آدیداس",
             brand: "آدیداس",
           },
           {
-            image: "/images/reebok-shirt.png",
+            image: "/images/reebok-shirt.webp",
             title: "جدیدترین محصولات ریباک",
             brand: "ریباک",
           },

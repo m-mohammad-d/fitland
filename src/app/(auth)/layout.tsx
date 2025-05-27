@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="flex-1">{children}</div>
 
       <div className="bg-secondary relative hidden h-screen lg:block lg:flex-1">
-        <Image src="/images/authPageImage.png" alt="auth image" layout="fill" objectFit="cover" />
+        <Image src="/images/authPageImage.webp" alt="auth image" layout="fill" objectFit="cover" />
 
         <div className="bg-secondary-850 absolute inset-0 opacity-95"></div>
 
