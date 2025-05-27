@@ -3,8 +3,9 @@ import { GET_CATEGORY_BY_ID } from "@/graphql/queries/categoryQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetCategoryByIdResponse } from "@/types/Category";
 
-export default async function UpdateCategoryPage({ params }: { params: { id: string } }) {
-  const categoryResponse = await graphQLFetch<GetCategoryByIdResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_CATEGORY_BY_ID.loc?.source.body as string, { id: params.id });
+export default async function UpdateCategoryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const categoryResponse = await graphQLFetch<GetCategoryByIdResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_CATEGORY_BY_ID.loc?.source.body as string, { id });
 
   return (
     <div className="space-y-6">
@@ -16,7 +17,7 @@ export default async function UpdateCategoryPage({ params }: { params: { id: str
       </div>
 
       <div className="rounded-lg p-6">
-        <UpdateCategoryForm category={categoryResponse.data?.getCategoryById} categoryId={params.id} />
+        <UpdateCategoryForm category={categoryResponse.data?.getCategoryById} categoryId={id} />
       </div>
     </div>
   );

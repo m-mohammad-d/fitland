@@ -1,5 +1,3 @@
-import { Product } from "./products";
-
 export interface List {
   id: string;
   title: string;

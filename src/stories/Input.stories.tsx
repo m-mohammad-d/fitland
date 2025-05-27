@@ -52,11 +52,13 @@ export const Disabled: Story = {
   },
 };
 
+const PasswordInput = () => {
+  const [value, setValue] = useState("");
+  return <Input label="رمز عبور" type="password" placeholder="********" value={value} onChange={(e) => setValue(e.target.value)} />;
+};
+
 export const Password: Story = {
-  render: () => {
-    const [value, setValue] = useState("");
-    return <Input label="رمز عبور" type="password" placeholder="********" value={value} onChange={(e) => setValue(e.target.value)} />;
-  },
+  render: () => <PasswordInput />,
 };
 
 export const DifferentSizes: Story = {

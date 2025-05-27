@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
-import { FiPlus, FiX, FiUpload } from "react-icons/fi";
+import { FiX, FiUpload } from "react-icons/fi";
 import { useUpload } from "@/hooks/useUpload";
 import UploadSpinner from "./UploadSpinner";
 

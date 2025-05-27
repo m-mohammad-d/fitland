@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { createContext, useOptimistic, useState, useTransition } from "react";
-import { object, z } from "zod";
+import { z } from "zod";
 
 const filterSchema = z.object({
   category: z.array(z.string()).default([]).optional(),

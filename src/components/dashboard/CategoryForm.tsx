@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategoryFormValues, categorySchema } from "@/validator/Category";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
 interface CategoryFormProps {

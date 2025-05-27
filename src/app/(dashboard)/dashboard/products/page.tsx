@@ -7,10 +7,10 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useReactTable, getCoreRowModel, flexRender, ColumnDef, getSortedRowModel, SortingState, getPaginationRowModel, getFilteredRowModel, ColumnFiltersState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { FiMoreHorizontal, FiArrowDown, FiChevronLeft, FiChevronRight, FiEdit, FiTrash2, FiPackage, FiTag, FiLayers, FiAlertCircle } from "react-icons/fi";
+import { FiMoreHorizontal, FiArrowDown, FiChevronLeft, FiChevronRight, FiEdit, FiTrash2, FiPackage, FiTag, FiLayers } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import ConfirmModal from "@/components/ui/ConfirmModal";
@@ -18,7 +18,7 @@ import { BiPlus, BiSearch } from "react-icons/bi";
 import DotSpinner from "@/components/ui/DotSpinner";
 
 function ManageProducts() {
-  const { data, loading, error, refetch } = useQuery<ApoloGetProductsResponse>(GET_PRODUCTS);
+  const { data, loading, refetch } = useQuery<ApoloGetProductsResponse>(GET_PRODUCTS);
   const [deleteProduct] = useMutation(DELETE_PRODUCT);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -33,6 +33,7 @@ function ManageProducts() {
       setDeleteConfirmId(null);
       refetch();
     } catch (error) {
+      console.error(error);
       toast.error("خطا در حذف محصول");
     }
   };
@@ -193,13 +194,6 @@ function ManageProducts() {
   });
 
   if (loading) return <DotSpinner />;
-  if (error)
-    return (
-      <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
-        <FiAlertCircle className="h-12 w-12 text-red-500" />
-        <p className="text-lg text-neutral-700">خطا در دریافت اطلاعات</p>
-      </div>
-    );
 
   return (
     <div className="p-4 md:p-6">

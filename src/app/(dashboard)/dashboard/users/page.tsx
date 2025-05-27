@@ -7,19 +7,19 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useReactTable, getCoreRowModel, flexRender, ColumnDef, getSortedRowModel, SortingState, getPaginationRowModel, getFilteredRowModel, ColumnFiltersState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { FiMoreHorizontal, FiArrowDown, FiChevronLeft, FiChevronRight, FiEdit, FiTrash2, FiAlertCircle, FiUser } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import ConfirmModal from "@/components/ui/ConfirmModal";
-import {  BiSearch } from "react-icons/bi";
+import { BiSearch } from "react-icons/bi";
 import DotSpinner from "@/components/ui/DotSpinner";
 import { formatJalaliDate } from "@/lib/Date";
 
 function ManageUsers() {
-  const { data, loading, error, refetch } = useQuery<ApolloGetAllUsersResponse>(GET_ALL_USERS);
+  const { data, loading, refetch, error } = useQuery<ApolloGetAllUsersResponse>(GET_ALL_USERS);
   const [deleteUser] = useMutation(DELETE_USER);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -34,6 +34,7 @@ function ManageUsers() {
       setDeleteConfirmId(null);
       refetch();
     } catch (error) {
+      console.error(error);
       toast.error("خطا در حذف کاربر");
     }
   };

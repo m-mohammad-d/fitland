@@ -5,7 +5,7 @@ import { UPDATE_DISCOUNT_STATUS } from "@/graphql/mutations/discountMutations";
 import { useQuery, useMutation } from "@apollo/client";
 import { useReactTable, getCoreRowModel, flexRender, ColumnDef, getSortedRowModel, SortingState, getPaginationRowModel, getFilteredRowModel, ColumnFiltersState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { FiArrowDown, FiChevronLeft, FiChevronRight, FiEdit, FiMoreHorizontal, FiTag, FiAlertCircle } from "react-icons/fi";
@@ -36,11 +36,12 @@ function ManageDiscounts() {
       toast.success(`کد تخفیف با موفقیت ${!currentStatus ? "فعال" : "غیرفعال"} شد`);
       refetch();
     } catch (error) {
+      console.error(error);
       toast.error("خطا در تغییر وضعیت کد تخفیف");
     }
   };
 
-  const columns = useMemo<ColumnDef<any>[]>(
+  const columns = useMemo<ColumnDef<ApoloGetAllDiscountsResponse["getAllDiscountCodes"][0]>[]>(
     () => [
       {
         header: ({ column }) => {

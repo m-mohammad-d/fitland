@@ -18,7 +18,7 @@ export function getTokenFromCookie(cookieHeader: string | null): string | null {
 export function verifyToken(token: string): AuthPayload | null {
   try {
     return jwt.verify(token, JWT_SECRET) as AuthPayload;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

@@ -30,10 +30,17 @@ export const primary: Story = {
       ],
       sizes: ["40", "41", "42"],
       category: {
+        id: "23",
         name: "Accessories",
-        __typename: "Category",
       },
       __typename: "Product",
+      categoryId: "",
+      brand: "",
+      discount: 0,
+      comments: [],
+      orderItems: [],
+      createdAt: "",
+      updatedAt: ""
     },
   },
 };

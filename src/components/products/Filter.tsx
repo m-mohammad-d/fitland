@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useFilters } from "@/provider/FilterProvider";
 import { useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "@/graphql/queries/categoryQueries";
-import { GetCategorysResponse } from "@/types/Category";
+import { ApolloGetCategorysResponse } from "@/types/Category";
 import { FiXCircle, FiCheck, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Brands } from "@/constants/Brands";
@@ -14,8 +14,8 @@ import { cn } from "@/lib/utils";
 type FilterKey = "category" | "brand" | "colors" | "sizes";
 
 const Filter = () => {
-  const { filters, updateFilters, activeSections, setActiveSections, sortBy , updateSortBy } = useFilters();
-  const { data } = useQuery<GetCategorysResponse>(GET_CATEGORIES);
+  const { filters, updateFilters, activeSections, setActiveSections } = useFilters();
+  const { data } = useQuery<ApolloGetCategorysResponse>(GET_CATEGORIES);
 
   const [priceInputs, setPriceInputs] = useState({
     minPrice: filters.minPrice || 0,

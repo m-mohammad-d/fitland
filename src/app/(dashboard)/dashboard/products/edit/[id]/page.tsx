@@ -11,10 +11,11 @@ interface GetProductResponse {
   };
 }
 
-export default async function UpdateProductPage({ params }: { params: { id: string } }) {
+export default async function UpdateProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const [categoryResponse, productResponse] = await Promise.all([
     graphQLFetch<GraphQLFetchGetCategorysResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_CATEGORIES.loc?.source.body as string),
-    graphQLFetch<GetProductResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_PRODUCT_BY_ID.loc?.source.body as string, { id: params.id }),
+    graphQLFetch<GetProductResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_PRODUCT_BY_ID.loc?.source.body as string, { id }),
   ]);
 
   const product = productResponse.data.product;
@@ -47,7 +48,7 @@ export default async function UpdateProductPage({ params }: { params: { id: stri
         <h1 className="text-2xl font-bold text-gray-900">ویرایش محصول</h1>
       </div>
 
-      <UpdateProductForm categories={categoryResponse.data.categories} defaultValues={defaultValues} productId={params.id} />
+      <UpdateProductForm categories={categoryResponse.data.categories} defaultValues={defaultValues} productId={id} />
     </div>
   );
 }

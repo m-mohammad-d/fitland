@@ -669,7 +669,7 @@ const resolvers = {
       });
     },
 
-    signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }, context: GraphQLContext) => {
+    signUp: async (_: void, { email, password, name }: { email: string; password: string; name?: string }) => {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
         throw new GraphQLError("این ایمیل قبلاً ثبت شده است", {

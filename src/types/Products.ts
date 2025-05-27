@@ -1,3 +1,6 @@
+import { Comment } from "./Comment";
+import { OrderItem } from "./Order";
+
 export interface Category {
   name: string;
   __typename: "Category";
@@ -22,7 +25,12 @@ export interface Product {
   categoryId: string;
   brand: string;
   discount: number;
-  isActive: boolean;
+  discountCode?: string;
+  discountedPrice?: number;
+  comments: Comment[];
+  orderItems: OrderItem[];
+  createdAt: string;
+  updatedAt: string;
   __typename: "Product";
 }
 

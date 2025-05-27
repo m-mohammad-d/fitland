@@ -35,6 +35,7 @@ export default function ListDetailsPage({ params }: Props) {
       setDeleteConfirmId(null);
       refetch();
     } catch (error) {
+      console.error(error);
       toast.error("خطا در حذف محصول از فهرست");
     }
   };
