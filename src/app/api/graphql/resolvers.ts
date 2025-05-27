@@ -198,6 +198,17 @@ const resolvers = {
     categories: async () => {
       return await prisma.category.findMany();
     },
+    getCategoryById: async (_: void, { id }: { id: string }) => {
+      if (!id) {
+        throw new GraphQLError("ارسال آیدی اجباری است", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            http: { status: 400 },
+          },
+        });
+      }
+      return await prisma.category.findUnique({ where: { id } });
+    },
     product: async (_: void, { id }: { id: string }) => {
       const product = await prisma.product.findUnique({
         where: { id },

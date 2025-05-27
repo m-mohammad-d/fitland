@@ -16,3 +16,8 @@ export interface GraphQLFetchGetCategorysResponse {
     categories: Category[];
   };
 }
+export interface GetCategoryByIdResponse {
+  data: {
+    getCategoryById: Category;
+  };
+}

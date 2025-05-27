@@ -336,7 +336,7 @@ type Query {
   getProductComments(id: ID!): [Comment]
 
   categories: [Category!]!
-
+  getCategoryById(id: ID!): Category
   getUserLists: [List!]!
   getListById(id: ID!): List!
 
@@ -344,7 +344,7 @@ type Query {
   getOrdersStats(days: Int!): OrdersStats!
   getNewUsersStats(days: Int!): NewUsersStats!
   getAllDiscountCodes: [DiscountCode!]!
-  
+
   getDiscountCodeById(id: ID!): DiscountCode!
 }
 

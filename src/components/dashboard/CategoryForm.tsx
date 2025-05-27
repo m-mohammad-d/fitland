@@ -9,16 +9,18 @@ import Input from "@/components/ui/Input";
 interface CategoryFormProps {
   onSubmit: (data: CategoryFormValues) => Promise<void>;
   isLoading?: boolean;
+  defaultValues?: CategoryFormValues;
   submitLabel?: string;
 }
 
-export default function CategoryForm({ onSubmit, isLoading, submitLabel = "ذخیره" }: CategoryFormProps) {
+export default function CategoryForm({ onSubmit, isLoading, submitLabel = "ذخیره", defaultValues }: CategoryFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
+    defaultValues,
   });
 
   return (
