@@ -10,3 +10,8 @@ export interface ApoloGetAllDiscountsResponse {
   getAllDiscountCodes: Discount[];
 }
 
+export interface getDiscountCodeResponse {
+  data: {
+    getDiscountCodeById: Discount;
+  };
+}

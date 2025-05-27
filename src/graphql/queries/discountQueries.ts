@@ -11,3 +11,15 @@ export const GET_ALL_DISCOUNT_CODES = gql`
     }
   }
 `;
+
+export const GET_DISCOUNT_CODE_BY_ID = gql`
+  query GetDiscountCodeById($id: ID!) {
+    getDiscountCodeById(id: $id) {
+      id
+      code
+      type
+      value
+      isActive
+    }
+  }
+`;

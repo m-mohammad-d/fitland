@@ -4,14 +4,19 @@ import { useMutation } from "@apollo/client";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import DiscountForm from "@/components/dashboard/DiscountForm";
-import { ADD_DISCOUNT } from "@/graphql/mutations/discountMutations";
+import { UPDATE_DISCOUNT } from "@/graphql/mutations/discountMutations";
 import { DiscountFormValues } from "@/validator/Discount";
 
-export default function AddDiscountForm() {
+interface UpdateDiscountFormProps {
+  discountId: string;
+  defaultValues?: DiscountFormValues;
+}
+
+export default function UpdateDiscountForm({ discountId, defaultValues }: UpdateDiscountFormProps) {
   const router = useRouter();
-  const [createDiscount, { loading }] = useMutation(ADD_DISCOUNT, {
+  const [updateDiscount, { loading }] = useMutation(UPDATE_DISCOUNT, {
     onCompleted: () => {
-      toast.success("کد تخفیف با موفقیت ایجاد شد");
+      toast.success("کد تخفیف با موفقیت ویرایش شد");
       router.push("/dashboard/discounts");
       router.refresh();
     },
@@ -21,9 +26,10 @@ export default function AddDiscountForm() {
   });
 
   const handleSubmit = async (data: DiscountFormValues) => {
-    await createDiscount({
+    await updateDiscount({
       variables: {
         input: {
+          id: discountId,
           code: data.code,
           type: data.type,
           value: data.value,
@@ -33,5 +39,5 @@ export default function AddDiscountForm() {
     });
   };
 
-  return <DiscountForm onSubmit={handleSubmit} isLoading={loading} submitLabel="ایجاد کد تخفیف" />;
+  return <DiscountForm onSubmit={handleSubmit} isLoading={loading} submitLabel="ویرایش کد تخفیف" defaultValues={defaultValues} />;
 }
