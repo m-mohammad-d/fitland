@@ -13,6 +13,14 @@ export const APPLY_DISCOUNT = gql`
   }
 `;
 
+export const ADD_DISCOUNT = gql`
+  mutation addDiscountCode($input: addDiscountCodeInput!) {
+    addDiscountCode(input: $input) {
+      id
+    }
+  }
+`;
+
 export const UPDATE_DISCOUNT_STATUS = gql`
   mutation updateDiscountCode($input: updateDiscountCodeInput!) {
     updateDiscountCode(input: $input) {
