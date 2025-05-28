@@ -147,11 +147,10 @@ enum PaymentMethod {
 }
 
 enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  DELIVERED
-  CANCELED
+  PROCESSING     
+  SHIPPED       
+  DELIVERED    
+  CANCELED       
 }
 
 enum DiscountType {

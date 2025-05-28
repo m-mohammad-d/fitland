@@ -1,6 +1,6 @@
 export type DailySales = {
   date: string;
-  count: number;
+  total: number;
 };
 
 export type SalesStats = {
@@ -32,4 +32,4 @@ export type DailyUsers = {
 export type NewUsersStats = {
   totalNewUsers: number;
   usersByDay: DailyUsers[];
-}; 
+};

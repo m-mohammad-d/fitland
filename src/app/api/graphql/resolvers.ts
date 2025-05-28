@@ -446,9 +446,9 @@ const resolvers = {
       );
 
       // Transform salesByDay object into an array of objects
-      const salesByDayArray = Object.entries(salesByDay).map(([date, amount]) => ({
+      const salesByDayArray = Object.entries(salesByDay).map(([date, total]) => ({
         date,
-        amount,
+        total,
       }));
 
       return {
@@ -929,7 +929,7 @@ const resolvers = {
           tax: input.tax,
           totalPrice: finalPrice,
           discountCodeId,
-          status: "PENDING",
+          status: "PROCESSING",
           items: {
             create: input.items.map((item) => ({
               productId: item.productId,

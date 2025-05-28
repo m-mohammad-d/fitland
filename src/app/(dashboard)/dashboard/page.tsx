@@ -68,7 +68,7 @@ export default function DashboardPage() {
     datasets: [
       {
         label: "فروش",
-        data: salesData?.getSalesStats.salesByDay.map((sale: DailySales) => sale.count) || [],
+        data: salesData?.getSalesStats.salesByDay.map((sale: DailySales) => sale.total) || [],
         borderColor: "rgb(59, 130, 246)",
         backgroundColor: "rgba(59, 130, 246, 0.1)",
         tension: 0.4,

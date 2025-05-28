@@ -140,20 +140,18 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
         cell: ({ row }) => {
           const statusColors = {
             PENDING: "bg-yellow-100 text-yellow-800",
-            PROCESSING: "bg-blue-100 text-blue-800",
-            COMPLETED: "bg-green-100 text-green-800",
-            CANCELLED: "bg-red-100 text-red-800",
+            SHIPPED: "bg-blue-100 text-blue-800",
+            DELIVERED: "bg-green-100 text-green-800",
+            CANCELED: "bg-red-100 text-red-800",
           } as const;
           const statusText = {
             PENDING: "در انتظار پرداخت",
-            PROCESSING: "در حال پردازش",
-            COMPLETED: "تکمیل شده",
-            CANCELLED: "لغو شده",
+            SHIPPED: "در حال ارسال",
+            DELIVERED: "تحویل داده شده",
+            CANCELED: "لغو شده",
           } as const;
           return (
-            <span className={`rounded-full px-3 py-1 text-sm ${statusColors[row.original.status as keyof typeof statusColors]}`}>
-              {statusText[row.original.status as keyof typeof statusText]}
-            </span>
+            <span className={`rounded-full px-3 py-1 text-sm ${statusColors[row.original.status as keyof typeof statusColors]}`}>{statusText[row.original.status as keyof typeof statusText]}</span>
           );
         },
       },
@@ -172,9 +170,7 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
           return (
             <div className="flex flex-col">
               <span>{row.original.discountCode?.code}</span>
-              {row.original.discountCode?.type === "PERCENT" && (
-                <span className="text-xs text-green-600">{row.original.discountCode.value}% تخفیف</span>
-              )}
+              {row.original.discountCode?.type === "PERCENT" && <span className="text-xs text-green-600">{row.original.discountCode.value}% تخفیف</span>}
             </div>
           );
         },
@@ -296,4 +292,4 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
       </div>
     </div>
   );
-} 
+}
