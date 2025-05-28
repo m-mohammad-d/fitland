@@ -1,4 +1,5 @@
 import { Address } from "./Address";
+import { Discount } from "./Discount";
 import { Product } from "./Products";
 import { User } from "./User";
 
@@ -45,6 +46,7 @@ export interface Order {
   deliveryDate: string;
   paymentMethod: "CASH" | "ONLINE" | string;
   shippingCost: number;
+  discountCode: Discount;
   tax: number;
   totalPrice: number;
   status: "PENDING" | "DELIVERED" | "CANCELED" | string;
@@ -53,4 +55,9 @@ export interface Order {
 
 export interface GetOrderByIdResponse {
   getOrderById: Order;
+}
+
+
+export interface ApoloGetAllOrdersResponse {
+  getAllOrders: Order[];
 }

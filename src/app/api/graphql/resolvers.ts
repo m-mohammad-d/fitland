@@ -230,6 +230,7 @@ const resolvers = {
               product: true,
             },
           },
+          user: true,
           discountCode: true,
           address: true,
         },
@@ -636,8 +637,8 @@ const resolvers = {
         },
       });
     },
-    updateCategory: async (_: void, {input}: {input: UpdateCategoryArgs}, context: GraphQLContext) => {
-      const {id, name} = input;
+    updateCategory: async (_: void, { input }: { input: UpdateCategoryArgs }, context: GraphQLContext) => {
+      const { id, name } = input;
       const userId = context?.user?.id;
       const isAdmin = context?.user?.role === "ADMIN";
 

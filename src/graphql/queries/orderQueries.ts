@@ -81,3 +81,30 @@ export const GET_ORDER_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_ORDERS = gql`
+query GetAllOrders {
+  getAllOrders {
+    id
+    user {
+      name
+      email
+      phone
+      nationalCode
+    }
+    deliveryDate
+    paymentMethod
+    shippingCost
+    tax
+    totalPrice
+    status
+    createdAt
+    discountCode {
+      value
+      isActive
+      type
+      code
+    }
+    }
+  }
+`;
