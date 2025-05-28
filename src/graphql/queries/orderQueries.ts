@@ -6,6 +6,7 @@ export const GET_USER_ORDERS = gql`
       id
       createdAt
       totalPrice
+      status
       items {
         product {
           id

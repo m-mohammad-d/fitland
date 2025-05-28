@@ -18,6 +18,7 @@ export interface UserOrder {
   createdAt: string;
   totalPrice: number;
   items: UserOrderItem[];
+  status: "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELED";
 }
 
 export interface GetUserOrdersResponse {
