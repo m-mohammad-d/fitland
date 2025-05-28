@@ -10,13 +10,14 @@ import { GET_ADDRESS_BY_ID } from "@/graphql/queries/addressQueries";
 import DotSpinner from "@/components/ui/DotSpinner";
 import { WALLET_WITHDRAW } from "@/graphql/mutations/WalletMutation";
 import toast from "react-hot-toast";
+import { ApoloGetAddressByIdResponse } from "@/types/Address";
 
 function CheckoutConfirmationClient() {
   const { checkout, items, getTotal, clearCart, clearCheckout, getFinalTotal } = useCart();
   const [orderError, setOrderError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { data, loading: isLoadingAddress } = useQuery(GET_ADDRESS_BY_ID, {
+  const { data, loading: isLoadingAddress } = useQuery<ApoloGetAddressByIdResponse>(GET_ADDRESS_BY_ID, {
     variables: { id: checkout.addressId },
   });
 
@@ -112,7 +113,7 @@ function CheckoutConfirmationClient() {
             <AiOutlineHome className="text-primary-600 mt-1 text-xl" />
             <p>
               <strong>آدرس تحویل:</strong>{" "}
-              {`${data?.getAddressById?.province}، ${data?.getAddressById?.city}، ${data?.getAddressById?.street}، ${data?.getAddressById?.alley}، پلاک ${data?.getAddressById?.plaque}، واحد ${data?.getAddressById?.unit}`}
+              {`${data?.getAddressById?.fullAddress}`}
             </p>
           </div>
 

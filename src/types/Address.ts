@@ -18,3 +18,7 @@ export interface GetAddressesResponse {
     getUserAddress: Address[];
   };
 }
+
+export interface ApoloGetAddressByIdResponse {
+  getAddressById : Address
+}
