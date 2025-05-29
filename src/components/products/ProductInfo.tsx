@@ -1,23 +1,18 @@
 import { useCart } from "@/store/useCart";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaCheck, FaMinus, FaPlus, FaShoppingCart, FaTimes } from "react-icons/fa";
+import { FaCheck, FaMinus, FaPlus, FaShoppingCart, FaTimes, FaShareAlt, FaListUl } from "react-icons/fa";
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_USER_LISTS, ADD_PRODUCT_TO_LIST } from "@/graphql/queries/lists";
+import { toast } from "react-hot-toast";
+import { Product } from "@/types/Products";
+import EmptyState from "../ui/EmptyState";
+import Modal from "../ui/Modal";
+import { List } from "@/types/lists";
 
 interface Props {
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    images: string[];
-    discount?: number;
-    discountedPrice?: number;
-    colors: { name: string; hex: string }[];
-    sizes: string[];
-    category: { name: string };
-  };
+  product: Product;
 }
 
 export default function ProductInfo({ product }: Props) {
@@ -26,6 +21,12 @@ export default function ProductInfo({ product }: Props) {
   const [selectedSize, setSelectedSize] = useState(product.sizes[0] || "");
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
+  const [showListModal, setShowListModal] = useState(false);
+  const [selectedListId, setSelectedListId] = useState<string | null>(null);
+  const [addingToList, setAddingToList] = useState(false);
+
+  const { data: listsData, loading: listsLoading } = useQuery(GET_USER_LISTS, { skip: !showListModal });
+  const [addProductToList] = useMutation(ADD_PRODUCT_TO_LIST);
 
   const cartItem = items.find((item) => item.productId === product.id && item.color === selectedColor && item.size === selectedSize);
 
@@ -62,36 +63,63 @@ export default function ProductInfo({ product }: Props) {
     }
   };
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, url });
+      } catch (e) {
+        console.error("خطا در اشتراک گذاری:", e);
+      }
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success("لینک محصول کپی شد!");
+    }
+  };
+
+  const handleAddToList = async (listId: string) => {
+    setAddingToList(true);
+    try {
+      await addProductToList({ variables: { listId, productId: product.id } });
+      setSelectedListId(listId);
+      toast.success("محصول به لیست اضافه شد!");
+      setTimeout(() => {
+        setShowListModal(false);
+        setSelectedListId(null);
+      }, 1200);
+    } catch (e) {
+      toast.error("خطا در افزودن به لیست");
+    } finally {
+      setAddingToList(false);
+    }
+  };
+
   return (
     <div className="relative space-y-6 rounded-xl border border-neutral-100 bg-white p-6 shadow-sm">
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm">
-          <div className="animate-fade-in-up w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                <FaCheck className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="text-xl font-bold text-neutral-800">محصول به سبد خرید اضافه شد</h3>
-              <p className="text-neutral-600">
-                {product.name} ({selectedSize}, {selectedColor})
-              </p>
-              <div className="mt-4 flex w-full flex-col-reverse gap-3 md:flex-row">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 font-medium transition-colors hover:bg-neutral-50"
-                >
-                  <FaTimes className="h-4 w-4" />
-                  ادامه خرید
-                </button>
-                <Link href="/cart" className="bg-primary-600 hover:bg-primary-700 flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors">
-                  <FaShoppingCart className="h-4 w-4" />
-                  مشاهده سبد خرید
-                </Link>
-              </div>
-            </div>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <div className="flex flex-col items-center space-y-4 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+            <FaCheck className="h-6 w-6 text-green-600" />
+          </div>
+          <h3 className="text-xl font-bold text-neutral-800">محصول به سبد خرید اضافه شد</h3>
+          <p className="text-neutral-600">
+            {product.name} ({selectedSize}, {selectedColor})
+          </p>
+          <div className="mt-4 flex w-full flex-col-reverse gap-3 md:flex-row">
+            <button
+              onClick={() => setShowModal(false)}
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 font-medium transition-colors hover:bg-neutral-50"
+            >
+              <FaTimes className="h-4 w-4" />
+              ادامه خرید
+            </button>
+            <Link href="/cart" className="bg-primary-600 hover:bg-primary-700 flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors">
+              <FaShoppingCart className="h-4 w-4" />
+              مشاهده سبد خرید
+            </Link>
           </div>
         </div>
-      )}
+      </Modal>
 
       <div className="bg-primary-50 text-primary-700 inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium">
         <span>{product.category.name}</span>
@@ -219,6 +247,68 @@ export default function ProductInfo({ product }: Props) {
           )}
         </div>
       </div>
+
+      <div className="mt-4 flex gap-2">
+        <button
+          onClick={handleShare}
+          aria-label="اشتراک گذاری محصول"
+          className="focus:ring-primary-500 flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 focus:ring-2 focus:outline-none"
+        >
+          <FaShareAlt className="text-primary-600 h-4 w-4" />
+          اشتراک گذاری
+        </button>
+        <button
+          onClick={() => setShowListModal(true)}
+          aria-label="افزودن به لیست"
+          className="focus:ring-primary-500 flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 focus:ring-2 focus:outline-none"
+        >
+          <FaListUl className="text-primary-600 h-4 w-4" />
+          افزودن به لیست
+        </button>
+      </div>
+
+      <Modal isOpen={showListModal} onClose={() => setShowListModal(false)}>
+        <div>
+          <h3 className="mb-4 text-lg font-bold text-neutral-800">افزودن به لیست</h3>
+          {listsLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="border-primary h-12 w-12 animate-spin rounded-full border-t-2 border-b-2"></div>
+            </div>
+          ) : (
+            <ul className="space-y-2">
+              {listsData?.getUserLists?.length ? (
+                listsData.getUserLists.map((list: List) => (
+                  
+                  <li key={list.id}>
+                    <button
+                      disabled={list.products.some((product) => product.id === product.id)}
+                      onClick={() => handleAddToList(list.id)}
+                      className={`focus:ring-primary-500 flex w-full items-center justify-between rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 focus:ring-2 focus:outline-none ${list.products.some((product) => product.id === product.id) ? "bg-primary-100 text-primary-700" : ""}`}
+                    >
+                      <span>{list.title}</span>
+                      {list.products.some((product) => product.id === product.id)  && <FaCheck className="text-primary-600 h-4 w-4" />}
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <EmptyState
+                  title="لیستی وجود ندارد"
+                  description="لیستی برای افزودن محصول وجود ندارد. لطفا یک لیست جدید ایجاد کنید."
+                  icon={<FaListUl className="text-primary-600 h-4 w-4" />}
+                  action={<Link href="/account/lists" className="bg-primary text-white rounded-lg px-4 py-2">ایجاد لیست جدید</Link>}
+                />
+              )}
+            </ul>
+          )}
+          <button
+            onClick={() => setShowListModal(false)}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 font-medium transition-colors hover:bg-neutral-50"
+          >
+            <FaTimes className="h-4 w-4" />
+            بستن
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
