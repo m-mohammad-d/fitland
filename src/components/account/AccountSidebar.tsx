@@ -27,7 +27,7 @@ const NAV_ITEMS = [
     label: "تاریخچه سفارشات",
   },
   {
-    path: "/account/favorites",
+    path: "/account/lists",
     icon: <BsHeart />,
     label: "علاقه‌مندی‌ها",
   },

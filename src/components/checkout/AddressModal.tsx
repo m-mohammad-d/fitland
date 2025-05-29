@@ -73,9 +73,6 @@ const AddressModal: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-xl font-bold">{showAddressForm ? "تکمیل اطلاعات آدرس" : "ثبت آدرس جدید"}</h3>
-          <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
-            <BiPlus className="rotate-45" size={24} />
-          </button>
         </div>
 
         {showAddressForm ? <CreateAddressForm onSubmit={handleSubmitAddress} defaultAddress={selectedAddress} /> : <AddressPicker onLocationSelect={handleLocationSelect} />}

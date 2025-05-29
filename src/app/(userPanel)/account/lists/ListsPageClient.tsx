@@ -11,6 +11,9 @@ import ListForm from "@/components/account/ListForm";
 import ListCard from "@/components/account/ListCard";
 import ListHeader from "@/components/account/ListHeader";
 import { List } from "@/types/lists";
+import EmptyState from "@/components/ui/EmptyState";
+import { AiOutlineHeart } from "react-icons/ai";
+import Button from "@/components/ui/Button";
 
 export default function ListsPageClient() {
   const router = useRouter();
@@ -141,18 +144,29 @@ export default function ListsPageClient() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence>
-          {data?.getUserLists.map((list: List) => (
-            <ListCard
-              key={list.id}
-              list={list}
-              onEdit={(id, title) => {
-                setIsEditing(id);
-                setNewTitle(title);
-              }}
-              onDelete={setDeleteConfirmId}
-              onViewDetails={handleViewDetails}
-            />
-          ))}
+          {data?.getUserLists.length === 0 ? (
+            <div className="col-span-full">
+              <EmptyState 
+                title="هیچ فهرستی ثبت نشده است" 
+                icon={<AiOutlineHeart className="w-12 h-12 text-primary" size={40} />} 
+                description="شما هنوز فهرستی ثبت نکرده‌اید. با استفاده از دکمه زیر فهرست جدید ثبت کنید." 
+                action={<Button  onClick={() => setIsCreating(true)}>ایجاد فهرست</Button>}
+              />
+            </div>
+          ) : (
+            data?.getUserLists.map((list: List) => (
+              <ListCard
+                key={list.id}
+                list={list}
+                onEdit={(id, title) => {
+                  setIsEditing(id);
+                  setNewTitle(title);
+                }}
+                onDelete={setDeleteConfirmId}
+                onViewDetails={handleViewDetails}
+              />
+            ))
+          )}
         </AnimatePresence>
       </div>
     </div>
