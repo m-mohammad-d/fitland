@@ -2,10 +2,10 @@ import BenefitsSection from "@/components/home/BenefitsSection";
 import Hero from "@/components/home/Hero";
 import MainOffers from "@/components/home/MainOffer";
 import ProductHighlight from "@/components/products/ProductHighlight";
-import Banner from "@/components/ui/Banner";
 import { GET_PRODUCTS } from "@/graphql/queries/productQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetProductsResponse } from "@/types/Products";
+
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -22,6 +22,7 @@ export default async function Home() {
 
   const discountedProducts = discountedProductsResponse.data.products.items;
   const newProducts = newProductsResponse.data.products.items;
+
   return (
     <div>
       <Hero />
@@ -39,10 +40,8 @@ export default async function Home() {
           },
         ]}
       />
-      <Banner imageUrl="/images/Baner.webp" mobileImageUrl="/images/Baner-mobile.webp" />
       <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} sliderId="discount" />
       <ProductHighlight title="جدیدترین محصولات" products={newProducts} sliderId="new" />
-      <Banner imageUrl="/images/Baner-1.webp" mobileImageUrl="/images/Baner-1-mobile.webp" />
       <MainOffers
         offers={[
           {
