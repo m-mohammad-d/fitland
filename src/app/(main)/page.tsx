@@ -38,10 +38,10 @@ export default async function Home() {
             brand: "پوما",
           },
         ]}
-      />{" "}
+      />
       <Banner imageUrl="/images/Baner.webp" mobileImageUrl="/images/Baner-mobile.webp" />
-      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} className="bg-[#FFF7F4]" />
-      <ProductHighlight title="جدیدترین محصولات" products={newProducts} className="bg-white" />
+      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} />
+      <ProductHighlight title="جدیدترین محصولات" products={newProducts} />
       <Banner imageUrl="/images/Baner-1.webp" mobileImageUrl="/images/Baner-1-mobile.webp" />
       <MainOffers
         offers={[

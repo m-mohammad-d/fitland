@@ -2,13 +2,21 @@ import { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "درباره ما | فیت لند",
-  description: "معرفی فیت لند و خدمات ما",
+  title: "درباره ما",
+  description: "آشنایی با اهداف، ارزش‌ها و تیم فروشگاه فیت‌لند",
+  openGraph: {
+    title: "درباره فیت‌لند | FitLand",
+    description: "فروشگاه تخصصی لباس و تجهیزات ورزشی با تمرکز بر کیفیت، قیمت مناسب و رضایت مشتری.",
+  },
+  twitter: {
+    title: "درباره ما",
+    description: "با فیت‌لند بیشتر آشنا شوید. داستان ما، تیم ما و دلیل انتخاب شدن توسط ورزشکارها.",
+  },
 };
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mt-8 min-h-screen bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Hero Section */}
         <div className="mb-16 text-center">

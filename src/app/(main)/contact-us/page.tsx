@@ -4,13 +4,21 @@ import { MdLocationOn } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 
 export const metadata: Metadata = {
-  title: "تماس با ما | فیت لند",
-  description: "راه‌های ارتباطی با فیت لند",
+  title: "تماس با ما",
+  description: "راه‌های ارتباطی با فیت‌لند و پشتیبانی سریع و مؤثر مشتریان",
+  openGraph: {
+    title: "تماس با ما | FitLand",
+    description: "در صورت داشتن هرگونه سوال یا نیاز به پشتیبانی، از طریق راه‌های ارتباطی با ما در تماس باشید.",
+  },
+  twitter: {
+    title: "تماس با ما",
+    description: "سریع‌ترین راه‌های ارتباط با پشتیبانی فیت‌لند برای راهنمایی در خرید و پیگیری سفارش‌ها.",
+  },
 };
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mt-8 min-h-screen bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Hero Section */}
         <div className="mb-16 text-center">
@@ -41,7 +49,7 @@ export default function ContactPage() {
               <FaMapMarkerAlt className="h-6 w-6 text-purple-600" />
             </div>
             <h3 className="mb-2 text-lg font-semibold">آدرس</h3>
-            <p className="text-gray-600">تهران، خیابان ولیعصر</p>
+            <p className="text-gray-600"> تهران، بزرگراه شیخ فضل‌الله نوری، ورودی اختصاصی برج میلاد</p>
           </div>
 
           <div className="rounded-lg bg-white p-6 text-center shadow-sm">

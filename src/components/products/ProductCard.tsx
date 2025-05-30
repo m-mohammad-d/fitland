@@ -10,7 +10,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link href={`/product/${product.id}`}>
-      <div className="my-4 max-w-xs space-y-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-6 shadow-lg">
+      <div className="my-4 max-w-xs h-96 space-y-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-6 shadow-lg">
         <div className="flex items-center justify-between"></div>
 
         <Image src={product.images[0]} alt={product.name} height={160} width={160} className="mt-2 h-40 w-full object-cover" />
