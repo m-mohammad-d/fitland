@@ -1,8 +1,9 @@
 import DeliveryDays from "@/components/checkout/DeliveryDays";
 import OrderProgressBar from "@/components/checkout/OrderProgressBar";
+import CheckoutContinueButton from "@/components/checkout/CheckoutContinueButton";
 import { getWorkingDays } from "@/lib/getWorkingDays";
-import Link from "next/link";
 import { Metadata } from "next/types";
+
 export const metadata: Metadata = {
   title: "روش ارسال",
   description: "روش ارسال مناسب را برای سفارش خود انتخاب کنید.",
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     description: "روش ارسال دلخواه‌تان را انتخاب نمایید.",
   },
 };
+
 function DeliveryDatePage() {
   const workingDays = getWorkingDays();
 
@@ -48,12 +50,11 @@ function DeliveryDatePage() {
             </div>
 
             <div className="pt-6">
-              <Link
+              <CheckoutContinueButton
                 href="/checkout/payment-method"
-                className="bg-primary-600 hover:bg-primary-700 inline-block w-full rounded-lg px-4 py-3 text-center font-medium text-white shadow-md transition-colors hover:shadow-lg"
-              >
-                تایید زمان و ادامه به پرداخت
-              </Link>
+                text="تایید زمان و ادامه به پرداخت"
+                validationField="deliveryDate"
+              />
             </div>
           </div>
         </div>

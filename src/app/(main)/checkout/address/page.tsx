@@ -1,11 +1,12 @@
 import AddressList from "@/components/checkout/AddressList";
 import AddressModal from "@/components/checkout/AddressModal";
 import OrderProgressBar from "@/components/checkout/OrderProgressBar";
+import CheckoutContinueButton from "@/components/checkout/CheckoutContinueButton";
 import { GET_USER_ADDRESS } from "@/graphql/queries/addressQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetAddressesResponse } from "@/types/Address";
-import Link from "next/link";
 import { Metadata } from "next/types";
+
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
     description: "آدرس تحویل کالا را وارد نمایید.",
   },
 };
+
 async function CheckOutAddress() {
   const res = await graphQLFetch<GetAddressesResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_USER_ADDRESS.loc?.source.body as string);
 
@@ -41,9 +43,11 @@ async function CheckOutAddress() {
             </div>
 
             <div className="py-4">
-              <Link href="/checkout/delivery" className="bg-primary-600 hover:bg-primary-700 mt-12 rounded-lg px-4 py-3 font-medium text-white shadow-md transition-colors hover:shadow-lg">
-                ادامه فرآیند خرید
-              </Link>
+              <CheckoutContinueButton
+                href="/checkout/delivery"
+                text="ادامه فرآیند خرید"
+                validationField="addressId"
+              />
             </div>
           </div>
         </div>
