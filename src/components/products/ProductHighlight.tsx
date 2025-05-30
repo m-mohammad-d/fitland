@@ -17,12 +17,7 @@ interface ProductHighlightProps {
   sliderId?: string;
 }
 
-const ProductHighlight: React.FC<ProductHighlightProps> = ({ 
-  title, 
-  className, 
-  products,
-  sliderId = "default"
-}) => {
+const ProductHighlight: React.FC<ProductHighlightProps> = ({ title, className, products, sliderId = "default" }) => {
   if (!products || products.length === 0) return null;
 
   const prevButtonClass = `swiper-button-prev-${sliderId}`;
@@ -35,10 +30,10 @@ const ProductHighlight: React.FC<ProductHighlightProps> = ({
           <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
           <div className="flex gap-2">
             <button className={`${prevButtonClass} rounded-full bg-gray-100 p-2 hover:bg-gray-200`}>
-              <MdOutlineKeyboardArrowLeft size={24} />
+              <MdKeyboardArrowRight size={24} />
             </button>
             <button className={`${nextButtonClass} rounded-full bg-gray-100 p-2 hover:bg-gray-200`}>
-              <MdKeyboardArrowRight size={24} />
+              <MdOutlineKeyboardArrowLeft size={24} />
             </button>
           </div>
         </div>
