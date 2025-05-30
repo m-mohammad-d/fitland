@@ -40,8 +40,8 @@ export default async function Home() {
         ]}
       />
       <Banner imageUrl="/images/Baner.webp" mobileImageUrl="/images/Baner-mobile.webp" />
-      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} />
-      <ProductHighlight title="جدیدترین محصولات" products={newProducts} />
+      <ProductHighlight title="بیشترین تخفیف" products={discountedProducts} sliderId="discount" />
+      <ProductHighlight title="جدیدترین محصولات" products={newProducts} sliderId="new" />
       <Banner imageUrl="/images/Baner-1.webp" mobileImageUrl="/images/Baner-1-mobile.webp" />
       <MainOffers
         offers={[
