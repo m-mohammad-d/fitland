@@ -10,7 +10,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link href={`/product/${product.id}`}>
-      <div className="my-4 max-w-xs h-96 space-y-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-6 shadow-lg">
+      <div className="my-4 h-96 max-w-xs space-y-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-4 py-6 shadow-lg">
         <div className="flex items-center justify-between"></div>
 
         <Image src={product.images[0]} alt={product.name} height={160} width={160} className="mt-2 h-40 w-full object-cover" />
@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <h2 className="font-semibold text-gray-900">{product.name}</h2>
           <p className="mt-1 text-gray-700">{product.price.toLocaleString()} تومان</p>
           <p className="mt-1 text-sm text-gray-500">
-            از سایز {product.sizes} تا {product.sizes}
+            از سایز {product.sizes[0]} تا {product.sizes[product.sizes.length - 1]}
           </p>
 
           <div className="mt-3 flex justify-center gap-2">
