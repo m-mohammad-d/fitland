@@ -10,6 +10,7 @@ const filterSchema = z.object({
   maxPrice: z.number().optional(),
   brand: z.array(z.string()).default([]).optional(),
   colors: z.array(z.string()).default([]).optional(),
+  search: z.string().optional(),
   sizes: z.array(z.string()).default([]).optional(),
   availableOnly: z.boolean().optional(),
   sortBy: z.string().optional(),
@@ -19,6 +20,7 @@ type Filters = z.infer<typeof filterSchema>;
 type FilterContextType = {
   filters: Filters;
   sortBy: string | null;
+  resetFilters: () => void;
   isPending: boolean;
   updateFilters: (_updates: Partial<Filters>) => void;
   activeSections: Record<string, boolean>;
@@ -40,6 +42,7 @@ export default function FilterProvider({ children }: { children: React.ReactNode
     brand: searchParams.getAll("brand"),
     colors: searchParams.getAll("colors"),
     sizes: searchParams.getAll("sizes"),
+    search: searchParams.get("search") || "",
     minPrice: searchParams.has("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
     maxPrice: searchParams.has("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
     availableOnly: searchParams.has("availableOnly") ? searchParams.get("availableOnly") === "true" : false,
@@ -86,6 +89,19 @@ export default function FilterProvider({ children }: { children: React.ReactNode
       router.replace(`?${newSearchParams}`, { scroll: false });
     });
   }
+  function resetFilters() {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.delete("category");
+    newSearchParams.delete("brand");
+    newSearchParams.delete("search");
+    newSearchParams.delete("colors");
+    newSearchParams.delete("sizes");
+    newSearchParams.delete("minPrice");
+    newSearchParams.delete("maxPrice");
+    newSearchParams.delete("availableOnly");
+    newSearchParams.delete("sortBy");
+    router.replace(`?${newSearchParams}`, { scroll: false });
+  }
 
   function updateSortBy(value: string) {
     const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -116,6 +132,7 @@ export default function FilterProvider({ children }: { children: React.ReactNode
         setActiveSections,
         page,
         updatePage,
+        resetFilters,
       }}
     >
       {children}

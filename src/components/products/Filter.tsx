@@ -14,9 +14,9 @@ import { cn } from "@/lib/utils";
 type FilterKey = "category" | "brand" | "colors" | "sizes";
 
 const Filter = () => {
-  const { filters, updateFilters, activeSections, setActiveSections } = useFilters();
+  const { filters, updateFilters, activeSections, setActiveSections, resetFilters } = useFilters();
   const { data } = useQuery<ApolloGetCategorysResponse>(GET_CATEGORIES);
-
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const [priceInputs, setPriceInputs] = useState({
     minPrice: filters.minPrice || 0,
     maxPrice: filters.maxPrice || 10000000,
@@ -40,7 +40,11 @@ const Filter = () => {
     }
 
     if (hasUpdates) {
-      updateFilters(updates);
+      if (!isMounted) {
+        setIsMounted(true);
+      } else {
+        updateFilters(updates);
+      }
     }
   }, [debouncedMinPrice, debouncedMaxPrice]);
 
@@ -62,18 +66,6 @@ const Filter = () => {
     },
     [filters, updateFilters],
   );
-
-  const resetFilters = () => {
-    updateFilters({
-      category: [],
-      brand: [],
-      colors: [],
-      sizes: [],
-      availableOnly: false,
-      minPrice: undefined,
-      maxPrice: undefined,
-    });
-  };
 
   const handlePriceChange = (type: "min" | "max", value: number) => {
     const newValue = Math.max(0, Math.min(10000000, value));
