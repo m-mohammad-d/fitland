@@ -63,7 +63,7 @@ const Filter = () => {
     [filters, updateFilters],
   );
 
-  const resetFilters = useCallback(() => {
+  const resetFilters = () => {
     updateFilters({
       category: [],
       brand: [],
@@ -73,11 +73,7 @@ const Filter = () => {
       minPrice: undefined,
       maxPrice: undefined,
     });
-    setPriceInputs({
-      minPrice: 0,
-      maxPrice: 10000000,
-    });
-  }, [updateFilters]);
+  };
 
   const handlePriceChange = (type: "min" | "max", value: number) => {
     const newValue = Math.max(0, Math.min(10000000, value));

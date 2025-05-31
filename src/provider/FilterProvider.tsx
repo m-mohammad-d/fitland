@@ -68,8 +68,7 @@ export default function FilterProvider({ children }: { children: React.ReactNode
 
   function updateFilters(updates: Partial<typeof optimisticFilters>) {
     const newState = { ...optimisticFilters, ...updates };
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-
+    const newSearchParams = new URLSearchParams();
     Object.entries(newState)
       .filter(Boolean)
       .forEach(([key, value]) => {
