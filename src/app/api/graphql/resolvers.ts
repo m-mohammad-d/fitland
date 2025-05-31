@@ -27,7 +27,7 @@ const resolvers = {
       const where: Prisma.ProductWhereInput = {};
 
       if (filters) {
-        const { minPrice, maxPrice, discount, category, colors, sizes, availableOnly, search } = filters;
+        const { minPrice, maxPrice, discount, category, brand , colors, sizes, availableOnly, search } = filters;
 
         if (minPrice !== undefined || maxPrice !== undefined) {
           where.price = {
@@ -35,7 +35,7 @@ const resolvers = {
             ...(maxPrice !== undefined ? { lte: maxPrice } : {}),
           };
         }
-
+        if (brand?.length) where.brand = { in: brand };
         if (discount) where.discount = { gte: discount };
         if (category?.length) where.categoryId = { in: category };
         if (sizes?.length) where.sizes = { hasSome: sizes };
