@@ -60,8 +60,8 @@ function CheckoutConfirmationClient() {
     onCompleted: () => {
       createOrder({ variables: { input: orderInput } });
     },
-    onError: (error) => {
-      setOrderError(error.message || "پرداخت از کیف پول ناموفق بود.");
+    onError: () => {
+      setOrderError("موجودی کافی نیست");
     },
   });
 
@@ -112,8 +112,7 @@ function CheckoutConfirmationClient() {
           <div className="flex items-start gap-3">
             <AiOutlineHome className="text-primary-600 mt-1 text-xl" />
             <p>
-              <strong>آدرس تحویل:</strong>{" "}
-              {`${data?.getAddressById?.fullAddress}`}
+              <strong>آدرس تحویل:</strong> {`${data?.getAddressById?.fullAddress}`}
             </p>
           </div>
 
