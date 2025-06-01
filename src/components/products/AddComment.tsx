@@ -2,8 +2,9 @@ import { useMutation } from "@apollo/client";
 import Modal from "../ui/Modal";
 import { CommentForm } from "./CommentForm";
 import { ADD_COMMENT } from "@/graphql/mutations/CommentMutation";
-
+import { useRouter } from "next/navigation";
 function AddComment({ isOpen, onClose, productId }: { isOpen: boolean; onClose: () => void; productId: string }) {
+  const router = useRouter();
   const [createProductComment, { loading }] = useMutation(ADD_COMMENT);
 
   const createProductCommentHandler = async ({ content, rating }: { content: string; rating: number }) => {
@@ -16,6 +17,7 @@ function AddComment({ isOpen, onClose, productId }: { isOpen: boolean; onClose: 
         },
       });
       onClose();
+      router.refresh();
     } catch (err) {
       console.error(err);
     }
