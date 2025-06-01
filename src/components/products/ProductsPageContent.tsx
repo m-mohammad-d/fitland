@@ -4,14 +4,14 @@ import { useFilters } from "@/provider/FilterProvider";
 import { ApoloGetProductsResponse } from "@/types/Products";
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
-import { LuSettings2 } from "react-icons/lu";
+import { LuSearch, LuSettings2 } from "react-icons/lu";
 import { Drawer } from "../ui/Drawer";
 import Filter from "./Filter";
 import ProductGrid from "./ProductGrid";
 import ProductGridSkeleton from "./ProductGridSkeleton";
 import Sorting from "./Sorting";
 import Pagination from "../ui/Pagination";
-
+import EmptyState from "../ui/EmptyState";
 export default function ProductsPageContent() {
   const { filters, sortBy, page, updatePage } = useFilters();
   const pageSize = 8;
@@ -45,6 +45,7 @@ export default function ProductsPageContent() {
             </button>
           </div>
           {loading ? <ProductGridSkeleton /> : <ProductGrid products={products || []} />}
+          {data?.products.totalCount === 0 && <EmptyState title="محصولی یافت نشد" description="لطفاً فیلترها را تغییر دهید و دوباره امتحان کنید." icon={<LuSearch />} />}
           <Pagination currentPage={page} totalPages={Math.ceil(totalProducts / pageSize)} onPageChange={updatePage} />
         </div>
 
