@@ -13,7 +13,11 @@ export type User = {
   createdAt: number;
   updatedAt: number;
 };
-
+export type GetMeQuery = {
+  data: {
+    getMe: User;
+  };
+};
 export type ApolloGetUserResponse = {
   getMe: User & {
     __typename: string;
