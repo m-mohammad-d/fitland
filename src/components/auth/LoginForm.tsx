@@ -10,7 +10,7 @@ import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import UploadSpinner from "../ui/UploadSpinner";
-
+import { useSearchParams } from "next/navigation";
 const loginSchema = z.object({
   email: z.string().email("ایمیل معتبر وارد کنید").min(1, "ایمیل الزامی است"),
   password: z.string().min(6, "رمز عبور باید حداقل ۶ کاراکتر باشد"),
@@ -20,11 +20,13 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const back = searchParams.get("back") || "/account/profile";
 
-  const [mutateFunction, { loading }] = useMutation(LOGIN, {
+  const [login, { loading }] = useMutation(LOGIN, {
     onCompleted: () => {
       toast.success("با موفقیت وارد حساب شدید 🎉");
-      router.push("/account/profile");
+      router.push(back || "/account/profile");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -40,7 +42,7 @@ export default function LoginForm() {
   });
 
   const onSubmit = (data: LoginFormValues) => {
-    mutateFunction({
+    login({
       variables: {
         email: data.email,
         password: data.password,

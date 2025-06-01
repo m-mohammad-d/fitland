@@ -11,7 +11,7 @@ import { useMutation } from "@apollo/client";
 import { SIGN_UP } from "@/graphql/mutations/AuthMutations";
 import { calculatePasswordStrength } from "@/lib/passwordStrength";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const signupSchema = z
   .object({
@@ -29,10 +29,12 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 
 export default function SignupForm() {
   const router = useRouter();
-  const [mutateFunction, { loading }] = useMutation(SIGN_UP, {
+  const searchParams = useSearchParams();
+  const back = searchParams.get("back") || "/account/profile";
+  const [signup, { loading }] = useMutation(SIGN_UP, {
     onCompleted: () => {
       toast.success("اکانت با موفقیت ایجاد شد");
-      router.push("/account/profile");
+      router.push(back);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -60,7 +62,7 @@ export default function SignupForm() {
   }, [password]);
 
   const onSubmit = (data: SignupFormValues) => {
-    mutateFunction({
+    signup({
       variables: {
         email: data.email,
         name: data.email,

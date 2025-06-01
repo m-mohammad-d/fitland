@@ -1,15 +1,18 @@
 "use client";
 import CartItem from "@/components/ui/CartItem";
+import DotSpinner from "@/components/ui/DotSpinner";
+import { GET_ME } from "@/graphql/queries/userQueries";
 import { useCart } from "@/store/useCart";
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { RiShoppingBag3Line } from "react-icons/ri";
-
 const CartClient = () => {
   const { items, removeItem, updateQuantity, getTotal, getOriginalTotal, getTotalQuantity, getTotalDiscount } = useCart();
+  const { data, loading } = useQuery(GET_ME);
   const total = getOriginalTotal();
   const discount = getTotalDiscount();
   const finalAmount = getTotal();
-
+  if (loading) return <DotSpinner />;
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-8">
       <h1 className="mb-8 flex items-center gap-2 text-3xl font-bold">
@@ -61,7 +64,10 @@ const CartClient = () => {
                 </div>
               </div>
               <div className="py-4">
-                <Link href="/checkout/address" className="bg-primary-600 hover:bg-primary-700 mt-12 rounded-lg px-4 py-3 font-medium text-white shadow-md transition-colors hover:shadow-lg">
+                <Link
+                  href={!data?.getMe ? "/login?back=/checkout/address" : "/checkout/address"}
+                  className="bg-primary-600 hover:bg-primary-700 mt-12 rounded-lg px-4 py-3 font-medium text-white shadow-md transition-colors hover:shadow-lg"
+                >
                   ادامه فرآیند خرید
                 </Link>
               </div>
