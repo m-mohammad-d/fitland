@@ -20,8 +20,8 @@ export default async function Home() {
     }),
   ]);
 
-  const discountedProducts = discountedProductsResponse.data.products.items;
-  const newProducts = newProductsResponse.data.products.items;
+  const discountedProducts = discountedProductsResponse?.data?.products?.items;
+  const newProducts = newProductsResponse?.data?.products?.items;
 
   return (
     <div>
