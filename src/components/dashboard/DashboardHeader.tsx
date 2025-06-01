@@ -33,7 +33,7 @@ export default function DashboardHeader() {
           <div className="relative">
             <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 md:px-3">
               <div className="relative h-8 w-8 overflow-hidden rounded-full">
-                <Image src={user?.photo || "/images/default-avatar.webp"} alt={user?.name || "User"} fill className="object-cover" />
+                <Image src={user?.photo || "/images/userLogo.png"} alt={user?.name || "User"} fill className="object-cover" />
               </div>
               <div className="hidden md:block">
                 <div className="text-sm font-medium">{user?.name || "کاربر"}</div>
