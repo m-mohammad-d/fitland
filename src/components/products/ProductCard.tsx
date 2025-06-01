@@ -15,7 +15,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <Image src={product.images[0]} alt={product.name} height={160} width={160} className="mt-2 h-40 w-full object-cover" />
         <div className="mt-4 text-center">
-          <h2 className="font-semibold text-gray-900">{product.name}</h2>
+          <h2 className="line-clamp-2 font-semibold text-gray-900">{product.name}</h2>
           <p className="mt-1 text-gray-700">{product.price.toLocaleString()} تومان</p>
           <p className="mt-1 text-sm text-gray-500">
             از سایز {product.sizes[0]} تا {product.sizes[product.sizes.length - 1]}

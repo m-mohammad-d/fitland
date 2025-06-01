@@ -39,10 +39,10 @@ const ProductHighlight: React.FC<ProductHighlightProps> = ({ title, className, p
         </div>
 
         <Swiper
-          spaceBetween={16}
+          spaceBetween={8}
           slidesPerView={1.2}
           breakpoints={{
-            640: { slidesPerView: 2.2 },
+            400: { slidesPerView: 2.2 },
             768: { slidesPerView: 3.2 },
             1024: { slidesPerView: 4.2 },
           }}
