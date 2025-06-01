@@ -45,10 +45,66 @@ function Header() {
   const { getTotalQuantity } = useCart();
 
   const isLoggedIn = Boolean(data?.getMe);
+  const isAdmin = data?.getMe?.role === "ADMIN";
   const cartCount = mounted ? getTotalQuantity() : 0;
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const renderAuthButton = () => {
+    if (!isLoggedIn) {
+      return (
+        <Link href="/login" className="hidden items-center gap-2 rounded-lg bg-white px-4 py-2 text-neutral-800 shadow-md transition lg:flex">
+          ورود | ثبت‌نام
+          <LuUser size={20} />
+        </Link>
+      );
+    }
+
+    if (isAdmin) {
+      return (
+        <Link href="/dashboard" className="hidden items-center gap-2 rounded-lg bg-white px-4 py-2 text-neutral-800 shadow-md transition lg:flex">
+          پنل ادمین
+          <LuUser size={20} />
+        </Link>
+      );
+    }
+
+    return (
+      <Link href="/account/profile" className="hidden items-center gap-2 rounded-lg bg-white px-4 py-2 text-neutral-800 shadow-md transition lg:flex">
+        حساب کاربری
+        <LuUser size={20} />
+      </Link>
+    );
+  };
+
+  const renderMobileAuthButton = () => {
+    if (!isLoggedIn) {
+      return (
+        <Link href="/auth/login" className="bg-primary mt-4 flex w-full items-center gap-2 rounded-lg px-4 py-2 text-left text-white shadow-md">
+          <LuUser size={20} />
+          ورود | ثبت‌نام
+        </Link>
+      );
+    }
+
+    if (isAdmin) {
+      return (
+        <Link href="/admin/dashboard" className="bg-primary mt-4 flex w-full items-center gap-2 rounded-lg px-4 py-2 text-left text-white shadow-md">
+          <LuUser size={20} />
+          پنل ادمین
+        </Link>
+      );
+    }
+
+    return (
+      <Link href="/account/profile" className="bg-primary mt-4 flex w-full items-center gap-2 rounded-lg px-4 py-2 text-left text-white shadow-md">
+        <LuUser size={20} />
+        حساب کاربری
+      </Link>
+    );
+  };
 
   return (
     <>
@@ -66,10 +122,7 @@ function Header() {
 
         <div className="flex items-center gap-3">
           <motion.div whileTap={{ scale: 0.9 }}>
-            <Link href={isLoggedIn ? "/account/profile" : "/login"} className="hidden items-center gap-2 rounded-lg bg-white px-4 py-2 text-neutral-800 shadow-md transition lg:flex">
-              {isLoggedIn ? "حساب کاربری" : "ثبت‌نام | ورود"}
-              <LuUser size={20} />
-            </Link>
+            {renderAuthButton()}
           </motion.div>
 
           <motion.div whileTap={{ scale: 0.9 }} className="relative">
@@ -146,10 +199,7 @@ function Header() {
               ))}
             </div>
 
-            <Link href={isLoggedIn ? "/account/profile" : "/login"} className="bg-primary mt-4 flex w-full items-center gap-2 rounded-lg px-4 py-2 text-left text-white shadow-md">
-              <LuUser size={20} />
-              {isLoggedIn ? "حساب کاربری" : "ثبت‌نام | ورود"}
-            </Link>
+            {renderMobileAuthButton()}
           </div>
         </motion.div>
       )}

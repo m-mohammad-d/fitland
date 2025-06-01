@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const getMeResponse = await graphQLFetch<GetMeQuery>(process.env.NEXT_PUBLIC_BACKEND_URL!, GET_ME.loc?.source.body as string);
 
-  if (getMeResponse.data.getMe.role !== "ADMIN") {
+  if (getMeResponse?.data?.getMe?.role !== "ADMIN") {
     redirect("/forbidden");
   }
   return (
