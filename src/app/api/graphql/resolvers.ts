@@ -942,7 +942,15 @@ const resolvers = {
         },
         include: { items: true },
       });
-
+      
+      await Promise.all(
+        input.items.map((item) =>
+          prisma.product.update({
+            where: { id: item.productId },
+            data: { stock: { decrement: item.quantity } },
+          })
+        )
+      );
       return order;
     },
     applyDiscount: async (_: void, { code, totalPrice }: { code: string; totalPrice: number }) => {
