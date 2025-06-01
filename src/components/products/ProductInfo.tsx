@@ -22,8 +22,6 @@ export default function ProductInfo({ product }: Props) {
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [selectedListId, setSelectedListId] = useState<string | null>(null);
-  const [addingToList, setAddingToList] = useState(false);
 
   const { data: listsData, loading: listsLoading } = useQuery(GET_USER_LISTS, { skip: !showListModal });
   const [addProductToList] = useMutation(ADD_PRODUCT_TO_LIST);
@@ -78,20 +76,16 @@ export default function ProductInfo({ product }: Props) {
   };
 
   const handleAddToList = async (listId: string) => {
-    setAddingToList(true);
     try {
       await addProductToList({ variables: { listId, productId: product.id } });
-      setSelectedListId(listId);
       toast.success("محصول به لیست اضافه شد!");
       setTimeout(() => {
         setShowListModal(false);
-        setSelectedListId(null);
       }, 1200);
     } catch (e) {
+      console.log(e);
       toast.error("خطا در افزودن به لیست");
-    } finally {
-      setAddingToList(false);
-    }
+    } 
   };
 
   return (

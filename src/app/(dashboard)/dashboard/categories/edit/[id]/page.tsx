@@ -2,7 +2,7 @@ import UpdateCategoryForm from "@/components/dashboard/UpdateCategoryForm";
 import { GET_CATEGORY_BY_ID } from "@/graphql/queries/categoryQueries";
 import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GetCategoryByIdResponse } from "@/types/Category";
-
+export const dynamic = "force-dynamic";
 export default async function UpdateCategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const categoryResponse = await graphQLFetch<GetCategoryByIdResponse>(process.env.NEXT_PUBLIC_BACKEND_URL || "", GET_CATEGORY_BY_ID.loc?.source.body as string, { id });

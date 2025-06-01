@@ -5,6 +5,7 @@ import { graphQLFetch } from "@/lib/graphqlFetch";
 import { GET_ME } from "@/graphql/queries/userQueries";
 import { GetMeQuery } from "@/types/User";
 import { redirect } from "next/navigation";
+export const dynamic = "force-dynamic";
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const getMeResponse = await graphQLFetch<GetMeQuery>(process.env.NEXT_PUBLIC_BACKEND_URL!, GET_ME.loc?.source.body as string);
 

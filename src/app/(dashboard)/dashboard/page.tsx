@@ -31,7 +31,7 @@ export default function DashboardPage() {
     variables: { days: 30 },
   });
   const { data: OrderResponse, loading: orderLoading } = useQuery<ApoloGetAllOrdersResponse>(GET_ALL_ORDERS);
-
+  const isLoading = orderLoading || salesLoading || ordersLoading || usersLoading || productLoading;
   const statsData = [
     {
       title: "فروش ماه",
@@ -104,7 +104,7 @@ export default function DashboardPage() {
     },
   ];
 
-  if (salesLoading || ordersLoading || usersLoading || productLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <div className="text-lg text-gray-600">در حال بارگذاری...</div>

@@ -1,7 +1,6 @@
 // app/faq/page.tsx
 
 import FAQList from "@/components/ui/FAQ";
-import FAQ from "@/components/ui/FAQ";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
