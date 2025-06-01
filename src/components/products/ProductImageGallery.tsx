@@ -8,6 +8,7 @@ import { Navigation, Keyboard } from "swiper/modules";
 import { HiChevronRight, HiChevronLeft, HiXMark } from "react-icons/hi2";
 import "swiper/css";
 import "swiper/css/navigation";
+import type { SwiperRef } from 'swiper/react'
 
 type Props = {
   images: string[];
@@ -19,7 +20,11 @@ export default function ProductImageGallery({ images }: Props) {
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-
+  const swiperRef = useRef<SwiperRef>(null);
+  const changeActiveIndex = (index: number) => {
+    setActiveIndex(index);
+    swiperRef.current?.swiper.slideTo(index)
+  };
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
@@ -78,6 +83,7 @@ export default function ProductImageGallery({ images }: Props) {
             <Swiper
               modules={[Navigation, Keyboard]}
               initialSlide={activeIndex}
+              ref={swiperRef}
               keyboard={{ enabled: true }}
               navigation={{
                 prevEl: prevRef.current!,
@@ -95,7 +101,7 @@ export default function ProductImageGallery({ images }: Props) {
               className="w-full max-w-4xl"
             >
               {images.map((img, index) => (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} onClick={() => changeActiveIndex(index)}>
                   <div className="relative flex h-[60vh] w-full items-center justify-center">
                     <Image src={img} alt={`تصویر ${index}`} fill className="object-contain" sizes="(max-width: 768px) 90vw, 70vw" />
                   </div>
@@ -107,7 +113,7 @@ export default function ProductImageGallery({ images }: Props) {
               {images.map((img, index) => (
                 <div
                   key={index}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => changeActiveIndex(index)}
                   className={`relative h-16 w-16 cursor-pointer rounded border-2 transition ${index === activeIndex ? "border-white" : "border-transparent opacity-60 hover:opacity-100"}`}
                 >
                   <Image src={img} alt={`پیش‌نمایش ${index}`} fill className="object-cover" sizes="64px" />
