@@ -99,7 +99,6 @@ const resolvers = {
     getUserWalletInfo: async (_parent: void, _args: void, context: GraphQLContext) => {
       try {
         const userId = context.user?.id;
-        console.log(context);
 
         const wallet = await prisma.wallet.findUnique({
           where: {

@@ -6,7 +6,7 @@ import { z } from "zod";
 import Link from "next/link";
 import Input from "@/components/ui/Input";
 import { LOGIN } from "@/graphql/mutations/AuthMutations";
-import { useMutation } from "@apollo/client";
+import { ServerError, useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import UploadSpinner from "../ui/UploadSpinner";
@@ -29,7 +29,17 @@ export default function LoginForm() {
       router.push(back || "/account/profile");
     },
     onError: (error) => {
-      toast.error(error.message);
+      const networkError = error?.networkError as ServerError & {
+        result: {
+          errors: {
+            message: string;
+          }[];
+        };
+      };
+
+      const errorMessage = networkError?.result?.errors?.[0]?.message;
+
+      toast.error(errorMessage);
     },
   });
 
