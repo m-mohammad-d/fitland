@@ -9,6 +9,7 @@ import { ApolloGetUserResponse } from "@/types/User";
 import { UPDATE_USER } from "@/graphql/mutations/UserMutations";
 import { BiWallet } from "react-icons/bi";
 import Image from "next/image";
+import LogoutButton from "../auth/LogoutButton";
 
 const NAV_ITEMS = [
   {
@@ -121,10 +122,7 @@ export default function AccountSidebar() {
       </nav>
 
       <div className="mt-6 pt-4">
-        <button className="flex w-full items-center justify-center rounded-md px-4 py-2 text-red-600 transition hover:bg-red-100">
-          <BsBoxArrowRight className="ml-2 text-lg" />
-          <span className="text-sm">خروج</span>
-        </button>
+        <LogoutButton className="w-full flex items-center justify-center" />
       </div>
     </aside>
   );
