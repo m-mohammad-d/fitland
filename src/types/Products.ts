@@ -25,8 +25,7 @@ export interface Product {
   categoryId: string;
   brand: string;
   discount: number;
-  discountCode?: string;
-  discountedPrice?: number;
+  discountedPrice: number;
   comments: Comment[];
   orderItems: OrderItem[];
   createdAt: string;

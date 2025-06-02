@@ -91,7 +91,7 @@ function Header() {
 
     if (isAdmin) {
       return (
-        <Link href="/admin/dashboard" className="bg-primary mt-4 flex w-full items-center gap-2 rounded-lg px-4 py-2 text-left text-white shadow-md">
+        <Link href="/dashboard" className="bg-primary mt-4 flex w-full items-center gap-2 rounded-lg px-4 py-2 text-left text-white shadow-md">
           <LuUser size={20} />
           پنل ادمین
         </Link>
