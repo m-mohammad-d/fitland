@@ -18,7 +18,7 @@ function WalletPaymentPage() {
   }
 
   return (
-    <div>
+    <div className="flex h-screen flex-col justify-center">
       <PaymentGateway onPaymentSuccess={handleDepositWallet} />
     </div>
   );
