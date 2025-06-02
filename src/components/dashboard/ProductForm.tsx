@@ -58,8 +58,8 @@ export default function ProductForm({ categories, defaultValues, onSubmit, isLoa
   };
 
   const categoryOptions: CategoryOption[] = categories?.map((category) => ({
-    value: category.id,
-    label: category.name,
+    value: category?.id,
+    label: category?.name,
   }));
 
   // Transform colors array to Option format

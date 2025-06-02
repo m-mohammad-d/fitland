@@ -13,7 +13,7 @@ export default async function NewProductPage() {
         <h1 className="text-2xl font-bold text-gray-900">افزودن محصول جدید</h1>
       </div>
 
-      <AddProductForm categories={categoryResponse.data.categories} />
+      <AddProductForm categories={categoryResponse?.data?.categories} />
     </div>
   );
 }

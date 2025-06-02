@@ -137,7 +137,7 @@ function ManageProducts() {
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <FiTag className="h-4 w-4 text-neutral-500" />
-            <span>{row.original.category.name}</span>
+            <span>{row.original.category?.name}</span>
           </div>
         ),
       },
