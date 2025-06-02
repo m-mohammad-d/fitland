@@ -255,6 +255,16 @@ type ListProduct {
   addedAt: String!
 }
 
+type ForgotPasswordResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ResetPasswordResponse {
+  success: Boolean!
+  message: String!
+}
+
 # ----- Inputs -------
 
 input ProductFilter {
@@ -391,4 +401,6 @@ type Mutation {
   deleteList(id: ID!): List!
   addProductToList(listId: ID!, productId: ID!): ListProduct!
   removeProductFromList(listId: ID!, productId: ID!): ListProduct!
+  forgotPassword(email: String!): ForgotPasswordResponse!
+  resetPassword(token: String!, newPassword: String!): ResetPasswordResponse!
 }

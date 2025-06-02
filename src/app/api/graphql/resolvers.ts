@@ -17,8 +17,21 @@ import type {
 } from "./types";
 import { GraphQLError } from "graphql";
 import { CommentSchema } from "@/validator/Comment";
+import nodemailer from "nodemailer";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
+
+// Create a nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: Number(process.env.EMAIL_PORT),
+  secure: process.env.EMAIL_SECURE === "true",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 const resolvers = {
   Query: {
     products: async (_: void, args: ProductQueryArgs) => {
@@ -27,7 +40,7 @@ const resolvers = {
       const where: Prisma.ProductWhereInput = {};
 
       if (filters) {
-        const { minPrice, maxPrice, discount, category, brand , colors, sizes, availableOnly, search } = filters;
+        const { minPrice, maxPrice, discount, category, brand, colors, sizes, availableOnly, search } = filters;
 
         if (minPrice !== undefined || maxPrice !== undefined) {
           where.price = {
@@ -942,14 +955,14 @@ const resolvers = {
         },
         include: { items: true },
       });
-      
+
       await Promise.all(
         input.items.map((item) =>
           prisma.product.update({
             where: { id: item.productId },
             data: { stock: { decrement: item.quantity } },
-          })
-        )
+          }),
+        ),
       );
       return order;
     },
@@ -1573,6 +1586,125 @@ const resolvers = {
           },
         },
       });
+    },
+
+    forgotPassword: async (_: void, { email }: { email: string }) => {
+      try {
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        // Always return success to prevent email enumeration
+        if (!user) {
+          return {
+            success: true,
+            message: "اگر ایمیل شما در سیستم ثبت شده باشد، لینک بازنشانی رمز عبور به آن ارسال خواهد شد.",
+          };
+        }
+
+        // Generate a secure random token
+        const resetToken = crypto.randomBytes(32).toString("hex");
+        const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+
+        // Update user with reset token
+        await prisma.user.update({
+          where: { email },
+          data: {
+            resetToken,
+            resetTokenExpiry,
+          },
+        });
+
+        // Send reset email
+        const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}`;
+        await transporter.sendMail({
+          to: email,
+          from: process.env.EMAIL_FROM,
+          subject: "بازنشانی رمز عبور",
+          html: `
+          <div dir="rtl" style="font-family: 'Tahoma', sans-serif; background-color: #f5f5f5; padding: 40px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+              <tr>
+                <td style="background-color: #fa541c; padding: 20px 30px; color: white; text-align: center;">
+                  <h1 style="margin: 0; font-size: 24px;">بازنشانی رمز عبور</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 30px; color: #333333; font-size: 16px;">
+                  <p>سلام 👋</p>
+                  <p>درخواست بازنشانی رمز عبور برای حساب شما ثبت شده است.</p>
+                  <p>برای انتخاب رمز عبور جدید، روی دکمه زیر کلیک کنید:</p>
+                  <div style="text-align: center; margin: 30px 0;">
+                    <a href="${resetUrl}" target="_blank" style="background-color: #fa541c; color: white; padding: 14px 28px; border-radius: 5px; text-decoration: none; font-weight: bold;">بازنشانی رمز عبور</a>
+                  </div>
+                  <p>این لینک تا <strong>۱ ساعت</strong> معتبر است.</p>
+                  <p style="color: #888;">اگر شما این درخواست را ارسال نکرده‌اید، لطفاً این ایمیل را نادیده بگیرید.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="background-color: #f0f0f0; padding: 20px; text-align: center; font-size: 12px; color: #999;">
+                  © ${new Date().getFullYear()} FitLand. تمامی حقوق محفوظ است.
+                </td>
+              </tr>
+            </table>
+          </div>
+        `,
+        });
+
+        return {
+          success: true,
+          message: "لینک بازنشانی رمز عبور به ایمیل شما ارسال شد.",
+        };
+      } catch (error) {
+        console.error("Error in forgotPassword:", error);
+        return {
+          success: false,
+          message: "خطا در ارسال ایمیل بازنشانی رمز عبور.",
+        };
+      }
+    },
+
+    resetPassword: async (_: void, { token, newPassword }: { token: string; newPassword: string }) => {
+      try {
+        // Find user with valid reset token
+        const user = await prisma.user.findFirst({
+          where: {
+            resetToken: token,
+            resetTokenExpiry: {
+              gt: new Date(),
+            },
+          },
+        });
+
+        if (!user) {
+          return {
+            success: false,
+            message: "توکن نامعتبر یا منقضی شده است.",
+          };
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update user's password and clear reset token
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            password: hashedPassword,
+            resetToken: null,
+            resetTokenExpiry: null,
+          },
+        });
+
+        return {
+          success: true,
+          message: "رمز عبور با موفقیت بازنشانی شد.",
+        };
+      } catch (error) {
+        console.error("Error in resetPassword:", error);
+        return {
+          success: false,
+          message: "خطا در بازنشانی رمز عبور.",
+        };
+      }
     },
   },
 };
