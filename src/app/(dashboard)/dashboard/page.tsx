@@ -91,10 +91,10 @@ export default function DashboardPage() {
       href: "/dashboard/discounts/new",
     },
     {
-      title: "افزودن زمان ارسال",
-      icon: FiTruck,
+      title: "مدیریت کاربران",
+      icon: FiUsers,
       color: "bg-purple-500",
-      href: "/dashboard/shipping/new",
+      href: "/dashboard/users",
     },
     {
       title: "مشاهده گزارش کامل",

@@ -48,11 +48,7 @@ const navigation = [
     href: "/dashboard/wallets",
     icon: FiCreditCard,
   },
-  {
-    name: "روش‌های ارسال",
-    href: "/dashboard/shipping",
-    icon: FiTruck,
-  },
+
   {
     name: "گزارش‌ها",
     href: "/dashboard/reports",
