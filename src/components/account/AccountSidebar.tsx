@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, ChangeEvent } from "react";
 import { useUpload } from "@/hooks/useUpload";
-import { BsPlus, BsHeart, BsGeoAlt, BsChatDots, BsBoxArrowRight, BsPerson, BsClockHistory } from "react-icons/bs";
+import { BsPlus, BsHeart, BsGeoAlt, BsChatDots, BsPerson, BsClockHistory } from "react-icons/bs";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_ME } from "@/graphql/queries/userQueries";
 import { ApolloGetUserResponse } from "@/types/User";
