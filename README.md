@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🏋️‍♀️ FitLand – Sportswear E-commerce Platform
 
-First, run the development server:
+FitLand is a modern, full-featured e-commerce web application for selling sportswear online. It supports user authentication, dynamic product filtering, advanced cart functionality, order placement with custom delivery options, and wallet-based payments — all built with cutting-edge technologies like Next.js, GraphQL, Prisma, and TailwindCSS.
+
+---
+
+## ✨ Features
+
+- 🛍️ Product catalog with images, size, color, category, stock, and price
+- 🔍 Advanced product filtering
+- 🧾 Discount code support
+- 🛒 Smart cart (guest & authenticated mode)
+- 🧑‍💼 Authentication system (Sign up / Sign in)
+- 🚚 Delivery scheduling with selectable time ranges
+- 💳 Multiple payment methods including wallet
+- 🏦 User wallet with real-time balance tracking
+- 📬 Order confirmation and history
+- 🌍 Address selection with Leaflet map and geosearch
+- 📊 Dashboard with charts (admin side)
+- 📧 Email notifications via Nodemailer
+
+---
+
+## 🧱 Tech Stack
+
+| Layer         | Tools/Libs                                                                 |
+| ------------- | --------------------------------------------------------------------------- |
+| **Frontend**  | Next.js, React 19, TailwindCSS, Radix UI, Swiper, Framer Motion            |
+| **Forms**     | React Hook Form, Zod, @hookform/resolvers                                  |
+| **State**     | Zustand                                                                    |
+| **Routing**   | nuqs (for URL query state)                                                 |
+| **Backend**   | GraphQL (Apollo Server), Prisma, PostgreSQL                                |
+| **Auth**      | JWT, bcryptjs                                                              |
+| **File Upload** | Cloudinary                                                              |
+| **Maps**      | Leaflet + Leaflet GeoSearch                                                |
+| **Charts**    | Chart.js, react-chartjs-2                                                  |
+| **Email**     | Nodemailer                                                                 |
+
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/m-mohammad-d/fitland.git
+cd fitland
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file based on `.env.example` and fill in your:
+
+* Database connection string
+* JWT secrets
+* Cloudinary credentials
+* Email credentials (for Nodemailer)
+
+```bash
+cp .env.example .env
+```
+
+### 4. Set Up the Database
+
+```bash
+npx prisma generate
+npx prisma migrate dev --name init
+```
+
+### 5. Start the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## 📜 License
 
-To learn more about Next.js, take a look at the following resources:
+This project is licensed under the MIT License.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 💬 Contributing
 
-## Deploy on Vercel
+PRs are welcome! Please open an issue first to discuss what you’d like to change.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+> Built with ❤️ by Mohammad
+
