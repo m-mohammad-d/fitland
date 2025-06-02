@@ -46,7 +46,6 @@ export const primary: Story = {
         },
         comments: [],
         orderItems: [],
-        discountCode: undefined,
         discountedPrice: 270000,
         createdAt: "2024-03-25T12:00:00.000Z",
         updatedAt: "2024-03-25T12:00:00.000Z",

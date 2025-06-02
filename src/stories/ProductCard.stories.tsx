@@ -36,6 +36,7 @@ export const primary: Story = {
       __typename: "Product",
       categoryId: "",
       brand: "",
+      discountedPrice : 120,
       discount: 0,
       comments: [],
       orderItems: [],
