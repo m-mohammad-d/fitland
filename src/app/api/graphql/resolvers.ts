@@ -35,7 +35,7 @@ const transporter = nodemailer.createTransport({
 const resolvers = {
   Query: {
     products: async (_: void, args: ProductQueryArgs) => {
-      const { sortBy, filters, page = 1, pageSize = 10 } = args;
+      const { sortBy, filters, page = 1, pageSize } = args;
 
       const where: Prisma.ProductWhereInput = {};
 
@@ -75,7 +75,7 @@ const resolvers = {
         orderBy[column] = isDesc ? "desc" : "asc";
       }
 
-      const skip = (page - 1) * pageSize;
+      const skip = pageSize ? (page - 1) * pageSize : 0;
       const take = pageSize;
       const totalCount = await prisma.product.count({ where });
 
