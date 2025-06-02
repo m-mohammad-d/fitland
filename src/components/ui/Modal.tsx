@@ -35,20 +35,15 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
             exit={{ opacity: 0, scale: 0.8, y: 100 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
-            <div
-              className="dark:bg-background-2 relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
-              onClick={(e) => e.stopPropagation()} // جلوگیری از بسته شدن با کلیک روی خود مدال
-            >
+            <div className="relative max-h-4/5 overflow-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={onClose}
-                className="absolute left-4 top-4 rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                className="focus:ring-primary-500 absolute top-4 left-4 rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                 aria-label="بستن"
               >
                 <IoClose className="h-5 w-5" />
               </button>
-              <div className="mt-6">
-                {children}
-              </div>
+              <div className="mt-6">{children}</div>
             </div>
           </motion.div>
         </>
