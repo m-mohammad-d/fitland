@@ -1,6 +1,6 @@
 "use client";
 
-import { FiDollarSign, FiShoppingBag, FiPackage, FiUsers, FiPlus, FiTag, FiTruck, FiBarChart2 } from "react-icons/fi";
+import { FiDollarSign, FiShoppingBag, FiPackage, FiUsers, FiPlus, FiTag, FiBarChart2 } from "react-icons/fi";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { useQuery } from "@apollo/client";

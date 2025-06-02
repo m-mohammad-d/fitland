@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiPackage, FiLayers, FiShoppingCart, FiUsers, FiCreditCard, FiTag, FiTruck, FiBarChart2, FiChevronDown, FiX, FiPlus, FiList } from "react-icons/fi";
+import { FiPackage, FiLayers, FiShoppingCart, FiUsers, FiCreditCard, FiTag, FiBarChart2, FiChevronDown, FiX, FiPlus, FiList } from "react-icons/fi";
 import { useState } from "react";
 import { useSidebar } from "@/provider/SidebarContext";
 
