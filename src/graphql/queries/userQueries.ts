@@ -9,6 +9,7 @@ export const GET_ME = gql`
       photo
       phone
       gender
+      nationalCode
       role
       lastLogin
       createdAt

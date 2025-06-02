@@ -41,6 +41,7 @@ export default function ForgotPasswordPage() {
         toast.error("خطا در ارسال ایمیل بازنشانی رمز عبور");
       }
     } catch (error) {
+      console.log(error)
       toast.error("خطا در ارسال ایمیل بازنشانی رمز عبور");
     }
   };

@@ -11,21 +11,21 @@ async function ProfilePage() {
   const userInfo = [
     {
       label: "نام و نام خانوادگی",
-      value: res.data.getMe?.name || "تعیین نشده",
+      value: res?.data?.getMe?.name || "تعیین نشده",
     },
     {
       label: "شماره تماس",
-      value: res.data.getMe?.phone || "تعیین نشده",
+      value: res?.data?.getMe?.phone || "تعیین نشده",
     },
     {
       label: "کد ملی",
-      value: res.data.getMe?.nationalCode || "تعیین نشده",
+      value: res?.data?.getMe?.nationalCode || "تعیین نشده",
     },
     {
       label: "جنسیت",
-      value: res.data.getMe?.gender ? (res.data.getMe.gender === "MALE" ? "مرد" : "زن") : "تعیین نشده",
+      value: res?.data?.getMe?.gender ? (res?.data?.getMe.gender === "MALE" ? "مرد" : "زن") : "تعیین نشده",
     },
-    { label: "ایمیل", value: res.data.getMe?.email || "تعیین نشده" },
+    { label: "ایمیل", value: res?.data?.getMe?.email || "تعیین نشده" },
   ];
 
   return (

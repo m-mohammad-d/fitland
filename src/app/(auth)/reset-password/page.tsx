@@ -67,6 +67,7 @@ export default function ResetPasswordPage() {
         toast.error(response.data?.resetPassword?.message || "خطا در بازنشانی رمز عبور");
       }
     } catch (error) {
+      console.log(error);
       toast.error("خطا در بازنشانی رمز عبور");
     }
   };
