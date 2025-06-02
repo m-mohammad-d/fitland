@@ -9,6 +9,7 @@ import { UPDATE_USER } from "@/graphql/mutations/UserMutations";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import UploadSpinner from "../ui/UploadSpinner";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   id: z.string(),
@@ -52,9 +53,10 @@ function UpdateProfileForm({ user }: Props) {
       await updateUser({
         variables: { id, ...input },
       });
-      alert("پروفایل با موفقیت به‌روزرسانی شد!");
+      toast.success("پروفایل با موفقیت به‌روزرسانی شد!");
     } catch (error) {
       console.error("خطا در بروزرسانی پروفایل:", error);
+      toast.error("خطا در بروزرسانی پروفایل");
     }
   };
 
