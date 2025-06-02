@@ -131,10 +131,10 @@ export default function ProductInfo({ product }: Props) {
         </div>
 
         <div className="mt-2 flex items-center gap-3">
-          {product.discount ? (
+          {product.discount  ? (
             <>
               <span className="text-secondary-700 text-2xl font-bold">
-                {product.discountedPrice.toLocaleString()}
+                {product.discountedPrice?.toLocaleString()}
                 <span className="mr-1 text-sm font-normal">تومان</span>
               </span>
               <span className="text-lg text-neutral-500 line-through">{product.price.toLocaleString()}</span>
