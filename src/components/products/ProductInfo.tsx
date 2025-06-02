@@ -9,8 +9,7 @@ import { toast } from "react-hot-toast";
 import { Product } from "@/types/Products";
 import EmptyState from "../ui/EmptyState";
 import Modal from "../ui/Modal";
-import { List } from "@/types/lists";
-
+import { GetUserListsQuery, List } from "@/types/lists";
 interface Props {
   product: Product;
 }
@@ -23,10 +22,11 @@ export default function ProductInfo({ product }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
 
-  const { data: listsData, loading: listsLoading } = useQuery(GET_USER_LISTS, { skip: !showListModal });
+  const { data: listsData, loading: listsLoading  , refetch: refetchLists } = useQuery<GetUserListsQuery>(GET_USER_LISTS, { skip: !showListModal });
   const [addProductToList] = useMutation(ADD_PRODUCT_TO_LIST);
 
   const cartItem = items.find((item) => item.productId === product.id && item.color === selectedColor && item.size === selectedSize);
+
 
   useEffect(() => {
     if (cartItem) {
@@ -79,9 +79,7 @@ export default function ProductInfo({ product }: Props) {
     try {
       await addProductToList({ variables: { listId, productId: product.id } });
       toast.success("محصول به لیست اضافه شد!");
-      setTimeout(() => {
-        setShowListModal(false);
-      }, 1200);
+      refetchLists();
     } catch (e) {
       console.log(e);
       toast.error("خطا در افزودن به لیست");
@@ -275,12 +273,14 @@ export default function ProductInfo({ product }: Props) {
                   
                   <li key={list.id}>
                     <button
-                      disabled={list.products.some((product) => product.id === product.id)}
+                      disabled={list.products.some((productItem) => productItem.product.id === product.id)}
                       onClick={() => handleAddToList(list.id)}
-                      className={`focus:ring-primary-500 flex w-full items-center justify-between rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 focus:ring-2 focus:outline-none ${list.products.some((product) => product.id === product.id) ? "bg-primary-100 text-primary-700" : ""}`}
+                      className={`focus:ring-primary-500 flex w-full items-center justify-between rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 focus:ring-2 focus:outline-none ${list.products.some((productItem) => productItem.product.id === product.id) ? "bg-primary-100 text-primary-700" : ""}`}
                     >
+              
+
                       <span>{list.title}</span>
-                      {list.products.some((product) => product.id === product.id)  && <FaCheck className="text-primary-600 h-4 w-4" />}
+                      {list.products.some((productItem) => productItem.product.id === product.id) && <FaCheck className="text-primary-600 h-4 w-4" />}
                     </button>
                   </li>
                 ))

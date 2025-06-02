@@ -23,3 +23,7 @@ export interface ListProduct {
   id: string;
   product: Product;
 }
+
+export interface GetUserListsQuery {
+  getUserLists: List[];
+}
