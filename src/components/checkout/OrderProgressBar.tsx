@@ -14,7 +14,7 @@ type OrderProgressBarProps = {
 
 const OrderProgressBar: React.FC<OrderProgressBarProps> = ({ currentStep }) => {
   return (
-    <div className="w-full">
+    <div className="w-full my-4">
       <div className="mb-6 flex items-center justify-between">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
